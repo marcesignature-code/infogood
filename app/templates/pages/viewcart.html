@@ -1,0 +1,172 @@
+{% extends "Base/base.html" %}
+
+{% block hero_content %}
+
+{% include 'Base/navbar9.html' %}
+
+<div id="preloader">
+	<div class="preloader"><span></span><span></span></div>
+</div>
+
+<div class="clearfix"></div>
+			
+<!-- Page Title Start -->
+<section class="bg-light">
+	<div class="container">
+
+		<!-- Search Form -->
+		<div class="row justify-content-start align-items-center pt-lg-0 pt-5">
+			<div class="col-xl-7 col-lg-9 col-md-12 col-sm-12">
+				<div class="position-relative">
+					<h1 class="xl-heading">Cart Page</h1>
+					<nav id="breadcrumbs" class="breadcrumbs">
+						<ul>
+							<li><a href="/">Home</a></li>
+							<li><a href="#">Shop</a></li>
+							<li>Cart</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+		<!-- </row> -->
+
+	</div>
+</section>
+<!-- Page Title End -->
+
+<!-- Cart Detail Section -->
+<section>
+	<div class="container">
+		<div class="row g-4">
+		
+			<!-- Article content -->
+			<div class="col-xl-8 col-lg-8 col-md-8 col-sm-12">
+				<div class="cartDetails">
+					<table class="table table-bordered">
+						<thead>
+						<tr>
+							<th scope="col" class="itemthumbnail"></th>
+							<th scope="col" class="Item Name">Item Name</th>
+							<th scope="col" class="Quantity">Quantity</th>
+							<th scope="col" class="Price">Price</th>
+							<th scope="col" class="col"> </th>
+						</tr>
+						</thead>
+						
+						<tbody>
+
+							<!-- Components/Pages/viewcart/cart2.html -->
+							{% include 'Components/Pages/viewcart/cart2.html' %}
+							
+							<tr>
+								<td colspan="5">
+									<div class="d-flex flex-column flex-sm-row align-items-stretch gap-2 w-100">
+										<div class="flex-fill appluCoupon">
+											<div class="d-flex flex-column flex-sm-row gap-2">
+												<input type="text" class="form-control form-control-md" id="coupon-code" name="coupon-code" placeholder="Coupon Code">
+												<button type="button" class="btn btn-md fw-medium btn-dark">Apply Code</button>
+											</div>
+										</div>
+										
+										<div class="flex-shrink-0">
+											<button type="button" class="btn btn-md fw-medium btn-light-primary w-100 w-sm-auto">Update Cart</button>
+										</div>
+									</div>
+								</td>
+							</tr>
+							
+						</tbody>
+					</table>
+				
+				</div>
+			</div>
+			
+			<!-- Blog Sidebar -->
+			<div class="col-xl-4 col-lg-4 col-md-12 mt-4 mt-lg-0">
+				<div class="cartSidebar">
+					
+					<!-- Search -->
+					<div class="card gray">
+						<div class="card-body">
+						
+							<div class="cartShippings mb-4">
+								<h5>Shipping To</h5>
+								<address>
+									2720 Plainfield Avenue
+									Evans Mills, California, USA NY 13637
+								</address>
+								<div class="changeButton mt-3">
+									<button type="button" class="btn btn-md btn-dark w-100 fw-medium">Change Address</button>
+								</div>
+							</div>
+							
+							<div class="shoppingInfo bg-white rounded-3 p-4">
+								<div class="cartShoppes">
+
+									<!-- Components/Pages/checkout-page/shipping.html -->
+									{% include 'Components/Pages/checkout-page/shipping.html' %}
+									
+									<div class="singleCarts">
+										<div class="cartFirsty1">
+											<p class="itemName">Discount</p>
+										</div>
+										<div class="cartFirsty2">
+											<div class="totalPrice text-primary">-$22</div>
+										</div>
+									</div>
+									
+									<div class="singleCarts">
+										<div class="cartFirsty1">
+											<h6 class="itemBrans">Sub Total</h6>
+										</div>
+										<div class="cartFirsty2">
+											<div class="totalPrice text-primary">$247.50</div>
+										</div>
+									</div>
+									
+									<div class="singleCarts">
+										<button type="button" class="btn btn-md btn-primary w-100 fw-medium">Proceed To Checkout</button>
+									</div>
+									
+								</div>
+							</div>
+						
+						</div>
+					</div>								
+					
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</section>
+<!-- Cart Detail End -->
+
+<!-- Call To Action Start -->
+<section class="bg-cover bg-primary-2 position-relative py-5" style="background:url('{{ url_for('static', filename='assets/img/brand-section.png') }}') no-repeat;">
+	<div class="container">
+		
+		<!-- Components/Home/index/subscribe.html -->
+		{% include 'Components/Home/index/subscribe.html' %}
+
+	</div>
+</section>
+<!-- Call To Action Start -->
+
+
+	<!-- Components/Home/index/log.html -->
+	{% include 'Components/Home/index/log.html' %}
+			
+	
+	<!-- Components/Home/index/cart.html -->
+	{% include 'Components/Home/index/cart.html' %}
+			
+			
+	<!-- Components/Home/index/search.html -->
+	{% include 'Components/Home/index/search.html' %}
+
+
+	{% include 'Base/footer.html' %} 
+
+{% endblock %}

@@ -1,0 +1,9 @@
+{% for item in invoices %}
+    <tr>
+        <td data-label="Package Name">{{ item.title }}</td>
+        <td data-label="Order ID">{{ item.id }}</td>
+        <td data-label="Status"><span class="badge badge-xs {{ item.style }} rounded-pill">{{ item.status }}</span></td>
+        <td data-label="Due Date"><span class="text-normal">{{ item.date }}</span></td>
+        <td data-label="View"><a href="/invoice-page/" class="btn btn-sm fw-medium btn-light-primary rounded-pill">{{ item.btn }}</a></td>
+    </tr>
+{% endfor %}

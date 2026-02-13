@@ -1,0 +1,41 @@
+{% for item in reviews2 %}
+    <li>
+        <div class="singleReviewswrap">
+            <div class="singlereviews">
+                <div class="reviewerAvatar">
+                    <figure class="m-0">
+                        <img src="{{ item.img }}" class="img-fluid circle avatar-xl" alt="Avatar">
+                    </figure>
+                </div>
+                
+                <div class="reviewsInfo">
+                    <div class="reviewssupper d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                        <div class="reviewsExtopper">
+                            <div class="reviewrHeadline d-flex align-items-center justify-content-start gap-2">
+                                <h6 class="messageuserTitle">{{ item.title }}</h6> {{ item.on }} <a href="#" class="fw-medium text-primary">{{ item.name }}</a>
+                            </div>
+                            <div class="postedDate"><span class="text-md">{{ item.date }}</span></div>
+                        </div>
+                        <div class="flxLast">
+                            <div class="reviewsStar" data-rating="5">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-half"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="reviewsBody">
+                        <div class="reviewDescription d-block mb-3">
+                            <p class="m-0">{{ item.desc }}</p>
+                        </div>
+                        <div class="reviewreply">
+                            <button type="button" class="btn btn-sm fw-medium btn-light-primary rounded-pill"  data-bs-toggle="modal" data-bs-target="#replyModal"><i class="bi bi-reply me-2"></i>Reply to this review</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+{% endfor %}

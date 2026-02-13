@@ -1,0 +1,86 @@
+{% extends "Base/base.html" %}
+
+{% block hero_content %}
+
+{% include 'Base/navbar9.html' %}
+
+<div id="preloader">
+	<div class="preloader"><span></span><span></span></div>
+</div>
+
+<div class="clearfix"></div>
+
+<!-- Page Title Start -->
+<section class="bg-cover position-relative" style="background:url('{{ url_for('static', filename='assets/img/title-banner.jpg') }}') no-repeat;" data-overlay="6">
+	<div class="container">
+
+		<!-- Search Form -->
+		<div class="row justify-content-center align-items-center pt-lg-0 pt-5">
+			<div class="col-xl-7 col-lg-9 col-md-12 col-sm-12">
+				<div class="position-relative text-center mb-5">
+					<h1 class="text-light xl-heading">Latest Updates</h1>
+					<nav id="breadcrumbs" class="breadcrumbs light">
+						<ul>
+							<li><a href="/">Home</a></li>
+							<li><a href="#">Pages</a></li>
+							<li>Blog</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+		<!-- </row> -->
+
+	</div>
+</section>
+<!-- Page Title End -->
+
+<!-- Blogs Start -->
+<section class="bg-light">
+	<div class="container">
+		
+		<div class="row justify-content-center g-4">
+
+			<!-- Components/Pages/blog/single.html -->
+			{% include 'Components/Pages/blog/single.html' %}
+
+			<!-- Components/Pages/blog/blogs.html -->
+			{% include 'Components/Pages/blog/blogs.html' %}
+			
+		</div>
+
+		<!-- Components/Listings/Grid-Layouts/grid-layout-01/pagination.html -->
+		{% include 'Components/Listings/Grid-Layouts/grid-layout-01/pagination.html' %}		
+
+	</div>
+</section>
+<!-- Blogs END -->
+
+
+<!-- Call To Action Start -->
+<section class="bg-cover bg-primary-2 position-relative py-5" style="background:url('{{ url_for('static', filename='assets/img/brand-section.png') }}') no-repeat;">
+	<div class="container">
+		
+		<!-- Components/Home/index/subscribe.html -->
+		{% include 'Components/Home/index/subscribe.html' %}
+
+	</div>
+</section>
+<!-- Call To Action Start -->
+
+
+	<!-- Components/Home/index/log.html -->
+	{% include 'Components/Home/index/log.html' %}
+			
+
+	<!-- Components/Home/index/cart.html -->
+	{% include 'Components/Home/index/cart.html' %}
+			
+			
+	<!-- Components/Home/index/search.html -->
+	{% include 'Components/Home/index/search.html' %}
+
+
+	{% include 'Base/footer.html' %} 
+
+{% endblock %}

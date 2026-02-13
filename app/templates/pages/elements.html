@@ -1,0 +1,224 @@
+{% extends "Base/base.html" %}
+
+{% block hero_content %}
+
+{% include 'Base/navbar9.html' %}
+
+<div id="preloader">
+	<div class="preloader"><span></span><span></span></div>
+</div>
+
+<div class="clearfix"></div>
+			
+<!-- Page Title Start -->
+<section class="bg-light">
+	<div class="container">
+
+		<!-- Search Form -->
+		<div class="row justify-content-start align-items-center pt-lg-0 pt-5">
+			<div class="col-xl-7 col-lg-9 col-md-12 col-sm-12">
+				<div class="position-relative">
+					<h1 class="xl-heading">Elements</h1>
+					<nav id="breadcrumbs" class="breadcrumbs">
+						<ul>
+							<li><a href="/">Home</a></li>
+							<li><a href="#">Pages</a></li>
+							<li>Elements</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+		<!-- </row> -->
+
+	</div>
+</section>
+<!-- Page Title End -->
+
+
+<!-- All Elements Start -->
+<section>
+
+	<div class="container">
+		
+		<!-- row -->
+		<div class="row align-items-start g-4 mb-5">
+		
+			<div class="col-xl-6 col-lg-6 col-md-6">
+				<div class="elementWrap">
+					<div class="elementTitle mb-3"><h4 class="fw-medium mb-1">Buttons</h4></div>
+					<div class="elementContent">
+						<div class="d-flex align-items-start gap-3 flex-wrap">
+
+							<!-- Components/Pages/elements/buttons.html -->
+							{% include 'Components/Pages/elements/buttons.html' %}
+
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-xl-6 col-lg-6 col-md-6">
+				<div class="elementWrap">
+					<div class="elementTitle mb-3"><h4 class="fw-medium mb-1">Notifications</h4></div>
+					<div class="elementContent">
+
+						<!-- Components/Pages/elements/notifications.html -->
+						{% include 'Components/Pages/elements/notifications.html' %}
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<!-- /row -->
+		
+		<!-- row -->
+		<div class="row align-items-start g-4 mb-5">
+		
+			<div class="col-xl-6 col-lg-6 col-md-6">
+				<div class="elementWrap">
+					<div class="elementTitle mb-3"><h4 class="fw-medium mb-1">Badges</h4></div>
+					<div class="elementContent">
+
+						<!-- Components/Pages/elements/badges.html -->
+						{% include 'Components/Pages/elements/badges.html' %}
+						
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-xl-6 col-lg-6 col-md-6">
+				<div class="elementWrap">
+					<div class="elementTitle mb-3"><h4 class="fw-medium mb-1">Forms Elements</h4></div>
+
+					<!-- Components/Pages/elements/forms.html -->
+					{% include 'Components/Pages/elements/forms.html' %}
+
+				</div>
+			</div>
+
+		</div>
+		<!-- /row -->
+		
+		<!-- row -->
+		<div class="row align-items-start g-4 mb-5">
+		
+			<div class="col-xl-6 col-lg-6 col-md-6">
+				<div class="elementWrap">
+					<div class="elementTitle mb-3"><h4 class="fw-medium mb-1">Tab 01</h4></div>
+
+					<!-- Components/Pages/elements/tab1.html -->
+					{% include 'Components/Pages/elements/tab1.html' %}
+
+				</div>
+			</div>
+			
+			<div class="col-xl-6 col-lg-6 col-md-6">
+				<div class="elementWrap">
+					<div class="elementTitle mb-3"><h4 class="fw-medium mb-1">Tab 02</h4></div>
+
+					<!-- Components/Pages/elements/tab2.html -->
+					{% include 'Components/Pages/elements/tab2.html' %}
+
+				</div>
+			</div>
+			
+			<div class="col-xl-6 col-lg-6 col-md-6">
+				<div class="elementWrap">
+					<div class="elementTitle mb-3"><h4 class="fw-medium mb-1">Tab 03</h4></div>
+
+					<!-- Components/Pages/elements/tab3.html -->
+					{% include 'Components/Pages/elements/tab3.html' %}
+
+				</div>
+			</div>
+			
+			<div class="col-xl-6 col-lg-6 col-md-6">
+				<div class="elementWrap">
+					<div class="elementTitle mb-3"><h4 class="fw-medium mb-1">Tab 04</h4></div>
+
+					<!-- Components/Pages/elements/tab4.html -->
+					{% include 'Components/Pages/elements/tab4.html' %}
+
+				</div>
+			</div>
+
+		</div>
+		<!-- /row -->
+		
+		<!-- row -->
+		<div class="row align-items-start g-4 mb-5">
+		
+			<div class="col-xl-6 col-lg-6 col-md-6">
+				<div class="elementWrap">
+					<div class="elementTitle mb-3"><h4 class="fw-medium mb-1">Accordian</h4></div>
+					<div class="elementContent">
+						<div class="accordion accordion-flush" id="accordionFlushExample">
+
+							<!-- Components/Pages/elements/accordian.html -->
+							{% include 'Components/Pages/elements/accordian.html' %}
+
+						</div>	
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-xl-6 col-lg-6 col-md-6">
+				<div class="elementWrap">
+					<div class="elementTitle mb-3"><h4 class="fw-medium mb-1">Responsive Table</h4></div>
+					<div class="elementContent">
+						<table class="table table-striped mb-0">
+							<thead class="bg-light border-top">
+								<tr>
+									<th scope="col" class="border-0 text-start">Item</th>
+									<th scope="col" class="border-0">Quantity</th>
+									<th scope="col" class="border-0">Rate</th>
+									<th scope="col" class="border-0">Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								
+								<!-- Components/Pages/elements/table.html -->
+								{% include 'Components/Pages/elements/table.html' %}
+
+							</tbody>
+						</table>	
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<!-- /row -->
+
+	</div>
+			
+</section>
+<!-- All Elements End -->
+
+<!-- Call To Action Start -->
+<section class="bg-cover bg-primary-2 position-relative py-5" style="background:url('{{ url_for('static', filename='assets/img/brand-section.png') }}') no-repeat;">
+	<div class="container">
+		
+		<!-- Components/Home/index/subscribe.html -->
+		{% include 'Components/Home/index/subscribe.html' %}
+
+	</div>
+</section>
+<!-- Call To Action Start -->
+
+	<!-- Components/Home/index/log.html -->
+	{% include 'Components/Home/index/log.html' %}
+			
+	
+	<!-- Components/Home/index/cart.html -->
+	{% include 'Components/Home/index/cart.html' %}
+			
+			
+	<!-- Components/Home/index/search.html -->
+	{% include 'Components/Home/index/search.html' %}
+
+
+{% include 'Base/footer.html' %} 
+
+{% endblock %}

@@ -1,0 +1,5 @@
+{% for item in gallerys2 %}
+    <li class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
+        <a href="{{ item.img }}" class="mfp-gallery d-block"><img src="{{ item.img }}" class="img-fluid rounded" alt="Gallery Img"></a>
+    </li>
+{% endfor %}

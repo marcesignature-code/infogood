@@ -1,0 +1,9 @@
+{% for item in articles %}
+    <li>
+        <div class="postThumb"><a href="/blog-detail/" class="postImg"><figure><img src="{{ item.img }}" class="img-fluid rounded" alt="Post Image"></figure></a></div>
+        <div class="postCaps">
+            <h6><a href="/blog-detail/" class="link">{{ item.title }}</a></h6>
+            <span>{{ item.date }}</span>
+        </div>
+    </li>
+{% endfor %}

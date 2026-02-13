@@ -1,0 +1,269 @@
+{% extends "Base/base.html" %}
+
+{% block hero_content %}
+
+{% include 'Base/navbar.html' %}
+
+<div id="preloader">
+	<div class="preloader"><span></span><span></span></div>
+</div>
+			
+<div class="clearfix"></div>
+
+<!-- Hero Start -->
+<div class="image-cover hero-header" style="background:#fff0f2 url('{{ url_for('static', filename='assets/img/banner.png') }}') no-repeat;">
+	<div class="container">
+
+		<!-- Heading Rwo -->
+		<div class="row justify-content-center align-items-center mb-5 pt-lg-0 pt-5">
+			<div class="col-xl-10 col-lg-11 col-md-12 col-sm-12">
+				<div class="position-relative text-center">
+					<h1>Find The Best Places To Stay</h1>
+					<p class="fs-5 fw-light">Browse high-rated hotels, restaurants, attractions, activities and more!</p>
+				</div>
+			</div>
+		</div>
+		<!-- </row> -->
+		
+		<!-- Search Form row -->
+		<div class="row align-items-start justify-content-center mb-lg-5 mb-4">
+			<div class="col-xl-9 col-lg-10 col-md-12 col-sm-12">
+				<div class="heroSearch style-01 shadow-sm">
+					<div class="row gx-lg-2 gx-md-2 gx-3 gy-sm-2 gy-2">
+						<div class="col-xl-10 col-lg-9 col-md-12">
+							<div class="row gx-lg-2 gx-md-2 gx-3 gy-sm-2 gy-2">
+								<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+									<div class="form-group">
+										<div class="mobSearch d-flex align-items-center justify-content-start">
+											<div class="flexStart ps-2"><span class="fw-semibold text-dark">Find</span></div>
+											<input type="text" class="form-control fs-6 fw-medium border-0" placeholder="What are you looking for?">
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 single-border">
+									<div class="form-group">
+										<div class="mobSearch d-flex align-items-center justify-content-start">
+											<div class="flexStart ps-2"><span class="fw-semibold text-dark">Where</span></div>
+											<input type="text" class="form-control fs-6 fw-medium border-0" placeholder="Location">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-2 col-lg-3 col-md-12 col-sm-12">
+							<div class="form-group">
+								<button type="button" class="btn btn-primary full-width fw-medium"><i class="bi bi-search me-2"></i>Search</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Search Form Row -->
+		
+		<div class="row justify-content-center align-items-center">
+				<div class="col-xl-7 col-lg-8 col-md-11 col-sm-12">
+				<div class="d-block position-relative">
+					<div class="popularSearches d-flex align-items-center justify-content-center gap-4 flex-wrap">
+						<div class="singleItem"><a href="#" data-bs-toggle="tooltip" data-bs-title="Beauty & Spa" class="badge-success square--80 rounded-pill"><i class="fa-solid fa-spa fs-3"></i></a></div>	
+						<div class="singleItem"><a href="#" data-bs-toggle="tooltip" data-bs-title="Eat & Drink" class="badge-danger square--80 rounded-pill"><i class="fa-solid fa-bowl-rice fs-3"></i></a></div>	
+						<div class="singleItem"><a href="#" data-bs-toggle="tooltip" data-bs-title="Shopping" class="badge-info square--80 rounded-pill"><i class="fa-solid fa-bag-shopping fs-3"></i></a></div>	
+						<div class="singleItem"><a href="#" data-bs-toggle="tooltip" data-bs-title="Nightlife" class="badge-warning square--80 rounded-pill"><i class="fa-solid fa-martini-glass fs-3"></i></a></div>	
+						<div class="singleItem"><a href="#" data-bs-toggle="tooltip" data-bs-title="Coffee Shop" class="badge-primary square--80 rounded-pill"><i class="fa-solid fa-mug-saucer fs-3"></i></a></div>		
+					</div>
+				</div>
+				</div>
+		</div>
+
+	</div>
+</div>
+<!-- Hero End -->	
+
+<!-- Trending Category Start -->
+<section class="pb-0">
+	<div class="container">
+
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-7 col-lg-8 col-md-11 col-sm-12">
+				<div class="secHeading-wrap text-center">
+					<h3 class="sectionHeading">Hot & Trending <span class="text-primary">Categories</span></h3>
+					<p>Explore all types of popular category for submit your listings</p>
+				</div>
+			</div>
+		</div>
+
+	
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+				<div class="owl-carousel categorySlider">
+					
+					<!-- Components/Home/home-8/categories5.html -->
+                    {% include 'Components/Home/home-8/categories5.html' %}
+					
+				</div>
+			</div>
+		</div>
+	
+	</div>
+</section>
+<!-- Trending Category End -->
+	
+<!-- Popular Listings Start -->
+<section>
+	<div class="container">
+
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-7 col-lg-8 col-md-11 col-sm-12">
+				<div class="secHeading-wrap text-center">
+					<h3 class="sectionHeading">Popular Listings In <span class="text-primary">Chicago</span></h3>
+					<p>Explore Hot & Popular Business Listings</p>
+				</div>
+			</div>
+		</div>
+
+	
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+				<div class="owl-carousel owl-theme itemslider">
+					
+					<!-- Components/Home/home-3/listings2.html -->
+                    {% include 'Components/Home/home-3/listings2.html' %}
+					
+				</div>
+			</div>
+		</div>
+	
+	</div>
+</section>
+<!-- Popular Listings End -->
+
+
+<!-- Why Choose ListingHub Start -->
+<section class="position-relative" style="background-color:#fff5ed;">
+	<div class="container">
+		<div class="row align-items-center justify-content-between g-4">
+			
+			<!-- Components/Home/home-5/explore.html -->
+			{% include 'Components/Home/home-5/explore.html' %}
+		
+		</div>
+	</div>
+</section>
+<!-- Why Choose ListingHub End -->
+
+
+<!-- Choose Package Start -->
+<section>
+	<div class="container">
+
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-7 col-lg-8 col-md-11 col-sm-12">
+				<div class="secHeading-wrap text-center">
+					<h3 class="sectionHeading">Choose Your <span class="text-primary">Package</span></h3>
+					<p>Find & Select a perfect & suitable package for your choice.</p>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row align-items-center justify-content-center mb-4">
+			
+			<!-- Components/Home/home-5/account.html -->
+			{% include 'Components/Home/home-5/account.html' %}
+
+		</div>
+		
+		
+		<div class="row align-items-center justify-content-between g-xl-4 g-3">
+			
+			<!-- Components/Home/home-5/package.html -->
+			{% include 'Components/Home/home-5/package.html' %}
+		
+		</div>					
+	
+	</div>
+</section>
+<!-- Choose Package End -->
+
+
+<!-- Our Reviews Start -->
+<section class="bg-light">
+	<div class="container">
+
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-7 col-lg-8 col-md-11 col-sm-12">
+				<div class="secHeading-wrap text-center">
+					<h3 class="sectionHeading">Our Great <span class="text-primary">Reviews</span></h3>
+					<p>Our cliens love our services and give great & positive reviews</p>
+				</div>
+			</div>
+		</div>
+
+	
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+				<div class="owl-carousel owl-theme reviewsSlide">	
+						
+					<!-- Components/Home/index/reviews.html -->
+                    {% include 'Components/Home/index/reviews.html' %}
+					
+				</div>
+			</div>
+		</div>
+	
+	</div>
+</section>
+<!-- Our Reviews End -->
+
+
+<!-- Latest Updates Start -->
+<section>
+	<div class="container">
+
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-7 col-lg-8 col-md-11 col-sm-12">
+				<div class="secHeading-wrap text-center">
+					<h3 class="sectionHeading">Latest Updates <span class="text-primary">News</span></h3>
+					<p>Join ListingHub and get latest & trending updates about listing</p>
+				</div>
+			</div>
+		</div>
+
+	
+		<div class="row align-items-center justify-content-center g-4">
+		
+			<!-- Components/Home/index/blog.html -->
+			{% include 'Components/Home/index/blog.html' %}
+			
+		</div>
+	
+	</div>
+</section>
+<!-- Latest Updates End -->
+
+
+<!-- Call To Action Start -->
+<section class="bg-cover bg-primary-2 position-relative py-5" style="background:url('{{ url_for('static', filename='assets/img/brand-section.png') }}') no-repeat;">
+	<div class="container">
+		
+		<!-- Components/Home/index/subscribe.html -->
+		{% include 'Components/Home/index/subscribe.html' %}
+
+	</div>
+</section>
+<!-- Call To Action Start -->
+
+	<!-- Components/Home/index/log.html -->
+	{% include 'Components/Home/index/log.html' %}
+
+	
+	<!-- Components/Home/index/cart.html -->
+	{% include 'Components/Home/index/cart.html' %}
+			
+			
+	<!-- Components/Home/index/search.html -->
+	{% include 'Components/Home/index/search.html' %}
+
+
+{% include 'Base/footer.html' %} 
+
+{% endblock %}

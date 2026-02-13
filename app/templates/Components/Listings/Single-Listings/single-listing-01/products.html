@@ -1,0 +1,32 @@
+{% for item in products %}
+    <div class="singleItem">
+        <div class="catalogCard">
+            <div class="catalogThumb position-relative">
+                <div class="position-absolute top-0 start-0 mt-3 ms-3"><span class="badge badge-xs {{ item.style }} text-uppercase">{{ item.name }}</span></div>
+                <a href="#">
+                    <figure>	
+                        <img src="{{ item.img }}" class="img-fluid rounded-2" alt="Product Thumb">
+                    </figure>
+                </a>
+            </div>
+            
+            <div class="catalogCaps">
+                <div class="d-flex align-items-start justify-content-between gap-2">
+                    <div class="catalogProducttitle">
+                        <h6 class="lh-base m-0">{{ item.title }}</h6>
+                        <p class="text-md d-flex align-items-center gap-2 m-0"><span>{{ item.price }}</span>
+
+                            {% if item.tag == 'true' %}
+                                <span class="text-success">{{ item.off }}</span>
+                            {% endif %}
+
+                        </p>
+                    </div>
+                    <div class="addCart">
+                        <a href="#" class="text-muted-2 square--40 circle bg-light" data-bs-toggle="tooltip" data-bs-title="Add To Cart"><i class="bi bi-basket2-fill"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

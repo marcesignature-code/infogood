@@ -1,0 +1,11 @@
+{% for item in authors %}
+    <div class="py-3 px-3 border-top">
+        <div class="infoFlexio d-flex align-items-center justify-content-start gap-2">
+            <div class="square--40 rounded bg-light-primary"><i class="{{ item.icon }} text-primary"></i></div>
+            <div class="infoDetails">
+                <p class="text-muted lh-base mb-0">{{ item.name }}</p>
+                <p class="text-dark lh-base fw-medium fs-6 mb-0">{{ item.title }}</p>
+            </div>
+        </div>
+    </div>
+{% endfor %}

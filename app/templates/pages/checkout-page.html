@@ -1,0 +1,184 @@
+{% extends "Base/base.html" %}
+
+{% block hero_content %}
+
+{% include 'Base/navbar9.html' %}
+
+<div id="preloader">
+	<div class="preloader"><span></span><span></span></div>
+</div>
+
+<div class="clearfix"></div>
+			
+<!-- Page Title Start -->
+<section class="bg-light">
+	<div class="container">
+
+		<!-- Search Form -->
+		<div class="row justify-content-start align-items-center pt-lg-0 pt-5">
+			<div class="col-xl-7 col-lg-9 col-md-12 col-sm-12">
+				<div class="position-relative">
+					<h1 class="xl-heading">Checkout</h1>
+					<nav id="breadcrumbs" class="breadcrumbs">
+						<ul>
+							<li><a href="/">Home</a></li>
+							<li><a href="#">Shop</a></li>
+							<li>Checkout</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+		<!-- </row> -->
+
+	</div>
+</section>
+<!-- Page Title End -->
+
+
+<!-- Checkout Details Start -->
+<section>
+
+	<div class="container">
+	
+		<!-- row Start -->
+		<div class="row">
+			<div class="col-lg-12 col-md-12">
+				<div class="alert alert-success text-center" role="alert">
+					Hi Dear, Have you already an account? <a href="#" class="alert-link" data-bs-toggle="collapse" data-bs-target="#login-frm">Please Login</a>
+				</div>
+			</div>
+			
+			<div class="col-lg-12 col-md-12">	
+				<div id="login-frm" class="collapse mb-5">
+					<div class="row">
+						
+						<div class="col-lg-4 col-md-4 col-sm-6">
+							<div class="form-group">
+								<input type="text" class="form-control border" placeholder="Username">
+							</div>
+						</div>
+						
+						<div class="col-lg-4 col-md-4 col-sm-6">
+							<div class="form-group">
+								<input type="text" class="form-control border" placeholder="*******">
+							</div>
+						</div>
+						
+						<div class="col-lg-4 col-md-4 col-sm-12">
+							<div class="form-group">
+								<button type="submit" class="btn btn-primary full-width">Submit</button>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /row -->
+
+		<!-- row Start -->
+		<div class="row form-submit">
+			<div class="col-lg-8 col-md-12 col-sm-12">
+			
+				<!-- row -->
+				<div class="row m-0">
+					<div class="submit-page">
+						<div class="row">
+						
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<h3>Billing Detail</h3>
+							</div>
+
+							<!-- Components/Pages/checkout-page/billing.html -->
+							{% include 'Components/Pages/checkout-page/billing.html' %}
+					
+						</div>
+					</div>
+				</div>
+				<!--/row -->
+				
+				<!-- Payment Methode -->
+				<div class="row align-items-start justify-content-start mt-4 g-2">
+					<div class="col-xl-12 col-lg-12 col-md-12 col-12">
+							
+						<!-- Components/Pages/booking-page/payment.html -->
+						{% include 'Components/Pages/booking-page/payment.html' %}
+					
+					</div>
+					
+					<div class="col-xl-12 col-lg-12 col-md-12 col-12">
+						<div class="form-group m-0">
+							<a href="/success-payment/" class="btn btn-primary fw-medium w-100">Place Your Order</a>
+						</div>
+					</div>
+					
+				</div>
+			
+			</div>
+			
+			<!-- Col-lg 4 -->
+			<div class="col-lg-4 col-md-12 col-sm-12">
+				
+				<div class="paymensSidebar gray rounded-3 p-4">
+					<div class="paymentPagewrap">
+						<div class="paymentPage">
+							<div class="cartShoppes">
+
+								<!-- Components/Pages/checkout-page/shipping.html -->
+								{% include 'Components/Pages/checkout-page/shipping.html' %}
+								
+							</div>
+						</div>
+						
+						<div class="booking-info-try rounded bg-white mb-4 mt-3 p-4">
+							<ul class="p-0 m-0">
+								<li class="d-flex align-items-center justify-content-between my-1"><span class="text-dark fw-medium">Subtotal</span><span class="fw-medium text-muted">$272.20</span></li>
+								<li class="d-flex align-items-center justify-content-between my-1"><span class="text-dark fw-medium">GST</span><span class="fw-medium text-muted">$16.40</span></li>
+								<li class="d-flex align-items-center justify-content-between my-1"><span class="text-dark fw-medium">Tax</span><span class="fw-medium text-muted">$18.20</span></li>
+								<li class="d-flex align-items-center justify-content-between my-1"><span class="text-dark fw-medium">Discount</span><span class="fw-medium text-danger">-$12.10</span></li>
+								<li class="d-flex align-items-center justify-content-between"><span class="text-dark fw-medium">Total</span><span class="fw-semibold text-success">$298.76</span></li>
+							</ul>
+						</div>
+					</div>
+					
+				</div>
+				
+			</div>
+			<!-- /col-lg-4 -->
+			
+		</div>
+		<!-- /row -->					
+		
+	</div>
+			
+</section>
+<!-- Checkout Details End -->
+
+<!-- Call To Action Start -->
+<section class="bg-cover bg-primary-2 position-relative py-5" style="background:url('{{ url_for('static', filename='assets/img/brand-section.png') }}') no-repeat;">
+	<div class="container">
+		
+		<!-- Components/Home/index/subscribe.html -->
+		{% include 'Components/Home/index/subscribe.html' %}
+
+	</div>
+</section>
+<!-- Call To Action Start -->
+
+
+	<!-- Components/Home/index/log.html -->
+	{% include 'Components/Home/index/log.html' %}
+			
+
+	<!-- Components/Home/index/cart.html -->
+	{% include 'Components/Home/index/cart.html' %}
+			
+			
+	<!-- Components/Home/index/search.html -->
+	{% include 'Components/Home/index/search.html' %}
+
+
+	{% include 'Base/footer.html' %} 
+
+{% endblock %}

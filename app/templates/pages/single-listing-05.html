@@ -1,0 +1,291 @@
+{% extends "Base/base.html" %}
+
+{% block hero_content %}
+
+{% include 'Base/navbar.html' %}
+
+<div id="preloader">
+	<div class="preloader"><span></span><span></span></div>
+</div>
+
+<div class="clearfix"></div>
+			
+<!-- Car Gallery Start -->
+<section class="py-0">
+	<div class="container-fluid p-0 px-3 px-sm-0">
+	
+		<!-- Gallery Pert -->
+		<div class="row align-items-start pt-lg-0 pt-5">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-12">
+				<div class="owl-carousel owl-theme galleryslide">
+
+					<!-- Components/Listings/Single-Listings/single-listing-05/gallery8.html -->
+					{% include 'Components/Listings/Single-Listings/single-listing-05/gallery8.html' %}
+					
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</section>
+<!-- Car Gallery End -->
+
+
+<!-- Property Detail Start -->
+<section class="position-relative py-4 bg-white">
+	<div class="container">
+	
+		<!-- Gallery Pert -->
+		<div class="row align-items-start">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-12">
+				<div class="mainlistingInfos">
+					<div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+						<div class="firstColumn">
+							<div class="listingFirstinfo d-flex align-items-center justify-content-start gap-3 flex-wrap">
+								<div class="listingCaptioninfo">
+									<div class="propertyTitlename d-flex align-items-center gap-2 mb-1"><h3 class="fw-semibold mb-0">
+										{% if listing5.title %}
+											{{ listing5.title }}
+										{% else %}
+											TATA Nexon XM White
+										{% endif %}
+									</h3></div>
+									<div class="listingsbasicInfo">
+										<div class="d-flex align-items-center justify-content-start flex-wrap gap-2">
+											<div class="flexItem me-2"><span class="text-md fw-medium"><i class="fa-solid fa-location-dot me-2"></i>Old Paris, France</span></div>
+											<div class="flexItem me-2"><span class="text-md text-success fw-medium"><i class="bi bi-briefcase me-2"></i>Classified</span></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="lastColumn">	
+							<div class="d-flex align-items-center justify-content-md-end gap-3">
+								<div class="flexStart Priceinfo d-flex flex-column">
+									<span class="fw-medium">Price</span>
+									<span class="fw-bold fs-6 text-dark">$2,485</span>
+								</div>
+								<div class="flexlastButton"><button type="button" class="btn px-4 btn-light-primary fw-medium rounded-pill"><i class="bi bi-telephone me-2"></i>Call Now</button></div>
+							</div>	
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</section>
+<!-- Property Detail End -->
+
+
+<!-- All Section Content -->
+<section class="bg-light pt-4 pt-xl-5">
+	<div data-bs-spy="scroll" data-bs-target="#scrollphyNav" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0">
+		<div class="container">
+			<div class="row align-items-start gx-xl-5 g-4">
+					
+				<!-- Detail Row -->
+				<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12">
+					
+					<!-- Overview -->
+					<div class="listingSingleblock mb-4">
+						<div class="card-body p-4">
+							<div class="row align-items-start justify-content-start gy-4 gx-5">
+
+								<!-- Components/Listings/Single-Listings/single-listing-05/overview2.html -->
+								{% include 'Components/Listings/Single-Listings/single-listing-05/overview2.html' %}
+							
+							</div>
+						</div>
+					</div>
+					
+					
+					<!-- Gallery -->
+					<div class="listingSingleblock mb-4">
+						<div class="SingleblockHeader">
+							<a data-bs-toggle="collapse" data-parent="#gallery" data-bs-target="#gallery" aria-controls="gallery" href="#" aria-expanded="false" class="collapsed"><h4 class="listingcollapseTitle">Gallery</h4></a>
+						</div>
+						
+						<div id="gallery" class="panel-collapse collapse show">
+							<div class="card-body p-4 pt-2">
+								<ul class="row align-items-center justify-content-center g-3 p-0">
+									
+									<!-- Components/Listings/Single-Listings/single-listing-03/gallery6.html -->
+									{% include 'Components/Listings/Single-Listings/single-listing-03/gallery6.html' %}
+
+								</ul>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Components/Listings/Single-Listings/single-listing-04/description2.html -->
+					{% include 'Components/Listings/Single-Listings/single-listing-04/description2.html' %}
+					
+
+					<!-- Maps -->
+					<div class="listingSingleblock mb-4" id="maps">
+						<div class="SingleblockHeader">
+							<a data-bs-toggle="collapse" data-parent="#map" data-bs-target="#map" aria-controls="map" href="#" aria-expanded="false" class="collapsed"><h4 class="listingcollapseTitle">Map</h4></a>
+						</div>
+						
+							
+						<!-- Components/Listings/Single-Listings/single-listing-01/maps.html -->
+						{% include 'Components/Listings/Single-Listings/single-listing-01/maps.html' %}
+
+					</div>
+					
+					
+					<!-- Similar Items -->
+					<div class="listingSingleblock">
+						<div class="SingleblockHeader">
+							<a data-bs-toggle="collapse" data-parent="#similar" data-bs-target="#similar" aria-controls="similar" href="#" aria-expanded="false" class="collapsed"><h4 class="listingcollapseTitle">Similar Lists</h4></a>
+						</div>
+						
+						<div id="similar" class="panel-collapse collapse show">
+							<div class="card-body p-4 pt-2">
+								<div class="owl-carousel owl-theme similarSliders">
+									
+									<!-- Components/Home/home-3/listings2.html -->
+                    				{% include 'Components/Home/home-3/listings2.html' %}
+								
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				
+				<!-- Sidebar Detail -->
+				<div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+					<div class="sidebarGroups d-flex flex-column gap-4">
+						
+						<!-- Author -->
+						<div class="card">
+							<div class="bg-cover card-header ht-150" style="background:url('{{ url_for('static', filename='assets/img/avatar-bg.jpg') }}') no-repeat;"></div>
+							<div class="card-body mt-n3 p-0">
+								<div class="avatarBox position-relative mb-4">
+									<div class="square--100 circle bg-transparents mx-auto p-2 z-2"><img src="{{ url_for('static', filename='assets/img/team-4.jpg') }}" class="img-fluid circle" alt="Avatar"></div>
+									<div class="listingInfo text-center">
+										<p class="text-md text-muted mb-0">Added By</p>
+										<h6 class="mb-0">Shree K. Patel</h6>
+									</div>
+								</div>
+								<div class="avatarInfo mb-2">
+										
+									<!-- Components/Listings/Single-Listings/single-listing-01/author.html -->
+									{% include 'Components/Listings/Single-Listings/single-listing-01/author.html' %}
+
+								</div>
+							</div>
+							<div class="card-footer bg-white border-top">
+								<div class="d-flex align-items-center justify-content-center gap-3">
+									<div class="flexSocial"><a href="#" class="square--40 circle border"><i class="bi bi-facebook color--facebook"></i></a></div>
+									<div class="flexSocial"><a href="#" class="square--40 circle border"><i class="bi bi-twitter color--twitter"></i></a></div>
+									<div class="flexSocial"><a href="#" class="square--40 circle border"><i class="bi bi-instagram color--instagram"></i></a></div>
+									<div class="flexSocial"><a href="#" class="square--40 circle border"><i class="bi bi-youtube color--pinterest"></i></a></div>
+									<div class="flexSocial"><a href="#" class="square--40 circle border"><i class="bi bi-whatsapp color--whatsapp"></i></a></div>
+								</div>
+							</div>
+						</div>
+
+
+						<!-- Message Form -->
+						<div class="card">
+							<div class="card-header py-3">
+								<div class="headerFirst"><h6><i class="bi bi-envelope-check-fill me-2"></i>Message To Vendor</h6></div>
+							</div>
+							<div class="p-xl-4 p-3">
+								<div class="contactForm position-relative">
+									<div class="form-group">
+										<input type="text" class="form-control" placeholder="Your Name">
+									</div>
+									<div class="form-group">
+										<input type="email" class="form-control" placeholder="Your Email">
+									</div>
+									<div class="form-group">
+										<input type="tel" class="form-control" placeholder="Your Phone">
+									</div>
+									<div class="form-group">
+										<textarea class="form-control" placeholder="Leave a comment here" style="height: 120px"></textarea>
+									</div>
+									<div class="form-group">
+										<button type="button" class="btn btn-primary rounded-pill fw-medium w-100"><i class="bi bi-send me-2"></i>Send Message</button>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+						<!-- Message Form End -->
+						
+						<!-- Specifications -->
+						<div class="card">
+							<div class="card-header py-3">
+								<div class="headerFirst"><h6>Specifications</h6></div>
+							</div>
+							<div class="card-body p-0">
+								<div class="openingsInfo">
+
+									<!-- Components/Listings/Single-Listings/single-listing-05/specifications.html -->
+									{% include 'Components/Listings/Single-Listings/single-listing-05/specifications.html' %}
+
+								</div>
+							</div>
+						</div>
+						
+						<!-- Share option -->
+						<div class="card">
+							
+							<div class="card-body px-3">
+								<div class="form-group mb-1">
+									<button type="button" class="btn btn-whites border rounded-pill fw-medium w-100"><i class="bi bi-suit-heart me-2"></i>Bookmark This Listing</button>
+								</div>
+								<div class="form-group text-center mb-4">
+									<p class="text-md">45 People Bookmark This Place</p>
+								</div>
+								<div class="form-group m-0">
+									<div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+										<button type="button" class="btn btn-md btn-whites border rounded-pill color--facebook flex-fill"><i class="bi bi-suit-heart me-1"></i>Facebook</button>
+										<button type="button" class="btn btn-md btn-whites border rounded-pill color--twitter flex-fill"><i class="bi bi-suit-heart me-1"></i>Twitter</button>
+										<button type="button" class="btn btn-md btn-whites border rounded-pill color--instagram flex-fill"><i class="bi bi-suit-heart me-1"></i>Instagram</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					
+					</div>
+				</div>
+			
+			</div>
+		
+		</div>
+	</div>
+</section>
+<!-- All Section Content -->
+
+<!-- Call To Action Start -->
+<section class="bg-cover bg-primary-2 position-relative py-5" style="background:url('{{ url_for('static', filename='assets/img/brand-section.png') }}') no-repeat;">
+	<div class="container">
+		
+		<!-- Components/Home/index/subscribe.html -->
+		{% include 'Components/Home/index/subscribe.html' %}
+
+	</div>
+</section>
+<!-- Call To Action Start -->
+
+			
+	<!-- Components/Home/index/log.html -->
+	{% include 'Components/Home/index/log.html' %}
+			
+			
+	<!-- Components/Home/index/cart.html -->
+	{% include 'Components/Home/index/cart.html' %}
+			
+			
+	<!-- Components/Home/index/search.html -->
+	{% include 'Components/Home/index/search.html' %}
+
+
+{% include 'Base/footer.html' %} 
+
+{% endblock %}

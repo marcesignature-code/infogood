@@ -1,0 +1,98 @@
+{% extends "Base/base.html" %}
+
+{% block hero_content %}
+
+{% include 'Base/navbar4.html' %}
+
+<div id="preloader">
+	<div class="preloader"><span></span><span></span></div>
+</div>
+
+<div class="clearfix"></div>
+		
+<!-- Filter Search Options Start -->
+<div class="bg-white py-3 sticky-lg-top z-3">
+	<div class="container">
+	
+		<!-- Components/Listings/Grid-Layouts/grid-layout-02/filter.html -->
+		{% include 'Components/Listings/Grid-Layouts/grid-layout-02/filter.html' %}
+	
+	</div>
+</div>
+<!-- Filter Search Options End -->
+
+<!-- Search List Wrapper -->
+<section class="bg-light">
+	<div class="container">
+		
+		<div class="row align-items-center justify-content-between mb-4">
+			<div class="col-xl- 5 col-lg-5 col-md-5 col-sm-6 col-6">
+				<div class="totalListingshow">
+					<h6 class="fw-medium mb-0">106 Listings Founds</h6>
+				</div>
+			</div>
+			
+			<div class="col-xl- 5 col-lg-5 col-md-5 col-sm-6 col-6">
+				<div class="text-end">
+					<!-- Rating Filter -->
+				
+					<div class="btn-group">
+						<button type="button" class="py-2 px-3 dropdown-toggle toogleDrops" id="shortfilter" data-bs-toggle="dropdown" aria-expanded="false">
+							Short Listings
+						</button>
+						<ul class="dropdown-menu dropdown-menu-end border">
+
+							<!-- Components/Listings/Grid-Layouts/grid-layout-01/short-listings.html -->
+							{% include 'Components/Listings/Grid-Layouts/grid-layout-01/short-listings.html' %}
+
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row align-items-center justify-content-center g-xl-4 g-3">
+
+			<!-- Components/Listings/Grid-Layouts/grid-layout-02/listings5.html -->
+			{% include 'Components/Listings/Grid-Layouts/grid-layout-02/listings5.html' %}
+			
+		</div>
+			
+		<!-- Components/Listings/Grid-Layouts/grid-layout-01/pagination.html -->
+		{% include 'Components/Listings/Grid-Layouts/grid-layout-01/pagination.html' %}
+
+	</div>
+</section>
+<!-- Search List Wrapper End -->
+
+
+<!-- Call To Action Start -->
+<section class="bg-cover bg-primary-2 position-relative py-5" style="background:url('{{ url_for('static', filename='assets/img/brand-section.png') }}') no-repeat;">
+	<div class="container">
+		
+		<!-- Components/Home/index/subscribe.html -->
+		{% include 'Components/Home/index/subscribe.html' %}
+
+	</div>
+</section>
+<!-- Call To Action Start -->
+			
+
+	<!-- Components/Home/index/log.html -->
+	{% include 'Components/Home/index/log.html' %}
+		
+	
+	<!-- Components/Home/index/cart.html -->
+	{% include 'Components/Home/index/cart.html' %}
+			
+			
+	<!-- Components/Home/index/search.html -->
+	{% include 'Components/Home/index/search.html' %}
+			
+	<!-- Components/Listings/Grid-Layouts/grid-layout-02/offcanvas.html -->
+	{% include 'Components/Listings/Grid-Layouts/grid-layout-02/offcanvas.html' %}
+
+
+{% include 'Base/footer.html' %} 
+
+{% endblock %}

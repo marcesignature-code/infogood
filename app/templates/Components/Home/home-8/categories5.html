@@ -1,0 +1,17 @@
+{% for item in categories2 %}
+    <div class="singleCategory">
+        <div class="moder-category">
+            <div class="moder-categoryImage">
+                <img src="{{ item.img }}" class="img-fluid" alt="Category Image">
+                <div class="moder-categoryIcon">
+                    <i class="{{ item.icon }}"></i>
+                </div>
+            </div>
+            <div class="moder-categoryContent text-center">
+                <h5><a href="">{{ item.title }}</a></h5>
+                <div class="d-flex align-items-center justify-content-center"><span class="badge badge-xs rounded-pill">{{ item.lists }}</span></div>
+            </div>
+        </div>
+       <p>Bryan</p> 	
+    </div>
+{% endfor %}

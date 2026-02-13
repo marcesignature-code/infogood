@@ -1,0 +1,14 @@
+{% for item in ratings2 %}
+    <div class="col">
+        <div class="cardio">
+            <a href="#" class="cats-modern">
+                <div class="cats-icons">
+                    <i class="{{ item.icon }}"></i>
+                </div>
+                <div class="cats-titles">
+                    <h5>{{ item.title }}</h5>
+                </div>
+            </a>
+        </div>
+    </div>
+{% endfor %}

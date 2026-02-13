@@ -1,0 +1,134 @@
+{% extends "Base/base.html" %}
+
+{% block hero_content %}
+
+{% include 'Base/navbar9.html' %}
+
+<div id="preloader">
+	<div class="preloader"><span></span><span></span></div>
+</div>
+
+<div class="clearfix"></div>
+			
+<!-- Page Title Start -->
+<section class="bg-light">
+	<div class="container">
+
+		<!-- Search Form -->
+		<div class="row justify-content-start align-items-center pt-lg-0 pt-5">
+			<div class="col-xl-7 col-lg-9 col-md-12 col-sm-12">
+				<div class="position-relative">
+					<h1 class="xl-heading">Booking</h1>
+					<nav id="breadcrumbs" class="breadcrumbs">
+						<ul>
+							<li><a href="/">Home</a></li>
+							<li>Booking Page</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+		<!-- </row> -->
+
+	</div>
+</section>
+<!-- Page Title End -->
+
+<!-- Checkout Details Start -->
+<section>
+
+	<div class="container">
+
+		<!-- row Start -->
+		<div class="row form-submit">
+			<div class="col-lg-8 col-md-12 col-sm-12">
+			
+				<!-- row -->
+				<div class="row m-0">
+					<div class="submit-page">
+						<div class="row">
+						
+							<div class="col-lg-12 col-md-12 col-sm-12 mb-4">
+								<h3 class="fw-medium">Personal Details</h3>
+							</div>
+
+							<!-- Components/Pages/booking-page/details.html -->
+							{% include 'Components/Pages/booking-page/details.html' %}
+					
+						</div>
+					</div>
+				</div>
+				<!--/row -->
+				
+				<!-- Payment Methode -->
+				<div class="row align-items-start justify-content-start mt-4 g-2">
+					
+					<div class="col-lg-12 col-md-12 col-sm-12 mb-2">
+						<h3 class="fw-medium">Payment Methods</h3>
+					</div>
+					
+					<div class="col-xl-12 col-lg-12 col-md-12 col-12">
+						
+						<!-- Components/Pages/booking-page/payment.html -->
+						{% include 'Components/Pages/booking-page/payment.html' %}
+
+					</div>
+					
+					<div class="col-xl-12 col-lg-12 col-md-12 col-12">
+						<div class="form-group m-0">
+							<a href="/success-payment/" class="btn btn-primary fw-medium rounded-pill w-100">Proceed & Pay</a>
+						</div>
+					</div>
+					
+				</div>
+			
+			</div>
+			
+			<!-- Col-lg 4 -->
+			<div class="col-lg-4 col-md-12 col-sm-12">
+				
+				<div class="paymensSidebar bg-light rounded-3 p-4">
+
+					<!-- Components/Pages/booking-page/booking.html -->
+					{% include 'Components/Pages/booking-page/booking.html' %}
+					
+				</div>
+				
+			</div>
+			<!-- /col-lg-4 -->
+			
+		</div>
+		<!-- /row -->					
+		
+	</div>
+			
+</section>
+<!-- Checkout Details End -->
+
+<!-- Call To Action Start -->
+<section class="bg-cover bg-primary-2 position-relative py-5" style="background:url('{{ url_for('static', filename='assets/img/brand-section.png') }}') no-repeat;">
+	<div class="container">
+		
+		<!-- Components/Home/index/subscribe.html -->
+		{% include 'Components/Home/index/subscribe.html' %}
+
+	</div>
+</section>
+<!-- Call To Action Start -->
+
+
+	<!-- Components/Home/index/log.html -->
+	{% include 'Components/Home/index/log.html' %}
+
+			
+	<!-- Components/Home/index/cart.html -->
+	{% include 'Components/Home/index/cart.html' %}
+			
+			
+	<!-- Components/Home/index/search.html -->
+	{% include 'Components/Home/index/search.html' %}
+
+
+	{% include 'Base/footer.html' %} 
+
+{% endblock %}

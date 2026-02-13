@@ -1,0 +1,77 @@
+{% for item in listings6 %}
+    <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12">
+        <div class="listingCard listLayouts card rounded-3 border-0">
+            
+            <div class="row align-items-center justify-content-start g-3">
+                
+                <!-- Property Thumb -->
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <div class="listThumb overflow-hidden position-relative">
+                        <div class="position-absolute start-0 top-0 ms-3 mt-3"><span class="badge badge-xs text-uppercase {{ item.color }} rounded-pill">{{ item.btn }}</span></div>
+                        
+                        {% if item.tag == 'true' %}
+                            <div class="position-absolute end-0 bottom-0 me-3 mb-3"><span class="badge badge-xs featuredList rounded-pill"><i class="fa-solid fa-star me-1"></i>{{ item.btn1 }}</span></div>
+                        {% endif %}
+                        
+                        <a href="#" class="d-block"><img src="{{ item.img }}" class="img-fluid list-thumb object-fit" alt="Listing Img"></a>
+                    </div>
+                </div>
+                
+                <!-- Property Info -->
+                <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+                    <div class="listCaption px-3 py-4">
+                        <div class="listTitle d-block mb-4">
+                            <div class="d-flex align-items-start justify-content-between gap-2">
+                                <div class="flex-first">
+                                    <div class="d-flex align-items-center justify-content-start gap-2 flex-wrap mb-3">
+                                        <div class="singleCaption">
+                                            <div class="bg-light border rounded-pill py-1 ps-1 pe-3">
+                                                <div class="d-inline-flex align-items-center justify-content-start gap-2">
+                                                    <span class="square--25 circle bg-price text-light text-sm"><i class="bi bi-coin lh-1 h-auto"></i></span>
+                                                    <span class="text-sm fw-medium">{{ item.price }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {% if item.tag1 == 'true' %}
+                                            <div class="singleCaption">
+                                                <div class="bg-light border rounded-pill py-1 ps-1 pe-3">
+                                                    <div class="d-inline-flex align-items-center justify-content-start gap-2">
+                                                        <span class="square--25 circle bg-booking text-light text-sm"><i class="bi bi-lightning-charge-fill lh-1 h-auto"></i></span>
+                                                        <span class="text-sm fw-medium">{{ item.btn2 }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+
+                                    </div>
+                                    <h5 class="listItemtitle"><a href="{{ url_for('main.single_listing_02', title=slugify(item.title)) }}">{{ item.title }}<span class="verified"><i class="bi bi-patch-check-fill m-0"></i></span></a></h5>
+                                    <div class="d-flex align-items-center justify-content-start flex-wrap gap-3">
+                                        <div class="flex-start"><div class="list-location text-muted"><span><i class="fa-solid fa-location-dot me-2"></i>{{ item.location }}</span></div></div>
+                                        <div class="flex-last">
+                                            <div class="d-flex align-items-center justify-content-start">
+                                                <i class="fa-solid fa-star text-warning"></i><span class="mx-1 text-dark fw-bold">{{ item.rating }}</span><span class="text-md text-muted">({{ item.reviews }})</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-last">
+                                    <a href="#" class="bookmarkList"><i class="fa-regular fa-heart"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-features d-flex align-items-center justify-content-start row-gap-2 column-gap-3 text-dark">
+                            <div class="d-flex align-items-center fw-medium">
+                                <span class="{{ item.span }} me-2"><i class="{{ item.icon }} text-md"></i></span>{{ item.name }}
+                            </div>
+                            <div class="d-flex align-items-center fw-medium">
+                                <span class="listCall me-2"><i class="bi bi-telephone"></i></span>{{ item.number }}
+                            </div>			
+                        </div>
+                    </div>	
+                </div>
+                
+            </div>
+        </div>
+    </div>
+{% endfor %}

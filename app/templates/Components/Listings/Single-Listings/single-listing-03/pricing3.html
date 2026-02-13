@@ -1,0 +1,20 @@
+{% for item in pricings3 %}
+    <li class="col-xl-4 col-lg-6 col-md-6">
+        <div class="pricingMenu d-block">
+            <div class="d-flex align-items-center justify-content-between gap-2 border br-dashed rounded-pill p-2">
+                <div class="pricingMain d-flex align-items-center justify-content-start gap-2">
+                    <div class="pricingMenuIcons">
+                        <div class="square--50 circle bg-light-primary text-primary"><i class="{{ item.icon }}"></i></div>
+                    </div>
+                    
+                    <div class="prcCaptions">
+                        <h6 class="fw-medium mb-0">{{ item.title }}</h6>
+                    </div>
+                </div>
+                <div class="pricingCharges">
+                    <h6 class="text-muted m-0">{{ item.price }}</h6>
+                </div>
+            </div>
+        </div>
+    </li>
+{% endfor %}

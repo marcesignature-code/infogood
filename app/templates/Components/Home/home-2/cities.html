@@ -1,0 +1,27 @@
+{% for item in cities %}
+    <div class="{{ item.style }}">
+        <div class="card border-0 rounded-4 ht-300 position-relative">
+            <a href="#" class="h-100" tabindex="-1">
+                <div class="abx-thumb h-100" data-overlay="3">
+                    <img src="{{ item.img }}" class="w-100 h-100 object-fit" alt="">
+                </div>
+            </a>
+            <div class="position-absolute top-0 end-0 mt-3 me-3 z-1">
+                <span class="badge badge-xs bg-light text-dark rounded-pill">{{ item.lists }}</span>
+            </div>
+            <div class="position-absolute bottom-0 start-0 mb-3 ms-3 z-1">
+                <div class="d-block w-100 position-relative">
+                    <div class="cityTitle">
+                        <h4 class="text-light">{{ item.title }}</h4>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-start flex-wrap gap-2">
+                        <span class="badge badge-xs badge-transparent rounded-pill">San Diego</span>
+                        <span class="badge badge-xs badge-transparent rounded-pill">New York</span>
+                        <span class="badge badge-xs badge-transparent rounded-pill">Dallas</span>
+                        <span class="badge badge-xs badge-transparent rounded-pill">Denver</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

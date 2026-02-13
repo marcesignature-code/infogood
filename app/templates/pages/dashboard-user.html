@@ -1,0 +1,180 @@
+{% extends "Base/base.html" %}
+
+{% block hero_content %}
+
+{% include 'Base/navbar7.html' %}
+
+<div id="preloader">
+	<div class="preloader"><span></span><span></span></div>
+</div>
+			
+<!-- Dashboard Start -->
+<section class="p-0">
+	<div class="container-fluid p-0">
+		<div class="row user-dashboard g-0 pt-lg-0 pt-5">
+			
+			<!-- Dashboard Sidebar -->
+			<div class="col-xl-2 col-lg-3 col-md-12">
+				<div class="user-dashboard-inner h-100 border-end border-2 py-5 p-3 d-lg-block d-none">
+					<div class="dashboard_users mb-4">
+						<div class="square--80 circle mx-auto mb-1"><img src="{{ url_for('static', filename='assets/img/team-2.jpg') }}" class="img-fluid circle" alt="User Image"></div>
+						<div class="user-nameTitle text-center">
+							<h4 class="lh-base fw-semibold text-light mb-0">Welcome Back</h4>
+							<h6 class="text-light fw-medium opacity-75 mb-0">Shreethemes</h6>
+						</div>
+					</div>
+					<div class="dashboard_Menu">
+						<ul>
+							<li><a href="/dashboard-user/" class="active"><i class="bi bi-speedometer me-2"></i>Dashboard Area</a></li>
+							<li><a href="/dashboard-my-profile/"><i class="bi bi-person-lines-fill me-2"></i>My Profile</a></li>
+							<li><a href="/dashboard-my-bookings/"><i class="bi bi-journal-check me-2"></i>My Bookings</a></li>
+							<li><a href="/dashboard-my-listings/"><i class="bi bi-ui-radios-grid me-2"></i>My Listings</a></li>
+							<li><a href="/dashboard-bookmarks/"><i class="bi bi-bookmark-star me-2"></i>Bookmarkes</a></li>
+							<li><a href="/dashboard-messages/"><i class="bi bi-chat-dots me-2"></i>Messages<span class="notti_coun style-1">3</span></a></li>
+							<li><a href="/dashboard-reviews/"><i class="bi bi-yelp me-2"></i>Reviews</a></li>
+							<li><a href="/dashboard-wallet/"><i class="bi bi-wallet me-2"></i>Wallet</a></li>
+							<li><a href="/dashboard-add-listing/"><i class="bi bi-patch-plus me-2"></i>Add Listing</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			
+			<!-- Dashboard Content -->
+			<div class="col-xl-10 col-lg-9 col-md-12">
+				<div class="user-dashboard-box bg-light">
+					
+					<!-- Dashboard Title -->
+					<div class="dashHeader p-xl-5 p-4 pb-xl-0 pb-0">
+						<h2 class="fw-medium mb-0">Hello, Shreethemes</h2>
+					</div>
+					
+					<!-- Dashboard Details -->
+					<div class="dashCaption p-xl-5 p-3 p-md-4">
+						
+						<!-- Row Start -->
+						<div class="row align-items-start g-4 mb-4">
+							<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+								<div class="alert alert-primary alert-dismissible fade show" role="alert">
+									Your listing <strong>Holy Guacamole!</strong> has been approved!.
+									<button type="button" class="btn-close text-sm text-primary" data-bs-dismiss="alert" aria-label="Close"></button>
+								</div>
+							</div>
+						</div>
+						<!-- Row End -->
+						
+						<!-- Row Start -->
+						<div class="row align-items-start g-4 mb-lg-5 mb-4">
+
+							<!-- Components/User-Dashboard/dashboard-user/row.html -->
+							{% include 'Components/User-Dashboard/dashboard-user/row.html' %}
+
+						</div>
+						<!-- Row End -->
+						
+						<!-- Row Start -->
+						<div class="row align-items-start g-4 mb-lg-5 mb-4">
+							<div class="col-xl-6 col-lg-6 col-md-12">
+								<div class="card rounded-3 shadow-sm">
+									<div class="card-header py-3 px-4">
+										<h4 class="m-0">Recent Activities</h4>
+									</div>
+									<div class="card-body p-0">
+										<ul class="dashboardListgroup">
+
+											<!-- Components/User-Dashboard/dashboard-user/activities.html -->
+											{% include 'Components/User-Dashboard/dashboard-user/activities.html' %}
+
+										</ul>
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-xl-6 col-lg-6 col-md-12">
+								<div class="card rounded-3 shadow-sm">
+									<div class="card-header py-3 px-4">
+										<h4 class="m-0">Messages</h4>
+										<a href="#" class="text-muted-2 text-md fw-medium">View All</a>
+									</div>
+									<div class="card-body p-4">
+										<div class="messagesWrapers d-flex flex-column gap-4">
+
+											<!-- Components/User-Dashboard/dashboard-user/messages.html -->
+											{% include 'Components/User-Dashboard/dashboard-user/messages.html' %}
+										
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Row End -->
+						
+						<!-- Row Start -->
+						<div class="row align-items-start g-4 mb-lg-5 mb-4">
+							<div class="col-xl-12 col-lg-12 col-md-12">
+								<div class="card rounded-3 shadow-sm">
+									<div class="card-header flex-wrap gap-3 px-4">
+										<div class="cardTitle"><h4>View Invoices</h4></div>
+										
+										<div class="headerInformations">
+											<div class="d-flex align-items-center justify-content-start justify-content-md-between flex-wrap gap-3">
+												<div class="singleCaps">
+													<div class="form-group position-relative m-0">
+														<input type="text" class="form-control form-control-md bg-light border-0 ps-5" placeholder="Search any parameters...">
+														<span class="position-absolute top-50 start-0 translate-middle-y ms-3"><i class="fa-solid fa-magnifying-glass"></i></span>																	
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<div class="card-body p-3">
+										<table class="table">
+											<thead>
+												<tr>
+													<th scope="col">Package Name</th>
+													<th scope="col">Order ID</th>
+													<th scope="col">Status</th>
+													<th scope="col">Due Date</th>
+													<th scope="col">View</th>
+												</tr>
+											</thead>
+											
+											<tbody>
+
+												<!-- Components/User-Dashboard/dashboard-user/invoices.html -->
+												{% include 'Components/User-Dashboard/dashboard-user/invoices.html' %}
+
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Row End -->
+						
+						<!-- Row Start -->
+						<div class="row align-items-start g-4">
+							<div class="col-xl-12 col-lg-12 col-md-12">
+								<p class="text-muted m-0">© <script>document.write(new Date().getFullYear())</script> ListingHub. Develop with <i class="mdi mdi-heart text-danger"></i> by <a href="https://shreethemes.in" target="_blank" class="text-reset">Shreethemes</a>.</p>
+							</div>
+						</div>
+						
+					</div>
+					
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</section>
+<!-- Dashboard End -->
+
+
+	<!-- Components/Home/index/cart.html -->
+	{% include 'Components/Home/index/cart.html' %}
+		 
+			
+	<!-- Components/Home/index/search.html -->
+	{% include 'Components/Home/index/search.html' %}
+
+{% endblock %}

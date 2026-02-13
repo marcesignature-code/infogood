@@ -1,0 +1,33 @@
+{% for item in reviews %}
+    <div class="singleItem">
+        <div class="reviews-wrappers">
+            <div class="reviewsBox card border-0 rounded-4 shadow-sm">
+                <div class="card-body p-xl-5 p-lg-5 p-4">
+                    <div class="reviews-topHeader d-flex flex-column mb-3">
+                        <div class="d-flex align-items-center justify-content-center mb-2">
+                        <span class="me-1 text-sm text-warning"><i class="fa-solid fa-star"></i></span>
+                        <span class="me-1 text-sm text-warning"><i class="fa-solid fa-star"></i></span>
+                        <span class="me-1 text-sm text-warning"><i class="fa-solid fa-star"></i></span>
+                        <span class="me-1 text-sm text-warning"><i class="fa-solid fa-star"></i></span>
+                        <span class="me-1 text-sm text-warning"><i class="fa-solid fa-star"></i></span>
+                        </div>
+                        <div class="revws-desc text-center">
+                            <p class="text-dark fw-semibold mb-1">"{{ item.title }}"</p>
+                            <p class="m-0 text-dark">{{ item.desc }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="reviewsers d-flex flex-column mt-5">
+                <div class="d-flex align-items-center flex-column flex-thumbes gap-2">
+                    <div class="revws-pic"><img src="{{ item.img }}" class="img-fluid circle" width="55" alt=""></div>
+                    <div class="revws-caps text-center">
+                        <h6 class="fw-medium fs-6 m-0">{{ item.name }}</h6>
+                        <p class="text-muted-2 text-md m-0">{{ item.name1 }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

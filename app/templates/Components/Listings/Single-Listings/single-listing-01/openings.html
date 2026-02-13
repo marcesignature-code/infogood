@@ -1,0 +1,8 @@
+{% for item in openings %}
+    <div class="{{ item.style }}">
+        <div class="infoFlexio d-flex align-items-center justify-content-between">
+            <p class="text-dark text-md fw-medium lh-base mb-0">{{ item.title }}</p>
+            <p class="text-dark text-sm fw-medium lh-base mb-0">{{ item.time }}</p>
+        </div>
+    </div>
+{% endfor %}

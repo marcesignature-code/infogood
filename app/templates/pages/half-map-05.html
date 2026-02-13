@@ -1,0 +1,116 @@
+{% extends "Base/base.html" %}
+
+{% block hero_content %}
+
+{% include 'Base/navbar6.html' %}
+
+<div id="preloader">
+	<div class="preloader"><span></span><span></span></div>
+</div>
+
+<div class="clearfix"></div>
+		
+<!-- Search Listing Start -->
+<div class="map-banner-wrap half-map">
+	
+	<div class="map-left-box">
+		<div class="map-home flt-wrap pt-lg-0 pt-5">
+			<div class="home-map-container fw-map">
+				<div id="map-main"></div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="map-content-wrap">
+		<div class="map-content-bxo py-5 border-bottom">
+			
+			<!-- Single Filter For Property -->
+			<div class="filterOption-02 mb-3">
+					
+				<!-- Components/Listings/Half-Map-Screen/half-map-01/single-filter.html -->
+				{% include 'Components/Listings/Half-Map-Screen/half-map-01/single-filter.html' %}
+
+			</div>
+			
+			<!-- Single Filter Wraps -->
+			<div class="filterOptions-wrap d-flex justify-content-between align-items-center gap-2">
+					
+				<div class="filter-mobile d-lg-none flex-fill">
+					<a href="#filterSlider" data-bs-toggle="offcanvas" data-bs-target="#filterSlider" aria-controls="filterSlider" class="btn btn-md btn-light-primary full-width"><i class="bi bi-funnel me-2"></i>Filter Option</a>
+				</div>
+				
+				<!-- Components/Listings/Half-Map-Screen/half-map-01/filter2.html -->
+				{% include 'Components/Listings/Half-Map-Screen/half-map-01/filter2.html' %}
+				
+			</div>
+			
+		</div>
+		
+		<!--- All List -->
+		<div class="map-content-list py-4">
+			
+			<div class="row align-items-center justify-content-between mb-4">
+				<div class="col-xl- 5 col-lg-5 col-md-5 col-sm-6 col-6">
+					<div class="totalListingshow">
+						<h6 class="fw-medium mb-0">106 Listings Founds</h6>
+					</div>
+				</div>
+				
+				<div class="col-xl- 5 col-lg-5 col-md-5 col-sm-6 col-6">
+					<div class="text-end">
+						<!-- Rating Filter -->
+						<div class="btn-group">
+							<button type="button" class="py-2 px-3 dropdown-toggle toogleDrops" id="shortfilter" data-bs-toggle="dropdown" aria-expanded="false">
+								Short Listings
+							</button>
+							<ul class="dropdown-menu dropdown-menu-end border">
+
+								<!-- Components/Listings/Grid-Layouts/grid-layout-01/short-listings.html -->
+								{% include 'Components/Listings/Grid-Layouts/grid-layout-01/short-listings.html' %}
+
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+			<!-- All Listing Lits -->
+			<div class="row align-items-center justify-content-center g-xl-4 g-3">
+				
+				<!-- Components/Listings/List-Layouts/list-layout-01/listings8.html -->
+				{% include 'Components/Listings/List-Layouts/list-layout-01/listings8.html' %}
+				
+			</div>
+			
+			<!-- Components/Listings/Half-Map-Screen/half-map-01/pagination2.html -->
+			{% include 'Components/Listings/Half-Map-Screen/half-map-01/pagination2.html' %}
+			
+				
+			<!-- Components/Listings/Half-Map-Screen/half-map-01/foot-up.html -->
+			{% include 'Components/Listings/Half-Map-Screen/half-map-01/foot-up.html' %}
+			
+				
+		</div>
+	</div>
+	
+</div>
+<div class="clearfix"></div>
+<!-- Search Listing End -->
+
+
+	<!-- Components/Home/index/log.html -->
+	{% include 'Components/Home/index/log.html' %}
+			
+
+	<!-- Components/Home/index/cart.html -->
+	{% include 'Components/Home/index/cart.html' %}
+			
+			
+	<!-- Components/Home/index/search.html -->
+	{% include 'Components/Home/index/search.html' %}
+			
+
+	<!-- Components/Listings/Grid-Layouts/grid-layout-02/offcanvas.html -->
+	{% include 'Components/Listings/Grid-Layouts/grid-layout-02/offcanvas.html' %}
+
+{% endblock %}

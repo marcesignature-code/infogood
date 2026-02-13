@@ -1,0 +1,61 @@
+{% for item in listings4 %}
+    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+        <div class="listingitem-container">
+            <div class="singlelisting-item">
+                <div class="listing-top-item">
+                    <a href="#" class="topLink">
+                        <div class="position-absolute start-0 top-0 ms-3 mt-3 z-2">
+                            <div class="d-flex align-items-center justify-content-start gap-2">
+                                <span class="badge badge-xs text-uppercase {{ item.color }}">{{ item.btn }}</span>
+                                <span class="badge badge-xs badge-transparent">{{ item.dollar }}</span>
+                                
+                                {% if item.tag == 'true' %}
+                                    <span class="badge badge-xs badge-transparent"><i class="bi bi-star mb-0 me-1"></i>{{ item.btn1 }}</span>
+                                {% endif %}
+                                
+                            </div>
+                        </div>
+                        <img src="{{ item.img }}" class="img-fluid" alt="Listing Image">
+                    </a>
+                    <div class="position-absolute end-0 bottom-0 me-3 mb-3 z-2">
+                        <a href="#" class="bookmarkList" data-bs-toggle="tooltip" data-bs-title="Save Listing"><i class="bi bi-suit-heart m-0"></i></a>
+                    </div>
+                </div>
+                <div class="listing-middle-item">
+                    <div class="listing-avatar">
+                        <a href="#" class="avatarImg"><img src="{{ item.img1 }}" class="img-fluid circle" alt="Avatar"></a>
+                    </div>
+                    <div class="listing-details">
+                        <h4 class="listingTitle"><a href="{{ url_for('main.single_listing_02', title=slugify(item.title)) }}" class="titleLink">{{ item.title }}<span class="verified"><i class="bi bi-patch-check-fill m-0"></i></span></a></h4>
+                        <p>{{ item.desc }}</p>
+                    </div>
+                    <div class="listing-info-details">
+                        <div class="d-flex align-items-center justify-content-start gap-4">
+                            <div class="list-calls"><i class="bi bi-telephone mb-0 me-2"></i>{{ item.number }}</div>
+                            <div class="list-distance"><i class="bi bi-geo-alt mb-0 me-2"></i>{{ item.miles }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="listing-footer-item">
+                    <div class="d-flex align-items-center justify-content-between gap-2">
+                        <div class="catdWraps">
+                            <div class="flex-start">
+                                <a href="#" class="d-flex align-items-center justify-content-start gap-2">
+                                    <span class="{{ item.span }}"><i class="{{ item.icon }}"></i></span>
+                                    <span class="catTitle">{{ item.name }}</span>
+                                </a>
+                            </div>
+                            <div class="flex-end"><span class="moreCatcounter">{{ item.plus }}</span></div>
+                        </div>
+                        <div class="listing-rates">
+                            <div class="d-flex align-items-center justify-content-start gap-1">
+                                <span class="ratingAvarage {{ item.avarage }}">{{ item.rating }}</span>
+                                <span class="overallrates">{{ item.reviews }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

@@ -1,0 +1,10 @@
+{% for item in articles2 %}
+    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+        <a href="/single-helps/" class="popularArticles">
+            <div class="descriptions">
+                <h5 class="title">{{ item.title }}</h5>
+                <p class="sedc">{{ item.desc }}</p>
+            </div>
+        </a>
+    </div>
+{% endfor %}

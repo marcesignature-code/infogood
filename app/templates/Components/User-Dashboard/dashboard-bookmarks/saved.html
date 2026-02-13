@@ -1,0 +1,35 @@
+{% for item in saveds %}
+    <li>
+        <div class="mngListings">
+            <div class="d-flex align-items-center justify-content-start gap-3 flex-wrap">
+                <div class="mngListinfirst">
+                    <div class="d-flex align-items-center justify-content-start gap-3 flex-wrap">
+                        <div class="mngListings-thumb">
+                            <figure class="m-0"><img src="{{ item.img }}" class="img-fluid rounded" alt="Avatar"></figure>
+                        </div>
+                        
+                        <div class="mngListings-caps">
+                            <h5 class="mnglstTitle">{{ item.title }}</h5>
+                            <span>{{ item.desc }}</span>
+                            <div class="d-flex align-items-center justify-content-start gap-2 mt-3">
+                                <div class="ratingView" data-rating="5.0">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-half"></i>
+                                </div>
+                                <div class="text-md">{{ item.reviews }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mngListinlast">
+                    <div class="d-flex align-items-center justify-content-start gap-3">
+                        <a href="#" class="btn btn-sm btn-light-danger fw-medium rounded-pill"><i class="bi bi-x me-1"></i>Remove</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+{% endfor %}

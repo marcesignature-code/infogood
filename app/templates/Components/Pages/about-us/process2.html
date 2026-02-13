@@ -1,0 +1,17 @@
+{% for item in process2 %}
+    <div class="col-xl-4 col-lg-4 col-md-6">
+        <div class="processWrap px-xl-4">
+            <div class="text-center">
+                <div class="processIcons d-block">
+                    <div class="Icons">
+                        <i class="{{ item.icon }}"></i>
+                    </div>
+                </div>
+                <div class="processCaps">
+                    <h4 class="fw-medium">{{ item.title }}</h4>
+                    <p class="m-0">{{ item.desc }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

@@ -1,0 +1,250 @@
+{% extends "Base/base.html" %}
+
+{% block hero_content %}
+
+{% include 'Base/navbar2.html' %}
+
+<div id="preloader">
+	<div class="preloader"><span></span><span></span></div>
+</div>
+
+<div class="clearfix"></div>
+
+<!-- Hero Start -->
+<div class="image-cover hero-header full-height" style="background:url('{{ url_for('static', filename='assets/img/banner-6.jpg') }}') no-repeat;"
+	data-overlay="6">
+	<div class="container">
+
+		<!-- Heading Rwo -->
+		<div class="row justify-content-center align-items-center mb-5 pt-lg-0 pt-5">
+			<div class="col-xl-10 col-lg-11 col-md-12 col-sm-12">
+				<div class="position-relative text-center">
+					<h1>Find Nearby Attractions</h1>
+					<p class="fs-5 fw-light">Browse high-rated hotels, restaurants, attractions, activities and more!</p>
+				</div>
+			</div>
+		</div>
+		<!-- </row> -->
+		
+		<!-- Search Form row -->
+		<div class="row align-items-start justify-content-center">
+			<div class="col-xl-11 col-lg-12 col-md-12 col-sm-12">
+				<div class="heroSearch rounded-search style-01">
+					<div class="row gx-lg-2 gx-md-2 gx-3 gy-sm-2 gy-2">
+						<div class="col-xl-4 col-lg-3 col-md-12 col-sm-12">
+							<div class="form-group position-relative">
+								<input type="text" class="form-control fs-6 fw-medium border-0" placeholder="What are you looking for?">
+							</div>
+						</div>
+						<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 side-border">
+							<div class="form-group position-relative">
+								<input type="text" class="form-control fs-6 fw-medium border-0" placeholder="Location">
+								<span class="position-absolute top-50 end-0 translate-middle me-2"><i class="fa-solid fa-location-dot text-muted opacity-50 fs-5"></i></span>
+							</div>
+						</div>
+						<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12">
+							<div class="form-group fw-medium lights-bg no-border">
+								<div class="selects">
+									<select id="my-select">
+										<option label="All Categories"></option>  
+										<option value="lv">Eat & Drinking</option>
+										<option value="la">Rental Property</option>
+										<option value="kc">Classifieds</option>
+										<option value="no">Bank Services</option>
+										<option value="kc">Shopping</option>
+										<option value="lb">Fintess & Gym</option>
+										<option value="cl">Coaching</option>
+										<option value="cn">Other Services</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-2 col-lg-3 col-md-12 col-sm-12">
+							<div class="form-group">
+								<button type="button" class="btn btn-primary rounded-pill full-width fw-medium"><i class="bi bi-search me-2"></i>Search</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Search Form Row -->
+
+	</div>
+</div>
+<!-- Hero End -->
+
+
+<!-- Popular Listings Start -->
+<section>
+	<div class="container">
+
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-7 col-lg-8 col-md-11 col-sm-12">
+				<div class="secHeading-wrap text-center">
+					<h3 class="sectionHeading">Featured Listing In <span class="text-primary">Las Vegas</span></h3>
+					<p>Explore Hot & Popular Business Listings</p>
+				</div>
+			</div>
+		</div>
+
+	
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+				<div class="owl-carousel owl-theme itemslider">
+					
+					<!-- Components/Home/home-3/listings2.html -->
+                    {% include 'Components/Home/home-3/listings2.html' %}
+					
+				</div>
+			</div>
+		</div>
+	
+	</div>
+</section>
+<!-- Popular Listings End -->
+
+
+
+<!-- Trending Category Start -->
+<section class="pt-0">
+	<div class="container">
+
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-7 col-lg-8 col-md-11 col-sm-12">
+				<div class="secHeading-wrap text-center">
+					<h3 class="sectionHeading">Hot & Trending <span class="text-primary">Categories</span></h3>
+					<p>Explore all types of popular category for submit your listings</p>
+				</div>
+			</div>
+		</div>
+
+	
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+				<div class="owl-carousel categorySlider">
+							
+					<!-- Components/Home/home-2/categories2.html -->
+                    {% include 'Components/Home/home-2/categories2.html' %}
+					
+				</div>
+			</div>
+		</div>
+	
+	</div>
+</section>
+<!-- Trending Category End -->
+
+
+<!-- Popular Listings Start -->
+<section class="light-top-gredient">
+	<div class="container">
+
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-7 col-lg-8 col-md-11 col-sm-12">
+				<div class="secHeading-wrap text-center">
+					<h3 class="sectionHeading">Trending & Popular <span class="text-primary">Listings</span></h3>
+					<p>Explore Hot & Popular Business Listings</p>
+				</div>
+			</div>
+		</div>
+
+	
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+				<div class="owl-carousel owl-theme itemslider">
+						
+					<!-- Components/Home/index/listings.html -->
+                    {% include 'Components/Home/index/listings.html' %}
+					
+				</div>
+			</div>
+		</div>
+	
+	</div>
+</section>
+<!-- Popular Listings End -->
+
+
+<!-- Our Reviews Start -->
+<section class="bg-light">
+	<div class="container">
+
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-7 col-lg-8 col-md-11 col-sm-12">
+				<div class="secHeading-wrap text-center">
+					<h3 class="sectionHeading">Our Great <span class="text-primary">Reviews</span></h3>
+					<p>Our cliens love our services and give great & positive reviews</p>
+				</div>
+			</div>
+		</div>
+
+	
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+				<div class="owl-carousel owl-theme reviewsSlide">				
+						
+					<!-- Components/Home/index/reviews.html -->
+                    {% include 'Components/Home/index/reviews.html' %}
+		
+				</div>
+			</div>
+		</div>
+	
+	</div>
+</section>
+<!-- Our Reviews End -->
+
+
+<!-- Latest Updates Start -->
+<section>
+	<div class="container">
+
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-7 col-lg-8 col-md-11 col-sm-12">
+				<div class="secHeading-wrap text-center">
+					<h3 class="sectionHeading">Latest Updates <span class="text-primary">News</span></h3>
+					<p>Join ListingHub and get latest & trending updates about listing</p>
+				</div>
+			</div>
+		</div>
+
+	
+		<div class="row align-items-center justify-content-center g-4">
+		
+			<!-- Components/Home/index/blog.html -->
+			{% include 'Components/Home/index/blog.html' %}
+			
+		</div>
+	
+	</div>
+</section>
+<!-- Latest Updates End -->
+
+
+<!-- Call To Action Start -->
+<section class="bg-cover bg-primary-2 position-relative py-5" style="background:url('{{ url_for('static', filename='assets/img/brand-section.png') }}') no-repeat;">
+	<div class="container">
+		
+		<!-- Components/Home/index/subscribe.html -->
+		{% include 'Components/Home/index/subscribe.html' %}
+
+	</div>
+</section>
+<!-- Call To Action End -->
+
+	<!-- Components/Home/index/log.html -->
+	{% include 'Components/Home/index/log.html' %}
+
+
+	<!-- Components/Home/index/cart.html -->
+	{% include 'Components/Home/index/cart.html' %}
+
+
+	<!-- Components/Home/index/search.html -->
+	{% include 'Components/Home/index/search.html' %}
+
+
+{% include 'Base/footer.html' %} 
+
+{% endblock %}

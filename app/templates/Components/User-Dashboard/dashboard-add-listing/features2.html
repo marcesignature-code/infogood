@@ -1,0 +1,8 @@
+{% for item in features2 %}
+    <li class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+        <div class="form-check">
+            <input id="{{ item.id }}" class="form-check-input" name="{{ item.id }}" type="checkbox">
+            <label for="{{ item.id }}" class="form-check-label">{{ item.title }}</label>
+        </div>																
+    </li>
+{% endfor %}

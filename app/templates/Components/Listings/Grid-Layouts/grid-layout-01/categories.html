@@ -1,0 +1,6 @@
+{% for item in categories3 %}
+    <div class="form-checks flex-fill">
+        <input type="checkbox" class="btn-check" id="{{ item.id }}" {{ item.check }}>
+        <label class="btn btn-sm btn-secondary rounded-1 fw-medium full-width" for="{{ item.id }}">{{ item.title }}</label>
+    </div>
+{% endfor %}

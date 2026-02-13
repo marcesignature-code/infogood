@@ -1,0 +1,23 @@
+{% for item in carts %}
+    <tr>
+        <td class="cartThumbnail">
+        <a href="#" class="d-inline-block"><img src="{{ item.img }}" class="img-fluid rounded" alt="Thumbnail"></a>
+        </td>
+        <td data-label="Item Name">
+        <div class="itemInfo">
+            <h6 class="fw-semibold"><a href="#" class="link">{{ item.title }}</a></h6>
+            <p class="text-md mb-0"><span class="fw-semibold text-dark me-2">{{ item.name }}:</span><span>{{ item.weight }}</span></p>
+            <p class="text-md mb-0"><span class="fw-semibold text-dark me-2">Color:</span><span>{{ item.color }}</span></p>
+        </div>
+        </td>
+        <td data-label="Quantity">
+        <div class="itemQuantity">
+            <input type="number" class="form-control bg-light w-15 d-inline-block" value="{{ item.quantity }}">
+        </div>
+        </td>
+        <td data-label="Price"><div class="">{{ item.price }}</div></td>
+        <td data-label="Action">
+            <div class="removeItem"><a href="#" class="square--30 d-inline-flex circle badge-primary"><i class="bi bi-x-lg"></i></a></div>
+        </td>
+    </tr>
+{% endfor %}

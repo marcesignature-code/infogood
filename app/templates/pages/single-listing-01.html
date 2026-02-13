@@ -1,0 +1,403 @@
+{% extends "Base/base.html" %}
+
+{% block hero_content %}
+
+{% include 'Base/navbar4.html' %} 
+
+<div id="preloader">
+	<div class="preloader"><span></span><span></span></div>
+</div>
+
+<div class="clearfix"></div>
+			
+<!-- Property Detail Start -->
+<section class="bg-cover position-relative ht-500 py-0" style="background:url(
+	{% if listing.img %}
+		{{ listing.img }}
+	{% else %}
+		assets/img/single-1.jpg
+	{% endif %}
+	)no-repeat;" data-overlay="4">
+	<div class="container h-100">
+
+		<!-- Components/Listings/Single-Listings/single-listing-01/gallery.html -->
+		{% include 'Components/Listings/Single-Listings/single-listing-01/gallery.html' %}
+		
+	</div>
+</section>
+<!-- Property Detail End -->
+
+<!-- Scrollphy Nav Start -->
+<section class="py-3 bg-white sticky-xxl-top sticky-xl-top sticky-lg-top d-none d-lg-block d-xl-block d-xxl-block">
+	<nav id="scrollphyNav" class="featuresScrollphy">
+		<ul class="nav nav-pills px-4 d-flex align-items-center justify-content-between">
+		
+			<!-- Components/Listings/Single-Listings/single-listing-01/nav.html -->
+			{% include 'Components/Listings/Single-Listings/single-listing-01/nav.html' %}
+
+		</ul>
+	</nav>
+</section>
+<!-- Scrollphy Nav End -->
+
+
+<!-- All Section Content -->
+<section class="gray-simple pt-4 pt-xl-5">
+	<div data-bs-spy="scroll" data-bs-target="#scrollphyNav" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0">
+		<div class="container">
+			<div class="row align-items-start gx-xl-5 g-4">
+					
+				<!-- Detail Row -->
+				<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12">
+					
+					<!-- Components/Listings/Single-Listings/single-listing-01/description.html -->
+					{% include 'Components/Listings/Single-Listings/single-listing-01/description.html' %}
+					
+					<!-- Menu Pricing -->
+					<div class="listingSingleblock mb-4" id="pricingss">
+						<div class="SingleblockHeader">
+							<a data-bs-toggle="collapse" data-parent="#pricing" data-bs-target="#pricing" aria-controls="pricing" href="#" aria-expanded="false" class="collapsed"><h4 class="listingcollapseTitle">Menu Pricing</h4></a>
+						</div>
+						
+						<div id="pricing" class="panel-collapse collapse show">
+							<div class="card-body p-4 pt-2">
+								<ul class="deatil_features row align-items-start g-3 p-0">
+
+									<!-- Components/Listings/Single-Listings/single-listing-01/pricing.html -->
+									{% include 'Components/Listings/Single-Listings/single-listing-01/pricing.html' %}
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Main Products -->
+					<div class="listingSingleblock mb-4" id="productss">
+						<div class="SingleblockHeader">
+							<a data-bs-toggle="collapse" data-parent="#products" data-bs-target="#products" aria-controls="products" href="#" aria-expanded="false" class="collapsed"><h4 class="listingcollapseTitle">Browse Products</h4></a>
+						</div>
+						
+						<div id="products" class="panel-collapse collapse show">
+							<div class="card-body p-4 pt-2">
+								<div class="owl-carousel owl-theme catalogslider">
+									
+									<!-- Components/Listings/Single-Listings/single-listing-01/products.html -->
+									{% include 'Components/Listings/Single-Listings/single-listing-01/products.html' %}
+								
+								</div>
+								
+							</div>
+						</div>
+					</div>
+					
+					<!-- Features -->
+					<div class="listingSingleblock mb-4" id="features">
+						<div class="SingleblockHeader">
+							<a data-bs-toggle="collapse" data-parent="#feature" data-bs-target="#feature" aria-controls="feature" href="#" aria-expanded="false" class="collapsed"><h4 class="listingcollapseTitle">Features</h4></a>
+						</div>
+						
+						<div id="feature" class="panel-collapse collapse show">
+							<div class="card-body p-4 pt-2">
+								
+								<!-- Interior Amenities -->
+								<div class="interioramenities-block">
+									<div class="interioramenities-body">
+										<div class="row align-items-start justify-content-start g-3">
+											
+											<!-- Components/Listings/Single-Listings/single-listing-01/features.html -->
+											{% include 'Components/Listings/Single-Listings/single-listing-01/features.html' %}
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Gallery -->
+					<div class="listingSingleblock mb-4" id="Galleries">
+						<div class="SingleblockHeader">
+							<a data-bs-toggle="collapse" data-parent="#gallery" data-bs-target="#gallery" aria-controls="gallery" href="#" aria-expanded="false" class="collapsed"><h4 class="listingcollapseTitle">Gallery</h4></a>
+						</div>
+						
+						<div id="gallery" class="panel-collapse collapse show">
+							<div class="card-body p-4 pt-2">
+								<ul class="row align-items-center justify-content-center g-3 p-0">
+
+									<!-- Components/Listings/Single-Listings/single-listing-01/gallery2.html -->
+									{% include 'Components/Listings/Single-Listings/single-listing-01/gallery2.html' %}
+
+								</ul>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Maps -->
+					<div class="listingSingleblock mb-4" id="maps">
+						<div class="SingleblockHeader">
+							<a data-bs-toggle="collapse" data-parent="#map" data-bs-target="#map" aria-controls="map" href="#" aria-expanded="false" class="collapsed"><h4 class="listingcollapseTitle">Map</h4></a>
+						</div>
+						
+						<!-- Components/Listings/Single-Listings/single-listing-01/maps.html -->
+						{% include 'Components/Listings/Single-Listings/single-listing-01/maps.html' %}
+
+					</div>
+					
+					
+					<!-- Statistics -->
+					<div class="listingSingleblock mb-4" id="Statistics">
+						<div class="SingleblockHeader">
+							<a data-bs-toggle="collapse" data-parent="#Statistic" data-bs-target="#Statistic" aria-controls="Statistic" href="#" aria-expanded="false" class="collapsed"><h4 class="listingcollapseTitle">Statistics</h4></a>
+						</div>
+						
+						<!-- Components/Listings/Single-Listings/single-listing-01/statistics.html -->
+						{% include 'Components/Listings/Single-Listings/single-listing-01/statistics.html' %}
+						
+					</div>
+					
+					<!-- Reviews -->
+					<div class="listingSingleblock mb-4" id="reviews">
+						<div class="SingleblockHeader">
+							<a data-bs-toggle="collapse" data-parent="#review" data-bs-target="#review" aria-controls="review" href="#" aria-expanded="false" class="collapsed"><h4 class="listingcollapseTitle">Reviews</h4></a>
+						</div>
+						
+						<div id="review" class="panel-collapse collapse show">
+							<div class="card-body p-4 pt-2">
+								<div class="allreviewsWrapper">
+									<div class="reviewsTitle d-flex flex-column mb-3"><h5>03 Reviews</h5></div>
+									<div class="allreviewsLists mb-4">
+										
+										<!-- Components/Listings/Single-Listings/single-listing-01/reviews2.html -->
+										{% include 'Components/Listings/Single-Listings/single-listing-01/reviews2.html' %}
+									
+									</div>
+									
+									<!-- Extra Content -->
+									<div class="reviewssubmition">
+										<div class="formRow">
+											
+											<!-- Components/Listings/Single-Listings/single-listing-01/extra.html -->
+											{% include 'Components/Listings/Single-Listings/single-listing-01/extra.html' %}
+											
+										</div>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Similar Items -->
+					<div class="listingSingleblock">
+						<div class="SingleblockHeader">
+							<a data-bs-toggle="collapse" data-parent="#similar" data-bs-target="#similar" aria-controls="similar" href="#" aria-expanded="false" class="collapsed"><h4 class="listingcollapseTitle">Similar Lists</h4></a>
+						</div>
+						
+						<div id="similar" class="panel-collapse collapse show">
+							<div class="card-body p-4 pt-2">
+								<div class="owl-carousel owl-theme similarSliders">
+									
+									<!-- Components/Home/home-3/listings2.html -->
+                    				{% include 'Components/Home/home-3/listings2.html' %}
+								
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				
+				<!-- Sidebar Detail -->
+				<div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+					<div class="sidebarGroups d-flex flex-column gap-4">
+						
+						<!-- Author -->
+						<div class="card">
+							<div class="bg-cover card-header ht-150" style="background:url('{{ url_for('static', filename='assets/img/avatar-bg.jpg') }}') no-repeat;"></div>
+							<div class="card-body mt-n3 p-0">
+								<div class="avatarBox position-relative mb-4">
+									<div class="square--100 circle bg-transparents mx-auto p-2 z-2"><img src="{{ url_for('static', filename='assets/img/team-4.jpg') }}" class="img-fluid circle" alt="Avatar"></div>
+									<div class="listingInfo text-center">
+										<p class="text-md text-muted mb-0">Added By</p>
+										<h6 class="mb-0">Shree K. Patel</h6>
+									</div>
+								</div>
+								<div class="avatarInfo mb-2">
+									
+									<!-- Components/Listings/Single-Listings/single-listing-01/author.html -->
+									{% include 'Components/Listings/Single-Listings/single-listing-01/author.html' %}
+
+								</div>
+							</div>
+							<div class="card-footer bg-white border-top">
+								<div class="d-flex align-items-center justify-content-center gap-3">
+									<div class="flexSocial"><a href="#" class="square--40 circle border"><i class="bi bi-facebook color--facebook"></i></a></div>
+									<div class="flexSocial"><a href="#" class="square--40 circle border"><i class="bi bi-twitter color--twitter"></i></a></div>
+									<div class="flexSocial"><a href="#" class="square--40 circle border"><i class="bi bi-instagram color--instagram"></i></a></div>
+									<div class="flexSocial"><a href="#" class="square--40 circle border"><i class="bi bi-youtube color--pinterest"></i></a></div>
+									<div class="flexSocial"><a href="#" class="square--40 circle border"><i class="bi bi-whatsapp color--whatsapp"></i></a></div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- Coupon Offer -->
+						<div class="card p-0">
+							<div class="card-header bg-cover ht-150" style="background:url('{{ url_for('static', filename='assets/img/avatar-bg-2.jpg') }}') no-repeat;" data-overlay="4"></div>
+							<div class="card-body px-4">
+								<div class="text-center d-block py-xl-4">
+									<div class="offerTitles d-block mb-4">
+										<h2 class="fw-semibold lh-base m-0">40% Off</h2>
+										<p class="text-md text-dark">On purchase worth more than <span class="fw-medium">$300</span> offer valid till <span class="fw-medium">20 August 2025</span></p>
+									</div>
+									<div class="couponCodes d-block">
+										<div class="couponCode">
+											<div class="couponcodeText border-opacity-25">PLAUG1758</div>
+											<div class="copyCoupon"><a href="#" class="fw-medium text-sm text-muted text-uppercase">Copy Code</a></div>
+										</div>
+									</div>
+								</div>
+							</div>										
+						</div>
+						<!-- Coupon Offer End -->									
+						
+						<!-- Booking Form -->
+						<div class="card overflow-visible">
+							<div class="card-header py-3">
+								<div class="headerFirst"><h6><i class="bi bi-calendar-check me-2"></i>Book Your Table</h6></div>
+							</div>
+							<div class="p-xl-4 p-3">
+								<div class="contactForm position-relative">
+									<div class="form-group">
+										<input type="text" class="form-control fw-medium" id="input" placeholder="Choose A Date">
+									</div>
+									<div class="form-group">
+										<div class="position-relative fw-medium border">
+											<select id="my-select2">
+												<option label="Pick Time Slots"></option> 
+												<option value="lv">07:00 AM</option>
+												<option value="la">07:30 AM</option>
+												<option value="kc">08:00 AM</option>
+												<option value="no">08:30 AM</option>
+												<option value="kc">09:00 AM</option>
+												<option value="lb">09:30 AM</option>
+												<option value="cl">10:30 AM</option>
+												<option value="cn">11:30 AM</option>
+												<option value="cg">12:00 PM</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="booking-form__input guests-input mixer-auto">
+											<button name="guests-btn" id="guests-input-btn">1 Guest</button>
+											<div class="guests-input__options" id="guests-input-options">
+												<div>
+													<span class="guests-input__ctrl minus" id="adults-subs-btn"><i class="fa-solid fa-minus"></i></span>
+													<span class="guests-input__value"><span id="guests-count-adults">1</span>Guests</span>
+													<span class="guests-input__ctrl plus" id="adults-add-btn"><i class="fa-solid fa-plus"></i></span>
+												</div>
+												<div>
+													<span class="guests-input__ctrl minus" id="children-subs-btn"><i class="fa-solid fa-minus"></i></span>
+													<span class="guests-input__value"><span id="guests-count-children">0</span>Children</span>
+													<span class="guests-input__ctrl plus" id="children-add-btn"><i class="fa-solid fa-plus"></i></span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="position-relative fw-medium border">
+											<select class="form-control" id="my-select3" multiple data-placeholder="Advanced features">
+												<option value="slice">Slice</option>
+												<option value="burger">Burger</option>
+												<option value="coffee">Coffee</option>
+												<option value="thali">Indian Thali</option>
+												<option value="tandoori">Tandoori</option>
+												<option value="chips">Chips</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<button type="button" class="btn btn-primary rounded-pill fw-medium w-100">Booking Request</button>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+						<!-- Booking Form End -->
+						
+						<!-- Openings -->
+						<div class="card">
+							<div class="card-header py-3">
+								<div class="headerFirst"><h6>Openings Hours</h6></div>
+								<div class="headerLast"><span class="badge badge-xs badge-success rounded-pill">Now Open</span></div>
+							</div>
+							<div class="card-body p-0">
+								<div class="openingsInfo">
+									
+									<!-- Components/Listings/Single-Listings/single-listing-01/openings.html -->
+									{% include 'Components/Listings/Single-Listings/single-listing-01/openings.html' %}
+
+								</div>
+							</div>
+						</div>
+						
+						<!-- Share Options -->
+						<div class="card">
+							
+							<div class="card-body px-3">
+								<div class="form-group mb-1">
+									<button type="button" class="btn btn-whites border rounded-pill fw-medium w-100"><i class="bi bi-suit-heart me-2"></i>Bookmark This Listing</button>
+								</div>
+								<div class="form-group text-center mb-4">
+									<p class="text-md">45 People Bookmark This Place</p>
+								</div>
+								<div class="form-group m-0">
+									<div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+										<button type="button" class="btn btn-md btn-whites border rounded-pill color--facebook flex-fill"><i class="bi bi-suit-heart me-1"></i>Facebook</button>
+										<button type="button" class="btn btn-md btn-whites border rounded-pill color--twitter flex-fill"><i class="bi bi-suit-heart me-1"></i>Twitter</button>
+										<button type="button" class="btn btn-md btn-whites border rounded-pill color--instagram flex-fill"><i class="bi bi-suit-heart me-1"></i>Instagram</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					
+					</div>
+				</div>
+			
+			</div>
+		
+		</div>
+	</div>
+</section>
+<!-- All Section Content -->
+
+<!-- Call To Action Start -->
+<section class="bg-cover bg-primary-2 position-relative py-5" style="background:url('{{ url_for('static', filename='assets/img/brand-section.png') }}') no-repeat;">
+	<div class="container">
+	
+		<!-- Components/Home/index/subscribe.html -->
+		{% include 'Components/Home/index/subscribe.html' %}
+
+	</div>
+</section>
+<!-- Call To Action Start -->
+
+
+	<!-- Components/Home/index/log.html -->
+	{% include 'Components/Home/index/log.html' %}
+			
+
+	<!-- Components/Home/index/cart.html -->
+	{% include 'Components/Home/index/cart.html' %}
+			
+			
+	<!-- Components/Home/index/search.html -->
+	{% include 'Components/Home/index/search.html' %}
+			
+			
+	<!-- Components/Listings/Single-Listings/single-listing-01/message.html -->
+	{% include 'Components/Listings/Single-Listings/single-listing-01/message.html' %}
+
+
+{% include 'Base/footer.html' %} 
+
+{% endblock %}

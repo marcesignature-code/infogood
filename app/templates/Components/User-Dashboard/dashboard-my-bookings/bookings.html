@@ -1,0 +1,63 @@
+{% for item in bookings %}
+    <li>    
+        <div class="bookingActivities">
+            <div class="d-flex align-items-start justify-content-start gap-3 flex-wrap">
+                <div class="bookingAvatar">
+                    <figure class="m-0"><img src="{{ item.img }}" class="img-fluid circle avatar-xl" alt="Avatar"></figure>
+                </div>
+                
+                <div class="bookingInfo">
+                    <div class="bookingTitle">
+                        <h5 class="titlesName">{{ item.title }}<span class="Bookscats">{{ item.name }}</span></h5>
+                        <div class="d-flex align-items-center justify-content-start gap-2">
+
+                            {% if item.tag == 'one' %}
+                                <span class="badge badge-xs pending rounded-pill">Pending</span>
+                                <span class="badge badge-xs unpaid rounded-pill">Unpaid</span>
+                            {% elif item.tag == 'two' %}
+                                <span class="badge badge-xs approved rounded-pill">Approved</span>
+                            {% elif item.tag == 'three' %}
+                                <span class="badge badge-xs cancelled rounded-pill">Cancelled</span>
+                            {% else %}
+                                <span class="badge badge-xs approved rounded-pill">Approved</span>
+                                <span class="badge badge-xs unpaid rounded-pill">Unpaid</span>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <div class="bookingDetails">
+                        <div class="singledetailInfo"><span class="listTitle">Booking Date</span>{{ item.date }}</div>
+                        <div class="singledetailInfo"><span class="listTitle">Booking Info</span>{{ item.info }}</div>
+                        <div class="singledetailInfo"><span class="listTitle">Client Name</span>{{ item.client }}</div>
+                        <div class="singledetailInfo"><span class="listTitle">Contact</span>{{ item.contact  }}</div>
+                        <div class="singledetailInfo"><span class="listTitle">Price</span>{{ item.price }}</div>
+                    </div>
+
+                    {% if item.tag1 == 'one' %}
+                        <div class="bookingAction">
+                            <div class="d-flex align-items-center justify-content-start flex-wrap gap-3">
+                                <a href="#" class="btn btn-sm btn-light-danger fw-medium rounded-pill"><i class="bi bi-x me-1"></i>Reject</a>
+                                <a href="#" class="btn btn-sm btn-light-success fw-medium rounded-pill"><i class="bi bi-check2-circle me-1"></i>Approve</a>
+                                <a href="#" class="btn btn-sm btn-secondary fw-medium rounded-pill" data-bs-toggle="modal" data-bs-target="#messageModal"><i class="bi bi-envelope-dash me-1"></i>Send Message</a>
+                            </div>
+                        </div>
+                    {% elif item.tag1 == 'two' %}
+                        <div class="bookingAction">
+                            <div class="d-flex align-items-center justify-content-start flex-wrap gap-3">
+                                <a href="#" class="btn btn-sm btn-secondary fw-medium rounded-pill" data-bs-toggle="modal" data-bs-target="#messageModal"><i class="bi bi-envelope-dash me-1"></i>Send Message</a>
+                            </div>
+                        </div>
+                    {% elif item.tag1 == 'four' %}
+                        <div class="bookingAction">
+                            <div class="d-flex align-items-center justify-content-start flex-wrap gap-3">
+                                <a href="#" class="btn btn-sm btn-light-success fw-medium rounded-pill"><i class="bi bi-send-check me-1"></i>Pay Now</a>
+                                <a href="#" class="btn btn-sm btn-secondary fw-medium rounded-pill" data-bs-toggle="modal" data-bs-target="#messageModal"><i class="bi bi-envelope-dash me-1"></i>Send Message</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                </div>
+            </div>
+        </div>
+    </li>
+{% endfor %}

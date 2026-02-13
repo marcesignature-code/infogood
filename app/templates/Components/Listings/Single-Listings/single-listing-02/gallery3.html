@@ -1,0 +1,54 @@
+<!-- Gallery Pert -->
+<div class="row align-items-start">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+        <div class="mainlistingInfo">
+            <div class="d-flex align-items-end justify-content-between flex-wrap gap-3">
+                <div class="firstColumn">
+                    <div class="listingFirstinfo d-flex align-items-center justify-content-start gap-3 flex-wrap">
+                        <div class="listingAvatar">
+                            <a href="#" class="d-block"><img src="{{ url_for('static', filename='assets/img/logo-2.png') }}" class="img-fluid rounded-3" width="95" alt="Avatar"></a>
+                        </div>
+                        <div class="listingCaptioninfo">
+                            <div class="propertyTitlename d-flex align-items-center gap-2 mb-1"><h2 class="fw-semibold text-light mb-0">
+                                {% if listing2.title %}
+                                    {{ listing2.title }}
+                                {% else %}
+                                    Sangam Apartment
+                                {% endif %}
+                            </h2><span class="verified mt-1"><img src="{{ url_for('static', filename='assets/img/tick.svg') }}" class="img-fluid" width="22" alt="Verified Listing"></span></div>
+                            <div class="listingsbasicInfo">
+                                <div class="d-flex align-items-center justify-content-start flex-wrap gap-2">
+                                    <div class="flexItem me-2"><span class="text-md fw-medium text-light"><i class="fa-solid fa-location-dot me-2"></i>
+                                        {% if listing2.location %}
+                                            {{ listing2.location }}
+                                        {% else %}
+                                            Old Paris, France
+                                        {% endif %}
+                                    </span></div>
+                                    <div class="flexItem me-2"><span class="text-md fw-medium text-light"><i class="bi bi-briefcase me-2"></i>Apartment</span></div>
+                                    <div class="flexItem">
+                                        <div class="d-flex align-items-center justify-content-start gap-2">
+                                            <div class="d-flex align-items-center justify-content-start gap-1">
+                                                <i class="bi bi-star-fill text-warning text-sm"></i><i class="bi bi-star-fill text-warning text-sm"></i><i class="bi bi-star-fill text-warning text-sm"></i><i class="bi bi-star-fill text-warning text-sm"></i><i class="bi bi-star-half text-warning text-sm"></i>
+                                            </div>
+                                            <span class="text-md fw-medium text-light">(42k Reviews)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lastColumn">	
+                    <div class="d-flex align-items-center justify-content-md-end flex-wrap gap-3">
+                        <div class="flexStart Priceinfo d-flex flex-column">
+                            <span class="fw-medium text-light">Price Range</span>
+                            <span class="fw-bold fs-6 text-light">$25k - $27k</span>
+                        </div>
+                        <div class="flexlastButton"><button type="button" class="btn px-4 btn-whites text-primary fw-medium" data-bs-toggle="modal" data-bs-target="#messageModal"><i class="bi bi-send-check me-2"></i>Send Message</button></div>
+                    </div>	
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

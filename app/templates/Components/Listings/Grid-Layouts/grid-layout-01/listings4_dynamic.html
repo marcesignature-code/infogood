@@ -1,0 +1,68 @@
+{% if listings and listings|length > 0 %}
+  {% for item in listings %}
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+      <div class="card list-layout-block border rounded-3 p-2">
+
+        <div class="position-relative">
+          <a href="/listing/{{ item.slug }}">
+            <img
+              src="{{ item.cover_image_url or url_for('static', filename='assets/img/default-listing.jpg') }}"
+              class="card-img-top rounded-3"
+              alt="{{ item.name }}"
+            >
+          </a>
+
+          <div class="position-absolute top-0 start-0 m-2 d-flex gap-2">
+            <span class="badge bg-success">{{ item.open_badge_text if item.open_badge_text else (item.status|upper) }}</span>
+            <span class="badge bg-dark">{{ item.price_level or '$$' }}</span>
+            {% if item.is_featured %}
+              <span class="badge bg-primary">Featured</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="card-body px-0 pb-0">
+          <div class="d-flex align-items-center mb-2">
+            <img
+              src="{{ item.logo_image_url or url_for('static', filename='assets/img/default-logo.png') }}"
+              alt="{{ item.name }}"
+              class="rounded-circle me-2"
+              width="40" height="40"
+            >
+            <h5 class="card-title mb-0">{{ item.name }}</h5>
+          </div>
+
+          <p class="card-text text-muted mb-2">
+            {{ item.short_description or 'Sin descripción disponible.' }}
+          </p>
+
+          <div class="d-flex flex-wrap gap-3 text-muted small mb-2">
+            {% if item.phone_primary %}
+              <span><i class="bi bi-telephone"></i> {{ item.phone_primary }}</span>
+            {% endif %}
+            {% if item.distance_miles %}
+              <span><i class="bi bi-geo-alt"></i> {{ item.distance_miles }} miles</span>
+            {% endif %}
+            {% if item.category and item.category.name %}
+              <span><i class="bi bi-tag"></i> {{ item.category.name }}</span>
+            {% endif %}
+          </div>
+
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <strong>{{ '%.1f'|format(item.rating_avg or 0) }}</strong>
+              <span class="text-muted">({{ item.reviews_count or 0 }} Reviews)</span>
+            </div>
+            <a href="/listing/{{ item.slug }}" class="btn btn-sm btn-light">View</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="col-12">
+    <div class="alert alert-light border rounded-3">
+      No hay listings activos para mostrar.
+    </div>
+  </div>
+{% endif %}

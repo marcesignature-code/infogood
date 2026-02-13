@@ -1,0 +1,21 @@
+{% for item in helps %}
+    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+        <div class="helpCategories">
+            <div class="iconlink">
+                <div class="icon"><i class="{{ item.icon }}"></i></div>
+                <div class="link"><a href="/single-helps/" class="link"><i class="bi bi-box-arrow-in-right"></i></a></div>									
+            </div>
+            <div class="details">
+                <div class="headers">
+                    <h5 class="tltname">{{ item.title }}</h5>
+                    <p>{{ item.desc }}</p>
+                </div>
+                <div class="subcategories">
+                    <span>{{ item.name }}</span>
+                    <span>{{ item.name1 }}</span>
+                    <span>{{ item.name2 }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

@@ -1,0 +1,9 @@
+{% for item in earnings %}
+    <tr>
+        <td data-label="Name">{{ item.title }}</td>
+        <td data-label="Order ID">{{ item.id }}</td>
+        <td data-label="Date"><span class="text-normal">{{ item.date }}</span></td>
+        <td data-label="Amount"><span class="fw-medium text-dark">{{ item.amount }}</span></td>
+        <td data-label="View"><span class="fw-medium text-danger">{{ item.fee }}</span></td>
+    </tr>
+{% endfor %}

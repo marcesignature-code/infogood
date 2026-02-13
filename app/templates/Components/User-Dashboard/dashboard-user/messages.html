@@ -1,0 +1,21 @@
+{% for item in messages %}
+    <div class="singleMessagesline">
+        <a href="#" class="d-flex align-items-center justify-content-start gap-2">
+            <div class="msgLinethumb"><div class="square--50 circle"><img src="{{ item.img }}" class="img-fluid circle" alt=""></div></div>
+            <div class="msgLinecaption flex-fill">
+                <div class="msglineTitle d-flex align-items-center justify-content-between gap-3">
+                    <h6 class="fw-semibold m-0">{{ item.title }}</h6>
+                    <span class="text-sm fw-medium text-muted">{{ item.time }}</span>
+                </div>
+                <div class="msglineParag d-flex align-items-center justify-content-between gap-3">
+                    <p class="text-md m-0">{{ item.desc }}</p>
+
+                    {% if item.tag == 'true' %}
+                        <span class="square--20 circle bg-primary text-light text-sm">{{ item.number }}</span>
+                    {% endif %}
+
+                </div>
+            </div>
+        </a>
+    </div>
+{% endfor %}

@@ -1,0 +1,9 @@
+{% for item in gallerys5 %}
+    <div class="col-lg-4 col-md-6">
+        <label class="lableTitle">{{ item.title }}</label>
+        <form action="/file-upload" class="dropzone" id="{{ item.id }}">
+            <i class="bi bi-patch-plus"></i>
+        </form>
+        <label class="smart-text text-md">{{ item.name }}</label>
+    </div>
+{% endfor %}

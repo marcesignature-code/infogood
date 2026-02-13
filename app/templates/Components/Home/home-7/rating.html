@@ -1,0 +1,18 @@
+{% for item in ratings %}
+    <div class="col-xl-4 col-lg-4 col-md-4">
+        <div class="ratingcaption text-center">
+            <div class="figureimg mb-3"><img src="{{ item.img }}" width="50" class="img-fluid" alt=""></div>
+            <div class="d-flex align-items-center justify-content-center gap-1">
+                <div class="fw-bold text-dark">{{ item.rate }}</div>
+                <div class="d-flex align-items-center justify-content-start gap-1 mb-2">
+                    <i class="fa-solid fa-star text-warning"></i>
+                    <i class="fa-solid fa-star text-warning"></i>
+                    <i class="fa-solid fa-star text-warning"></i>
+                    <i class="fa-solid fa-star text-warning"></i>
+                    <i class="fa-solid fa-star-half-stroke text-warning"></i>
+                </div>
+            </div>
+            <div class="text-muted fw-medium"><span>{{ item.title }}</span></div>
+        </div>
+    </div>
+{% endfor %}

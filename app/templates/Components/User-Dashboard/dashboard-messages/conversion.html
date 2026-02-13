@@ -1,0 +1,113 @@
+<!-- Conversion Modal -->
+<div class="modal fade" id="conversionModal" tabindex="-1" aria-labelledby="conversionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-transparent border-0">
+            <div class="chatboxWraper" id="conversionModalLabel">
+                    
+                <!-- Chat Header -->
+                <div class="bg-cover chatboxHeader py-5" style="background:url('{{ url_for('static', filename='assets/img/avatar-bg-2.jpg') }}') no-repeat;" data-overlay="5">
+                    <a href="#" data-bs-dismiss="modal" aria-label="Close" class="close"><i class="bi bi-x"></i></a>
+                    <div class="chatAvatar"><figure><img src="{{ url_for('static', filename='assets/img/team-2.jpg') }}" class="img-fluid circle avatar-xl" alt="Chat Avatar"></figure></div>
+                    <div class="chaterInfo">
+                        <h6 class="chatterTitle">Michel K. Deve</h6>
+                        <p class="subtitle">michelk.deve@gmail.com</p>
+                    </div>
+                </div>
+                
+                <!-- Chat Body -->
+                <div class="chatboxbody">
+                    <div id="chat-messages" class="animate">
+                        <label>Tuesday 07</label>
+                        
+                        <div class="message">
+                            <img src="{{ url_for('static', filename='assets/img/team-2.jpg') }}" alt="">
+                            <div class="bubble">
+                                Hi dear Michel!
+                                <div class="corner"></div>
+                                <span>1 min</span>
+                            </div>
+                        </div>
+                        
+                        <div class="message right">
+                            <img src="{{ url_for('static', filename='assets/img/team-4.jpg') }}" alt="">
+                            <div class="bubble">
+                                Hi, How may i help you?
+                                <div class="corner"></div>
+                                <span>4 min</span>
+                            </div>
+                        </div>
+                        
+                        <div class="message">
+                            <img src="{{ url_for('static', filename='assets/img/team-2.jpg') }}" alt="">
+                            <div class="bubble">
+                                Can you share your demo link?
+                                <div class="corner"></div>
+                                <span>Now</span>
+                            </div>
+                        </div>
+                        
+                        <div class="message right">
+                            <img src="{{ url_for('static', filename='assets/img/team-4.jpg') }}" alt="">
+                            <div class="bubble">
+                                Yah! Why not please share yor email.
+                                <div class="corner"></div>
+                                <span>2 min</span>
+                            </div>
+                        </div>
+                        
+                        <div class="message">
+                            <img src="{{ url_for('static', filename='assets/img/team-2.jpg') }}" alt="">
+                            <div class="bubble">
+                                Yeah, hold on
+                                <div class="corner"></div>
+                                <span>1 min</span>
+                            </div>
+                        </div>
+                        
+                        <div class="message">
+                            <img src="{{ url_for('static', filename='assets/img/team-2.jpg') }}" alt="">
+                            <div class="bubble">
+                                This is my id "mitchel.warm@gmail.com"
+                                <div class="corner"></div>
+                                <span>1 min</span>
+                            </div>
+                        </div>
+                        
+                        <div class="message right">
+                            <img src="{{ url_for('static', filename='assets/img/team-4.jpg') }}" alt="">
+                            <div class="bubble">
+                                Ok Dear! We will share soon.
+                                <div class="corner"></div>
+                                <span>now</span>
+                            </div>
+                        </div>
+                        
+                        <div class="message">
+                            <img src="{{ url_for('static', filename='assets/img/team-2.jpg') }}" alt="">
+                            <div class="bubble">
+                                Thanks a lot!
+                                <div class="corner"></div>
+                                <span>Now</span>
+                            </div>
+                        </div>
+                        
+                    </div>
+            
+                </div>
+                
+                <!-- Chat Footer -->
+                <div class="chatfooter">
+                    <div class="chatAdder">
+                        <button type="button" id="add"><i class="bi bi-patch-plus-fill"></i></button>
+                        <button type="button" id="gif"><i class="bi bi-emoji-laughing"></i></button>
+                    </div>
+                    <div class="sendmessage">
+                        <input type="text" class="form-control" value="Send message...">
+                        <button type="button" id="send"><i class="bi bi-send"></i></button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>

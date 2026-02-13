@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="ListingHub - Flask Business Directory & Listing Template">
+		<meta name="author" content="Shreethemes">
+		
+		<title>{% block title %}ListingHub - Flask Business Directory & Listing Template{% endblock %}</title>
+		<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='assets/img/favicon.png') }}">
+
+		{% block styles %}
+		<!-- All Plugins -->
+		<link href="{{ url_for('static', filename='assets/css/animation.css') }}" rel="stylesheet">
+		<link href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}" rel="stylesheet">
+		<link href="{{ url_for('static', filename='assets/css/dropzone.min.css') }}" rel="stylesheet">
+		<link href="{{ url_for('static', filename='assets/css/rome.css') }}" rel="stylesheet">
+		<link href="{{ url_for('static', filename='assets/css/owl.carousel.min.css') }}" rel="stylesheet">
+		<link href="{{ url_for('static', filename='assets/css/owl.theme.default.min.css') }}" rel="stylesheet">
+		<link href="{{ url_for('static', filename='assets/css/rangeSlider.min.css') }}" rel="stylesheet">
+		<link href="{{ url_for('static', filename='assets/css/select2.min.css') }}" rel="stylesheet">
+		<link href="{{ url_for('static', filename='assets/css/magnific-popup.css') }}" rel="stylesheet">
+		<link href="{{ url_for('static', filename='assets/css/prism.css') }}" rel="stylesheet">
+
+		<!-- Icons CSS -->
+		<link href="{{ url_for('static', filename='assets/css/fontawesome.css') }}" rel="stylesheet">
+		<link href="{{ url_for('static', filename='assets/css/bootstrap-icons.css') }}" rel="stylesheet">
+		
+		<!-- Custom CSS -->
+		<link href="{{ url_for('static', filename='assets/css/style.css') }}" rel="stylesheet">
+		{% endblock %}
+	</head>
+
+	<body>
+
+        <div id="main-wrapper">
+
+            <main>
+                {% block hero_content %}
+                    {{ hero_content}}
+                {% endblock %}
+            </main>
+
+        </div>
+		<!-- End Wrapper -->
+
+		{% block scripts %}
+        <!-- All Jquery -->
+		<script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='assets/js/popper.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='assets/js/bootstrap.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='assets/js/dropzone.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='assets/js/counterup.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='assets/js/rangeslider.js') }}"></script>
+		<script src="{{ url_for('static', filename='assets/js/select2.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='assets/js/owl.carousel.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='assets/js/rome.js') }}"></script>
+		<script src="{{ url_for('static', filename='assets/js/jquery.magnific-popup.min.js') }}"></script>
+
+		<script src="{{ url_for('static', filename='assets/js/custom.js') }}"></script>
+		<!-- This page plugins -->
+		{% endblock %}
+
+	</body>
+
+</html>

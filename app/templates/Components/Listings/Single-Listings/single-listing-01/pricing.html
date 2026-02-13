@@ -1,0 +1,19 @@
+{% for item in pricings %}
+    <li class="col-xl-4 col-lg-6 col-md-6">
+        <div class="pricingMenu d-block">
+            <div class="d-flex align-items-center justify-content-between gap-2 border br-dashed rounded-pill p-2">
+                <div class="pricingMain d-flex align-items-center justify-content-start gap-2">
+                    <div class="pricingMenuthumb"><figure class="m-0"><img src="{{ item.img }}" class="img-fluid avatar-lg circle" alt=""></figure></div>
+                    
+                    <div class="prcCaptions">
+                        <h6 class="fw-medium mb-0">{{ item.title }}</h6>
+                        <p class="text-md m-0">{{ item.name }}</p>
+                    </div>
+                </div>
+                <div class="pricingCharges">
+                    <h6 class="text-primary m-0">{{ item.price }}</h6>
+                </div>
+            </div>
+        </div>
+    </li>
+{% endfor %}

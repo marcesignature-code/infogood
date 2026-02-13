@@ -1,0 +1,8 @@
+{% for item in tables %}
+    <tr>
+        <td data-label="Invoice no.">{{ item.title }}</td>
+        <td data-label="Issued Date:">{{ item.number }}</td>
+        <td data-label="Due Date:">{{ item.rate }}</td>
+        <td data-label="Total">{{ item.total }}</td>
+    </tr>
+{% endfor %}

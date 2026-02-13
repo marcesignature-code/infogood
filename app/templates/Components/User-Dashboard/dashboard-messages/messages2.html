@@ -1,0 +1,31 @@
+{% for item in messages2 %}
+    <li>
+        <a href="#" class="singleMessageswrap {{ item.class }}" data-bs-toggle="modal" data-bs-target="#conversionModal">
+            <div class="singleMessages">
+                <div class="messagesAvatar">
+                    <figure class="m-0">
+                        <img src="{{ item.img }}" class="img-fluid circle avatar-xl" alt="Avatar">
+                        <span class="userStatus {{ item.style }}"></span>
+                    </figure>
+                </div>
+                
+                <div class="messagesInfo">
+                    <div class="messagesupper d-flex align-items-center justify-content-between gap-2 mb-1">
+                        <div class="messagesupper d-flex align-items-center justify-content-start gap-2">
+                            <h6 class="messageuserTitle">{{ item.title }}</h6>
+
+                            {% if item.tag == 'true' %}
+                                <span class="unread">{{ item.name }}</span>
+                            {% endif %}
+
+                        </div>
+                        <div class="flxLast"><span class="text-md text-muted">{{ item.time }}</span></div>
+                    </div>
+                    <div class="messagesBody">
+                        <p class="m-0">{{ item.desc }} <strong>{{ item.desc1 }}</strong> {{ item.desc2 }}</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </li>
+{% endfor %}

@@ -1,0 +1,6 @@
+{% for item in alls %}
+    <div class="filterFlex">
+        <input type="radio" class="btn-check" name="ratingsfilter" id="{{ item.id }}" {{ item.check }}>
+        <label class="btn" for="{{ item.id }}"><i class="bi bi-star-fill me-1"></i>{{ item.title }}</label>
+    </div>
+{% endfor %}

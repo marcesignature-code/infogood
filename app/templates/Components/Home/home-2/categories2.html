@@ -1,0 +1,14 @@
+{% for item in categories2 %}
+    <div class="singleCategory">
+        <div class="category-small-wrapper">
+            <a href="#" class="categoryBox">
+                <div class="categoryCapstions">
+                    <div class="catsIcons"><div class="icoBoxx"><i class="{{ item.icon }}"></i></div></div>
+                    <div class="catsTitle"><h5>{{ item.title }}</h5></div>
+                    <div class="CatsLists"><span class="categorycounter">{{ item.lists }}</span></div>
+                </div>
+                <img src="{{ item.img }}" class="img-fluid" alt="">
+            </a>
+        </div>	
+    </div>
+{% endfor %}

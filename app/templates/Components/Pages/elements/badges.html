@@ -1,0 +1,10 @@
+{% for item in badges %}
+    <div class="d-flex flex-wrap align-items-start gap-3 mb-3">
+        <span class="badge {{ item.style }} badge-primary rounded-pill">{{ item.title }}</span>
+        <span class="badge {{ item.style }} badge-info rounded-pill">{{ item.title1 }}</span>
+        <span class="badge {{ item.style }} badge-secondary rounded-pill">{{ item.title2 }}</span>
+        <span class="badge {{ item.style }} badge-success rounded-pill">{{ item.title3 }}</span>
+        <span class="badge {{ item.style }} badge-danger rounded-pill">{{ item.title4 }}</span>
+        <span class="badge {{ item.style }} badge-dark rounded-pill">{{ item.title5 }}</span>
+    </div>
+{% endfor %}

@@ -1,0 +1,13 @@
+{% for item in categories %}
+	<div class="singleCategory">
+		<div class="category-small-wrapper light">
+			<a href="#" class="categoryBox">
+				<div class="categoryCapstions">
+					<div class="catsIcons"><div class="icoBoxx"><i class="{{ item.icon }}"></i></div></div>
+					<div class="catsTitle"><h5>{{ item.title }}</h5></div>
+					<div class="CatsLists"><span class="categorycounter">{{ item.lists }}</span></div>
+				</div>
+			</a>
+		</div>	
+	</div>
+{% endfor %}
