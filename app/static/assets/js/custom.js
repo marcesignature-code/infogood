@@ -44,13 +44,9 @@
 
 
 	// Tooltip
-	const tooltipTriggerList = [...document.querySelectorAll('[data-bs-toggle="tooltip"]')];
-
-    // Initialize tooltips only if there are tooltip elements
-    if (tooltipTriggerList.length > 0) {
-        const tooltipList = tooltipTriggerList.map((tooltipTriggerEl) => {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
+	const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    if (window.bootstrap && bootstrap.Tooltip && tooltipTriggerList.length) {
+        tooltipTriggerList.forEach((el) => new bootstrap.Tooltip(el));
     }
 
 	const $backToTopButton = $("#back2Top");
@@ -340,7 +336,7 @@
                 navigationElement.find(".nav-submenu").hide(0);
     
                 if (/Mobi/i.test(navigator.userAgent) || navigator.maxTouchPoints > 0 || nav.settings.submenuTrigger === "click") {
-                    navigationElement.find(".nav-menu, .nav-dropdown > li > a").on(touchEvent, function (event) {
+                    navigationElement.find(".nav-menu > li > a, .nav-dropdown > li > a").on(touchEvent, function (event) {
                         if ($(this).siblings(".nav-submenu").length > 0) {
                             event.stopPropagation();
                             event.preventDefault();
