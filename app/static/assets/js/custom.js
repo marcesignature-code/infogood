@@ -334,33 +334,44 @@
             function enableDesktopMenu() {
                 clearEvents();
                 navigationElement.find(".nav-submenu").hide(0);
-    
-                if (/Mobi/i.test(navigator.userAgent) || navigator.maxTouchPoints > 0 || nav.settings.submenuTrigger === "click") {
-                    navigationElement.find(".nav-menu > li > a, .nav-dropdown > li > a").on(touchEvent, function (event) {
-                        if ($(this).siblings(".nav-submenu").length > 0) {
-                            event.stopPropagation();
-                            event.preventDefault();
-    
-                            if ($(this).siblings(".nav-submenu").css("display") === "none") {
-                                nav.showSubmenu($(this).parent("li"), nav.settings.effect);
-                                adjustSubmenuPositions();
-                                return false;
-                            } else {
-                                nav.hideSubmenu($(this).parent("li"), nav.settings.effect);
-                                const href = $(this).attr("href");
-                                if (href === "#" || href === "") return false;
-                                window.location.href = href;
+
+                // ✅ Desktop: usar hover si el dispositivo soporta "hover" (mouse/trackpad),
+                // aunque tenga pantalla táctil.
+                // ✅ Click: solo si es móvil, si se fuerza click, o si NO hay hover disponible.
+                const canHover = window.matchMedia && window.matchMedia("(any-hover: hover)").matches;
+                const isMobileUA = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+                const forceClick = nav.settings.submenuTrigger === "click";
+
+                if (forceClick || isMobileUA || !canHover) {
+                    navigationElement
+                        .find(".nav-menu > li > a, .nav-dropdown > li > a")
+                        .on(touchEvent, function (event) {
+                            if ($(this).siblings(".nav-submenu").length > 0) {
+                                event.stopPropagation();
+                                event.preventDefault();
+
+                                if ($(this).siblings(".nav-submenu").css("display") === "none") {
+                                    nav.showSubmenu($(this).parent("li"), nav.settings.effect);
+                                    adjustSubmenuPositions();
+                                    return false;
+                                } else {
+                                    nav.hideSubmenu($(this).parent("li"), nav.settings.effect);
+                                    const href = $(this).attr("href");
+                                    if (href === "#" || href === "") return false;
+                                    window.location.href = href;
+                                }
                             }
-                        }
-                    });
+                        });
                 } else {
-                    navigationElement.find(".nav-menu li").on(mouseEnterEvent, function () {
-                        nav.showSubmenu(this, nav.settings.effect);
-                        adjustSubmenuPositions();
-                    }).on(mouseLeaveEvent, function () {
-                        nav.hideSubmenu(this, nav.settings.effect);
-                    });
-    
+                    navigationElement.find(".nav-menu li")
+                        .on(mouseEnterEvent, function () {
+                            nav.showSubmenu(this, nav.settings.effect);
+                            adjustSubmenuPositions();
+                        })
+                        .on(mouseLeaveEvent, function () {
+                            nav.hideSubmenu(this, nav.settings.effect);
+                        });
+
                     if (nav.settings.hideSubWhenGoOut) detectOutsideClick();
                 }
             }
