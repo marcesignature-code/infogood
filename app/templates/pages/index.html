@@ -7,82 +7,187 @@
 <div class="clearfix"></div>
 
 <!-- Hero Start -->
-<div class="image-cover hero-header position-relative" style="background:url('{{ url_for('static', filename='assets/img/banner-1.jpg') }}')no-repeat;" data-overlay="6">
-	<div class="container">
-
-		<!-- Heading Rwo -->
-		<div class="row justify-content-center align-items-center mb-5 pt-lg-0 pt-5">
-			<div class="col-xl-10 col-lg-11 col-md-12 col-sm-12">
-				<div class="position-relative text-center">
-					<h1>Explore Your Perfect Places</h1>
-					<p class="subtitle">Bryan Browse high-rated hotels, restaurants, attractions, activities and more!</p>
-				</div>
-			</div>
+<div class="splashBanner w-100 position-relative pt-lg-0 pt-5">
+	<div class="splashSlider position-relative">
+		<div class="splashSliders owl-carousel">
+			<div class="image-cover singleSplash" style="background:url('{{ url_for('static', filename='assets/img/banner-4.jpg') }}') no-repeat;"></div>
+			<div class="image-cover singleSplash" style="background:url('{{ url_for('static', filename='assets/img/banner-5.jpg') }}') no-repeat;"></div>
+			<div class="image-cover singleSplash" style="background:url('{{ url_for('static', filename='assets/img/banner-6.jpg') }}') no-repeat;"></div>
+			<div class="image-cover singleSplash" style="background:url('{{ url_for('static', filename='assets/img/banner-7.jpg') }}') no-repeat;"></div>
 		</div>
-		<!-- </row> -->
-		
-		<!-- Search Form row -->
-		<div class="row align-items-start justify-content-center mb-lg-5 mb-4">
-			<div class="col-xl-11 col-lg-12 col-md-12 col-sm-12">
-				<div class="heroSearch style-01 shadow">
-					<div class="row gx-lg-2 gx-md-2 gx-3 gy-sm-2 gy-2">
-						<div class="col-xl-4 col-lg-3 col-md-12 col-sm-12">
-							<div class="form-group position-relative">
-								<input type="text" class="form-control fs-6 fw-medium border-0 ps-md-2" placeholder="What are you looking for?">
-							</div>
+
+		<div class="position-absolute top-50 start-50 translate-middle w-100 z-2 explose">
+			<div class="container">
+
+				<!-- Heading Row -->
+				<div class="row justify-content-center align-items-center mb-5 pt-lg-0 pt-5">
+					<div class="col-xl-10 col-lg-11 col-md-12 col-sm-12">
+						<div class="position-relative text-center hero-main-content">
+							<img 
+								src="{{ url_for('static', filename='assets/img/logo-principal2.png') }}" 
+								alt="InfoGoodTrip Logo" 
+								class="hero-main-logo"
+							>
+							<h1>Explore Your Perfect Places</h1>
+							<p class="subtitle">All the tourist information you need in one place.</p>
+							<p class="subtitle">Find: Hotels, inns, haciendas, restaurants, cafes, desserts, transportation,<br>museums and everything for an unforgettable trip.</p>
 						</div>
-						<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 side-border">
-							<div class="form-group position-relative">
-								<input type="text" class="form-control fs-6 fw-medium border-0" placeholder="Location">
-								<span class="position-absolute top-50 end-0 translate-middle me-2"><i class="fa-solid fa-location-dot text-muted opacity-50 fs-5"></i></span>
-							</div>
-						</div>
-						<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12">
-							<div class="form-group fw-medium lights-bg no-border">
-								<div class="selects">
-									<select id="my-select">
-										<option label="All Categories"></option> 
-										<option value="lv">Eat & Drinking</option>
-										<option value="la">Rental Property</option>
-										<option value="kc">Classifieds</option>
-										<option value="no">Bank Services</option>
-										<option value="kc">Shopping</option>
-										<option value="lb">Fintess & Gym</option>
-										<option value="cl">Coaching</option>
-										<option value="cn">Other Services</option>
-									</select>
-									
+					</div>
+				</div>
+				<!-- End Heading Row -->
+
+				<!-- Search Form Row -->
+				<div class="row align-items-start justify-content-center mb-lg-5 mb-4">
+					<div class="col-xl-11 col-lg-12 col-md-12 col-sm-12">
+						<div class="heroSearch style-01 shadow">
+							<div class="row gx-lg-2 gx-md-2 gx-3 gy-sm-2 gy-2">
+
+								<div class="col-xl-4 col-lg-3 col-md-12 col-sm-12">
+									<div class="form-group position-relative">
+										<input type="text" class="form-control fs-6 fw-medium border-0 ps-md-2" placeholder="What are you looking for?">
+									</div>
 								</div>
-							</div>
-						</div>
-						<div class="col-xl-2 col-lg-3 col-md-12 col-sm-12">
-							<div class="form-group">
-								<button type="button" class="btn btn-primary full-width fw-medium"><i class="bi bi-search me-2"></i>Search</button>
+
+								<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 side-border">
+									<div class="form-group position-relative">
+										<input type="text" class="form-control fs-6 fw-medium border-0" placeholder="Location">
+										<span class="position-absolute top-50 end-0 translate-middle me-2">
+											<i class="fa-solid fa-location-dot text-muted opacity-50 fs-5"></i>
+										</span>
+									</div>
+								</div>
+
+								<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12">
+									<div class="form-group fw-medium lights-bg no-border">
+										<div class="selects">
+											<select id="my-select">
+												<option label="All Categories"></option> 
+												<option value="lv">Eat & Drinking</option>
+												<option value="la">Rental Property</option>
+												<option value="kc">Classifieds</option>
+												<option value="no">Bank Services</option>
+												<option value="kc">Shopping</option>
+												<option value="lb">Fintess & Gym</option>
+												<option value="cl">Coaching</option>
+												<option value="cn">Other Services</option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-xl-2 col-lg-3 col-md-12 col-sm-12">
+									<div class="form-group">
+										<button type="button" class="btn btn-primary full-width fw-medium">
+											<i class="bi bi-search me-2"></i>Search
+										</button>
+									</div>
+								</div>
+
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		<!-- End Search Form Row -->
-		
-		<div class="row align-items-center justify-content-center">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-12 mb-2">
-				<div class="text-center"><h6 class="fw-semibold">Explore Popular Categories</h6></div>
-			</div>
-			<div class="col-xl-12 col-lg-12 col-md-12 col-md-12 col-12">
-				<div class="popularSearches d-flex align-items-center justify-content-center column-gap-3 row-gap-1 flex-wrap">
-					<div class="singleItem"><a href="#" class="badge badge-transparent rounded-pill">Real Estate</a></div>	
-					<div class="singleItem"><a href="#" class="badge badge-transparent rounded-pill">Eat & Drink</a></div>	
-					<div class="singleItem"><a href="#" class="badge badge-transparent rounded-pill">Shopping</a></div>	
-					<div class="singleItem"><a href="#" class="badge badge-transparent rounded-pill">Nightlife</a></div>	
-					<div class="singleItem"><a href="#" class="badge badge-transparent rounded-pill">Services</a></div>	
+				<!-- End Search Form Row -->
+
+				<div class="row align-items-center justify-content-center">
+					<div class="col-xl-12 col-lg-12 col-md-12 col-12 mb-2">
+						<div class="text-center">
+							<h6 class="fw-semibold">Explore Popular Categories</h6>
+						</div>
+					</div>
+
+					<div class="col-xl-12 col-lg-12 col-md-12 col-12">
+						<div class="popularSearches d-flex align-items-center justify-content-center column-gap-3 row-gap-1 flex-wrap">
+
+							<div class="singleItem">
+								<a href="#" class="badge badge-transparent rounded-pill">Ciudad-campo</a>
+							</div>
+
+							<div class="singleItem">
+								<a href="#" class="badge badge-transparent rounded-pill">Hospedaje</a>
+							</div>
+
+							<div class="singleItem">
+								<a href="#" class="badge badge-transparent rounded-pill">Comida</a>
+							</div>
+
+							<div class="singleItem">
+								<a href="#" class="badge badge-transparent rounded-pill">Postres</a>
+							</div>
+
+							<div class="singleItem dropdown price-dropdown">
+								<a href="#"
+								class="badge badge-transparent rounded-pill dropdown-toggle category-pill-link"
+								data-bs-toggle="dropdown"
+								aria-expanded="false">
+									Precio
+								</a>
+								<ul class="dropdown-menu category-pill-menu">
+									<li><a class="dropdown-item" href="#">$</a></li>
+									<li><a class="dropdown-item" href="#">$$</a></li>
+									<li><a class="dropdown-item" href="#">$$$</a></li>
+								</ul>
+							</div>
+
+							<div class="singleItem dropdown free-activities-dropdown">
+								<a href="#"
+								   class="badge badge-transparent rounded-pill dropdown-toggle category-pill-link"
+								   data-bs-toggle="dropdown"
+								   aria-expanded="false">
+									Actividades gratuitas
+								</a>
+								<ul class="dropdown-menu category-pill-menu">
+									<li><a class="dropdown-item" href="#">Ministerio de turismo</a></li>
+									<li><a class="dropdown-item" href="#">Municipio de Quito</a></li>
+									<li><a class="dropdown-item" href="#">Concejo Provincial</a></li>
+									<li><a class="dropdown-item" href="#">Municipio de Rumiñahui</a></li>
+									<li><a class="dropdown-item" href="#">Municipio de cotopaxi</a></li>
+									<li><a class="dropdown-item" href="#">Prefectura de Cotopaxi</a></li>
+									<li><a class="dropdown-item" href="#">Municipio de Otavalo</a></li>
+									<li><a class="dropdown-item" href="#">Prefectura de Imbabura</a></li>
+								</ul>
+							</div>
+
+							<div class="singleItem dropdown services-dropdown">
+								<a href="#"
+								class="badge badge-transparent rounded-pill dropdown-toggle category-pill-link"
+								data-bs-toggle="dropdown"
+								aria-expanded="false">
+									Servicios
+								</a>
+
+								<ul class="dropdown-menu category-pill-menu services-menu">
+									<li class="dropdown-submenu">
+										<a href="#" class="dropdown-item submenu-toggle">Transporte</a>
+										<ul class="dropdown-menu submenu">
+											<li><a class="dropdown-item" href="#">Transporte VIP</a></li>
+											<li><a class="dropdown-item" href="#">Transporte Vans</a></li>
+											<li><a class="dropdown-item" href="#">Transporte Ejecutivo</a></li>
+										</ul>
+									</li>
+
+									<li class="dropdown-submenu">
+										<a href="#" class="dropdown-item submenu-toggle">Operadores turísticos</a>
+										<ul class="dropdown-menu submenu">
+											<li><a class="dropdown-item" href="#">Inglés</a></li>
+											<li><a class="dropdown-item" href="#">Francés</a></li>
+											<li><a class="dropdown-item" href="#">Alemán</a></li>
+										</ul>
+									</li>
+								</ul>
+							</div>
+
+						</div>
+					</div>
 				</div>
+
 			</div>
 		</div>
 
+		<div class="mousedrop z-1">
+			<a href="#mains" class="mousewheel"><i class="bi bi-mouse"></i></a>
+		</div>
 	</div>
-	<div class="mousedrop z-1"><a href="#mains" class="mousewheel"><i class="bi bi-mouse"></i></a></div>
 </div>
 <!-- Hero End -->
 
@@ -94,7 +199,7 @@
 				<div class="owl-carousel brand-slider">
 					
 					<!-- Components/Home/index/brand.html -->
-                    {% include 'Components/Home/index/brand.html' %}
+					{% include 'Components/Home/index/brand.html' %}
 					
 				</div>
 			</div>
