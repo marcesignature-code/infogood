@@ -1,0 +1,91 @@
+<div class="authWrap">
+	<div class="authhead">
+		<div class="text-center mb-4">
+			<a href="{{ url_for('main.home_map') }}">
+				<img
+					class="img-fluid"
+					src="{{ url_for('static', filename='assets/img/logo-principal-light.png') }}"
+					alt="InfoGoodTrip logo"
+					style="max-width: 300px; width: 100%; height: auto;"
+				>
+			</a>
+		</div>
+	</div>
+
+	<div class="authbody d-black">
+		<div class="card rounded-4 p-sm-4 p-3 border-0 shadow-sm">
+			<div class="card-body p-0">
+
+				<div class="text-center mb-4">
+					<h1 class="mb-1 fs-2">Welcome Back</h1>
+					<p class="text-muted mb-0">Login to manage your account.</p>
+				</div>
+
+				<form class="text-start" method="POST" action="{{ url_for('auth.login') }}">
+					<div class="form">
+						<div class="form-group mb-3">
+							<label>Email Address</label>
+							<input type="email" name="email" class="form-control" placeholder="name@example.com" required>
+						</div>
+
+						<div class="form-group position-relative mb-3">
+							<div class="d-flex align-items-center justify-content-between mb-1">
+								<label class="mb-0">Password</label>
+								<a href="{{ url_for('auth.forgot_password') }}" class="text-primary fw-medium small">Forgot Password?</a>
+							</div>
+
+							<div class="position-relative">
+								<input type="password" class="form-control" id="modal-password-field" name="password" placeholder="Password" required>
+								<span class="fa-solid fa-eye toggle-password position-absolute top-50 end-0 translate-middle-y me-3"></span>
+							</div>
+						</div>
+
+						<div class="modal-flex-item d-flex align-items-center justify-content-between mb-3">
+							<div class="modal-flex-first">
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" id="rememberme_modal" name="remember_me" value="1">
+									<label class="form-check-label" for="rememberme_modal">Remember me</label>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group mb-3">
+							<button type="submit" class="btn btn-primary full-width fw-medium">Log In</button>
+						</div>
+					</div>
+
+					<div class="prixer my-3">
+						<div class="devider-wraps position-relative">
+							<div class="devider-text text-muted text-md">Or sign in with</div>
+						</div>
+					</div>
+
+					<div class="social-login mt-3">
+						<div class="d-flex align-items-center justify-content-center flex-wrap gap-3 p-0">
+							<div class="flex-first flex-fill mob-100">
+								<a href="#" class="btn bg-white border text-dark full-width">
+									<i class="fa-brands fa-google-plus-g color--googleplus me-2"></i>
+									<span class="fw-medium text-md">Sign in with Google</span>
+								</a>
+							</div>
+							<div class="flex-last flex-fill mob-100">
+								<a href="#" class="btn bg-white border text-dark full-width">
+									<i class="fa-brands fa-facebook color--facebook me-2"></i>
+									<span class="fw-medium text-md">Sign in with Facebook</span>
+								</a>
+							</div>
+						</div>
+					</div>
+
+					<div class="text-center mt-4 pt-2">
+						<p class="text-dark mb-0">
+							Don't have an account yet?
+							<a href="{{ url_for('auth.register') }}" class="fw-medium text-primary"> Sign up here</a>
+						</p>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+</div>

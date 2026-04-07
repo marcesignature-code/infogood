@@ -24,7 +24,7 @@
 					<div class="col-xl-10 col-lg-11 col-md-12 col-sm-12">
 						<div class="position-relative text-center hero-main-content">
 							<img 
-								src="{{ url_for('static', filename='assets/img/logo-principal2.png') }}" 
+								src="{{ url_for('static', filename='assets/img/logo-principal-light.png') }}" 
 								alt="InfoGoodTrip Logo" 
 								class="hero-main-logo"
 							>
@@ -340,9 +340,20 @@
 
 
 	<!-- Components/Home/index/search.html -->
-	{% include 'Components/Home/index/search.html' %}
-
+	<!-- {% include 'Components/Home/index/search.html' %} -->
+	
+	<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" style="max-width: 500px;">
+		<div class="modal-content border-0 bg-transparent shadow-none">
+			<div class="modal-body p-0">
+				{% include 'auth/_login_modal.html' %}
+			</div>
+		</div>
+	</div>
+</div>
 
 {% include 'Base/footer.html' %} 
+
+
 
 {% endblock %}

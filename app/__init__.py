@@ -1,13 +1,14 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from slugify import slugify
 from . import context_processors
 import os
 from dotenv import load_dotenv
 from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
 
+from .extensions import db, migrate, login_manager
+
 load_dotenv()
-db = SQLAlchemy()
+
 
 def _ensure_sslmode(database_url: str) -> str:
     if not database_url:
@@ -18,6 +19,7 @@ def _ensure_sslmode(database_url: str) -> str:
         q["sslmode"] = "require"
     new_query = urlencode(q)
     return urlunparse((parsed.scheme, parsed.netloc, parsed.path, parsed.params, new_query, parsed.fragment))
+
 
 def create_app():
     app = Flask(__name__)
@@ -39,13 +41,18 @@ def create_app():
     app.config["DEBUG"] = os.getenv("DEBUG", "False").lower() in ("true", "1")
 
     db.init_app(app)
+    migrate.init_app(app, db)
+    login_manager.init_app(app)
 
-    # Solo registra modelos (sin crear tablas automáticamente)
     with app.app_context():
         from . import models  # noqa: F401
 
     from .routes import main
+    from .auth import auth_bp
+
     app.register_blueprint(main)
+    app.register_blueprint(auth_bp)
+
     app.jinja_env.filters["slugify"] = slugify
 
     return app

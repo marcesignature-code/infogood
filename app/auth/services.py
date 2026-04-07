@@ -1,0 +1,1 @@
+# Supabase Auth integration will live here.

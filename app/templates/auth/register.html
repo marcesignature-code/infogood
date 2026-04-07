@@ -1,0 +1,190 @@
+{% extends "Base/no-header.html" %}
+
+{% block hero_content %}
+
+<div class="bg-cover" style="background: #ffe8ee url('{{ url_for('static', filename='assets/img/auth-bg.png') }}') no-repeat center center; background-size: cover; min-height: 100vh;">
+
+	<div id="preloader">
+		<div class="preloader"><span></span><span></span></div>
+	</div>
+
+	<section class="py-5">
+		<div class="container">
+			<div class="row align-items-center justify-content-center min-vh-100">
+				<div class="col-xl-5 col-lg-6 col-md-8 col-sm-10">
+					<div class="authWrap">
+
+						<div class="authhead">
+                            <div class="text-center mb-4">
+                                <a href="{{ url_for('main.home_map') }}">
+                                    <img
+                                        class="img-fluid"
+                                        src="{{ url_for('static', filename='assets/img/logo-principal-dark.png') }}"
+                                        alt="InfoGoodTrip logo"
+                                        style="max-width: 320px; width: 100%; height: auto;"
+                                    >
+                                </a>
+                            </div>
+                        </div>
+
+						<div class="authbody d-black mb-4">
+							<div class="card rounded-4 p-sm-4 p-3 border-0 shadow-sm">
+								<div class="card-body p-0">
+
+									<div class="text-center mb-4">
+										<h1 class="mb-2 fs-2">Create An Account!</h1>
+										<p class="text-muted mb-0">Choose your role and create your account</p>
+									</div>
+
+									<form class="text-start" method="POST" action="{{ url_for('auth.register') }}">
+										
+										<div class="text-center mb-4">
+											<div class="d-flex align-items-center justify-content-center gap-4 flex-wrap">
+												<div class="form-check form-check-inline">
+													<input class="form-check-input" type="radio" name="role" id="role_user" value="user" checked>
+													<label class="form-check-label" for="role_user">User</label>
+												</div>
+												<div class="form-check form-check-inline">
+													<input class="form-check-input" type="radio" name="role" id="role_provider" value="provider">
+													<label class="form-check-label" for="role_provider">Provider</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group mb-4">
+													<label>First Name</label>
+													<input type="text" name="first_name" class="form-control" placeholder="First name" required>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group mb-4">
+													<label>Last Name</label>
+													<input type="text" name="last_name" class="form-control" placeholder="Last name" required>
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group mb-4">
+											<label>Email Address</label>
+											<input type="email" name="email" class="form-control" placeholder="name@example.com" required>
+										</div>
+
+										<div class="form-group mb-4">
+											<label>Phone</label>
+											<input type="text" name="phone" class="form-control" placeholder="+593 ...">
+										</div>
+
+										<div class="form-group position-relative mb-4">
+											<label>Password</label>
+											<div class="position-relative">
+												<input type="password" class="form-control" id="password-field" name="password" placeholder="Minimum 8 characters" required>
+												<span class="fa-solid fa-eye toggle-password position-absolute top-50 end-0 translate-middle-y me-3"></span>
+											</div>
+										</div>
+
+										<div class="form-group mb-4">
+											<label>Confirm Password</label>
+											<input type="password" name="confirm_password" class="form-control" placeholder="Confirm password" required>
+										</div>
+
+										<div id="provider-fields" style="display:none;">
+											<hr class="my-4">
+											<h5 class="mb-3">Business Information</h5>
+
+											<div class="form-group mb-4">
+												<label>Business Name</label>
+												<input type="text" name="business_name" class="form-control" placeholder="Business name">
+											</div>
+
+											<div class="form-group mb-4">
+												<label>Business Type</label>
+												<input type="text" name="business_type" class="form-control" placeholder="Hotel, Restaurant, Tour Operator...">
+											</div>
+
+											<div class="form-group mb-4">
+												<label>Main Category</label>
+												<input type="text" name="main_category" class="form-control" placeholder="Accommodation, Food & Drinks...">
+											</div>
+
+											<div class="form-group mb-4">
+												<label>City</label>
+												<input type="text" name="city" class="form-control" placeholder="City">
+											</div>
+										</div>
+
+										<div class="form-group mb-4">
+											<button type="submit" class="btn btn-primary full-width fw-medium">Create Account</button>
+										</div>
+
+										<div class="modal-flex-item d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+											<div class="modal-flex-first">
+												<div class="form-check form-check-inline">
+													<input class="form-check-input" type="checkbox" id="acceptterms" required>
+													<label class="form-check-label" for="acceptterms">I accept the terms and conditions</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="prixer my-4">
+											<div class="devider-wraps position-relative">
+												<div class="devider-text text-muted text-md">Or sign up with</div>
+											</div>
+										</div>
+
+										<div class="social-login">
+											<div class="d-flex align-items-center justify-content-center flex-wrap gap-3 p-0">
+												<div class="flex-first flex-fill mob-100">
+													<a href="#" class="btn bg-white border text-dark full-width">
+														<i class="fa-brands fa-google-plus-g color--googleplus me-2"></i>
+														<span class="fw-medium text-md">Sign up with Google</span>
+													</a>
+												</div>
+												<div class="flex-last flex-fill mob-100">
+													<a href="#" class="btn bg-white border text-dark full-width">
+														<i class="fa-brands fa-facebook color--facebook me-2"></i>
+														<span class="fw-medium text-md">Sign up with Facebook</span>
+													</a>
+												</div>
+											</div>
+										</div>                                        
+                                        <div class="text-center mt-4 pt-2">
+                                            <p class="text-dark mb-0">
+                                                Already have an account?
+                                                <a href="{{ url_for('auth.login') }}" class="fw-medium text-primary"> Log in here</a>
+                                            </p>
+                                        </div>
+
+									</form>
+								</div>
+							</div>
+						</div>				
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+
+{% include 'Components/Home/index/log.html' %}
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const userRadio = document.getElementById("role_user");
+		const providerRadio = document.getElementById("role_provider");
+		const providerFields = document.getElementById("provider-fields");
+
+		function toggleProviderFields() {
+			providerFields.style.display = providerRadio.checked ? "block" : "none";
+		}
+
+		if (userRadio && providerRadio && providerFields) {
+			userRadio.addEventListener("change", toggleProviderFields);
+			providerRadio.addEventListener("change", toggleProviderFields);
+			toggleProviderFields();
+		}
+	});
+</script>
+
+{% endblock %}
