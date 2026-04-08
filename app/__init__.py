@@ -47,11 +47,12 @@ def create_app():
     with app.app_context():
         from . import models  # noqa: F401
 
-    from .routes import main
+    from .routes import main, dashboard_bp
     from .auth import auth_bp
 
     app.register_blueprint(main)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(dashboard_bp)
 
     app.jinja_env.filters["slugify"] = slugify
 

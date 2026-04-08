@@ -1,0 +1,43 @@
+{% extends "Base/base.html" %}
+
+{% block content %}
+{% include 'Base/navbar.html' %}
+
+<div id="preloader">
+    <div class="preloader"><span></span><span></span></div>
+</div>
+
+<section class="gray-simple position-relative">
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- Sidebar -->
+            <div class="col-xl-3 col-lg-4 col-md-12">
+                {% include sidebar_partial %}
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-xl-9 col-lg-8 col-md-12">
+                <div class="dashboard-wraper bg-white rounded-4 p-4">
+
+                    {% block dashboard_header %}
+                    <div class="mb-4">
+                        <h2 class="mb-1">{{ dashboard_title|default('Dashboard') }}</h2>
+                        <p class="text-muted mb-0">{{ dashboard_subtitle|default('Panel de control') }}</p>
+                    </div>
+                    {% endblock %}
+
+                    {% block dashboard_content %}
+                    <div class="alert alert-light border rounded-3">
+                        Aquí irá el contenido del dashboard.
+                    </div>
+                    {% endblock %}
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

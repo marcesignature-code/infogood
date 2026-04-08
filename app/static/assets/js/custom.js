@@ -683,3 +683,15 @@ function topFunction() {
         behavior: "smooth" // Smooth scroll to the top
     });
 }
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const toggleBtn = document.getElementById("sidebarToggle");
+    const dashboardShell = document.getElementById("dashboardShell");
+
+    if (toggleBtn && dashboardShell) {
+        toggleBtn.addEventListener("click", function () {
+            dashboardShell.classList.toggle("sidebar-collapsed");
+        });
+    }
+});

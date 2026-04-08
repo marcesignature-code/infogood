@@ -1076,3 +1076,27 @@ def success_payment():
 @main.route("/viewcart/")
 def viewcart():
     return render_template("pages/viewcart.html")
+
+
+from flask import Blueprint, render_template
+
+dashboard_bp = Blueprint("dashboard", __name__)
+
+@dashboard_bp.route("/dashboard/user")
+def user_dashboard():
+    return render_template("Components/User-Dashboard/user/dashboard-user.html")
+
+@dashboard_bp.route("/dashboard/provider")
+def provider_dashboard():
+    return render_template("Components/User-Dashboard/provider/dashboard-provider.html")
+
+@dashboard_bp.route("/dashboard/sales")
+def sales_dashboard():
+    return render_template("Components/User-Dashboard/sales/dashboard-sales.html")
+
+@dashboard_bp.route("/dashboard/admin")
+def admin_dashboard():
+    return render_template("Components/User-Dashboard/admin/dashboard-admin.html")
+
+
+

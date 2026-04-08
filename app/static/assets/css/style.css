@@ -9715,3 +9715,189 @@ choices__list--dropdown .choices__item--selectable.is-highlighted, .choices__lis
     color: #fff !important;
     text-shadow: 0 2px 8px rgba(0,0,0,0.45);
 }
+
+/* CONTENEDOR GENERAL */
+.dashboard-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* SIDEBAR NORMAL */
+.dashboard-sidebar {
+    width: 280px;
+    min-width: 280px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* CONTENIDO */
+.dashboard-content {
+    flex: 1;
+    transition: all 0.3s ease;
+}
+
+/* BOTÓN FLECHA */
+.sidebar-toggle-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sidebar-toggle-btn:hover {
+    background: rgba(255,255,255,0.22);
+}
+
+/* ESTADO COLAPSADO */
+.dashboard-shell.sidebar-collapsed .dashboard-sidebar {
+    width: 95px;
+    min-width: 95px;
+}
+
+/* Ocultar textos al colapsar */
+.dashboard-shell.sidebar-collapsed .sidebar-text,
+.dashboard-shell.sidebar-collapsed h4,
+.dashboard-shell.sidebar-collapsed h5,
+.dashboard-shell.sidebar-collapsed p,
+.dashboard-shell.sidebar-collapsed .user-name,
+.dashboard-shell.sidebar-collapsed .welcome-title,
+.dashboard-shell.sidebar-collapsed .welcome-subtitle,
+.dashboard-shell.sidebar-collapsed .menu-label,
+.dashboard-shell.sidebar-collapsed .submenu-indicator,
+.dashboard-shell.sidebar-collapsed .badge,
+.dashboard-shell.sidebar-collapsed .label {
+    display: none !important;
+}
+
+/* Centrar iconos */
+.dashboard-shell.sidebar-collapsed .dashboard-sidebar ul li a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 10px !important;
+}
+
+/* Íconos más visibles */
+.dashboard-shell.sidebar-collapsed .dashboard-sidebar ul li a i {
+    margin-right: 0 !important;
+    font-size: 18px;
+}
+
+/* Avatar más compacto */
+.dashboard-shell.sidebar-collapsed .dashboard-sidebar img {
+    max-width: 48px;
+    height: 48px;
+    object-fit: cover;
+}
+
+/* Cambiar dirección de flecha */
+.dashboard-shell.sidebar-collapsed .sidebar-toggle-btn i {
+    transform: rotate(180deg);
+}
+
+/* =========================
+   SIDEBAR COLLAPSE
+========================= */
+
+.dashboard-shell .dashboard-sidebar {
+    position: relative;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.sidebar-toggle-btn {
+    position: absolute;
+    top: 18px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 15;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sidebar-toggle-btn:hover {
+    background: rgba(255,255,255,0.22);
+}
+
+/* columna del sidebar */
+.dashboard-shell .dashboard-sidebar-column {
+    transition: all 0.3s ease;
+}
+
+/* estado colapsado */
+/* Ajuste real de columnas al colapsar */
+.dashboard-sidebar-column,
+.dashboard-content-column {
+    transition: all 0.3s ease;
+}
+
+@media (min-width: 992px) {
+    .dashboard-shell.sidebar-collapsed .dashboard-sidebar-column {
+        flex: 0 0 90px !important;
+        max-width: 90px !important;
+        width: 90px !important;
+    }
+
+    .dashboard-shell.sidebar-collapsed .dashboard-content-column {
+        flex: 0 0 calc(100% - 90px) !important;
+        max-width: calc(100% - 90px) !important;
+        width: calc(100% - 90px) !important;
+    }
+}
+
+.dashboard-shell.sidebar-collapsed .dashboard-sidebar {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
+.dashboard-shell.sidebar-collapsed .sidebar-text,
+.dashboard-shell.sidebar-collapsed .user-nameTitle h4,
+.dashboard-shell.sidebar-collapsed .user-nameTitle h6,
+.dashboard-shell.sidebar-collapsed .notti_coun {
+    display: none !important;
+}
+
+.dashboard-shell.sidebar-collapsed .dashboard_users {
+    text-align: center;
+    margin-top: 28px;
+}
+
+.dashboard-shell.sidebar-collapsed .dashboard_users .square--80 {
+    width: 52px !important;
+    height: 52px !important;
+}
+
+.dashboard-shell.sidebar-collapsed .dashboard_Menu ul li a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 10px !important;
+}
+
+.dashboard-shell.sidebar-collapsed .dashboard_Menu ul li a i {
+    margin-right: 0 !important;
+    font-size: 18px;
+}
+
+.dashboard-shell.sidebar-collapsed .sidebar-toggle-btn i {
+    transform: rotate(180deg);
+}
