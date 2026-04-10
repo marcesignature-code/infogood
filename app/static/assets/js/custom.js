@@ -685,13 +685,23 @@ function topFunction() {
 }
 
 
-document.addEventListener("DOMContentLoaded", function () {
-    const toggleBtn = document.getElementById("sidebarToggle");
-    const dashboardShell = document.getElementById("dashboardShell");
+document.addEventListener("click", function (e) {
+    const toggleBtn = e.target.closest("#sidebarToggle");
+    if (!toggleBtn) return;
 
-    if (toggleBtn && dashboardShell) {
-        toggleBtn.addEventListener("click", function () {
-            dashboardShell.classList.toggle("sidebar-collapsed");
-        });
+    const dashboardShell = document.getElementById("dashboardShell");
+    if (!dashboardShell) return;
+
+    const isCollapsed = dashboardShell.classList.toggle("sidebar-collapsed");
+    localStorage.setItem("dashboardSidebarCollapsed", isCollapsed ? "true" : "false");
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const dashboardShell = document.getElementById("dashboardShell");
+    if (!dashboardShell) return;
+
+    const savedState = localStorage.getItem("dashboardSidebarCollapsed");
+    if (savedState === "true") {
+        dashboardShell.classList.add("sidebar-collapsed");
     }
 });
