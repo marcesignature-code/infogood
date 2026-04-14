@@ -1080,11 +1080,15 @@ def viewcart():
 
 from flask import Blueprint, render_template
 
+from app.services.dashboard_service import DashboardService
+
 dashboard_bp = Blueprint("dashboard", __name__)
 
 @dashboard_bp.route("/dashboard/user")
 def user_dashboard():
-    return render_template("Components/User-Dashboard/user/dashboard-user.html")
+    profile = DashboardService.resolve_profile()
+    context = DashboardService.build_user_dashboard(profile)
+    return render_template("Components/User-Dashboard/user/dashboard-user.html", **context)
 
 @dashboard_bp.route("/dashboard/provider")
 def provider_dashboard():

@@ -5,18 +5,18 @@
 
     <div class="dashboard_users mb-4">
         <div class="square--80 circle mx-auto mb-1 dashboard-user-avatar">
-            <img src="{{ url_for('static', filename='assets/img/user.jpg') }}" class="img-fluid circle" alt="User Image">
+            <img src="{{ dashboard_user.avatar_url }}" class="img-fluid circle" alt="User Image">
         </div>
         <div class="user-nameTitle text-center">
-            <h4 class="lh-base fw-semibold text-light mb-0">Welcome Back</h4>
-            <h6 class="text-light fw-medium opacity-75 mb-0">Edwin</h6>
+            <h4 class="lh-base fw-semibold text-light mb-0">{{ dashboard_user.role|title }} Dashboard</h4>
+            <h6 class="text-light fw-medium opacity-75 mb-0">{{ dashboard_user.full_name }}</h6>
         </div>
     </div>
 
     <div class="dashboard_Menu">
         <ul>
             <li>
-                <a href="/dashboard/user" class="{% if request.path == '/dashboard/user' or request.path == '/dashboard-user/' %}active{% endif %}">
+                <a href="{{ url_for('dashboard.user_dashboard') }}" class="{% if request.path == url_for('dashboard.user_dashboard') or request.path == '/dashboard-user/' %}active{% endif %}">
                     <i class="bi bi-speedometer me-2"></i>
                     <span class="sidebar-text">Dashboard Area</span>
                 </a>

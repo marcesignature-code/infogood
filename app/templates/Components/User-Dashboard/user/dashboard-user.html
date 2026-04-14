@@ -24,7 +24,7 @@
 					
 					<!-- Dashboard Title -->
 					<div class="dashHeader p-xl-5 p-4 pb-xl-0 pb-0">
-						<h2 class="fw-medium mb-0">Hello, Edwin</h2>
+						<h2 class="fw-medium mb-0">Hello, {{ dashboard_user.first_name }}</h2>
 					</div>
 					
 					<!-- Dashboard Details -->
@@ -34,7 +34,7 @@
 						<div class="row align-items-start g-4 mb-4">
 							<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
 								<div class="alert alert-primary alert-dismissible fade show" role="alert">
-									Your listing <strong>Holy Guacamole!2</strong> has been approved!.
+									{{ dashboard_alert.message|safe }}
 									<button type="button" class="btn-close text-sm text-primary" data-bs-dismiss="alert" aria-label="Close"></button>
 								</div>
 							</div>

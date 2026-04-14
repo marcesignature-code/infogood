@@ -11,4 +11,5 @@ login_manager.login_message_category = "warning"
 
 @login_manager.user_loader
 def load_user(user_id):
-    return None
+    from app.models.user import UserProfile
+    return db.session.get(UserProfile, user_id)
