@@ -1,61 +1,124 @@
-{% for item in listings %}
-    <div class="singleItem">
-        <div class="listingitem-container">
-            <div class="singlelisting-item">
-                <div class="listing-top-item">
-                    <a href="#" class="topLink">
-                        <div class="position-absolute start-0 top-0 ms-3 mt-3 z-2">
-                            <div class="d-flex align-items-center justify-content-start gap-2">
-                                <span class="badge badge-xs text-uppercase {{ item.color }}">{{ item.btn }}</span>
-                                <span class="badge badge-xs badge-transparent">{{ item.dollar }}</span>
+{% if listings and listings|length > 0 %}
+    {% for item in listings %}
+        {% set display_title = item.listing_name or item.name or item.title or 'Listing' %}
+        {% set display_desc = item.short_description or item.description or item.desc or 'No description available.' %}
+        {% set status_value = item.status or item.btn or 'open' %}
+        {% set status_lower = (status_value|string)|lower %}
+        {% set status_class = 'listOpen' if status_lower == 'open' else 'listClose' %}
+        {% set status_text = item.open_badge_text if item.open_badge_text is defined and item.open_badge_text else (item.btn if item.btn is defined else (status_value|string)|upper) %}
+        {% set cover_url = item.cover_image_url or item.img or url_for('static', filename='assets/img/default-listing.jpg') %}
+        {% set logo_url = item.logo_image_url or item.img1 or url_for('static', filename='assets/img/default-logo.png') %}
+        {% set phone_value = item.phone_primary or item.number or '-' %}
+        {% set location_value = item.city or item.address or item.miles or '-' %}
+        {% set price_value = item.price_level or item.dollar or '$$' %}
+        {% set is_featured = (item.is_featured if item.is_featured is defined else (item.tag == 'true')) %}
+        {% set rating_value = item.average_rating or item.rating_avg or item.rating or 0 %}
+        {% set rating_float = rating_value|float %}
+        {% set rating_class = 'excellent' if rating_float >= 4.7 else ('good' if rating_float >= 4.0 else 'midium') %}
+        {% set reviews_value = item.reviews if item.reviews is defined else ((item.reviews_count or item.review_count or 0) ~ ' Reviews') %}
 
-                                {% if item.tag == 'true' %}
-                                    <span class="badge badge-xs badge-transparent"><i class="bi bi-star mb-0 me-1"></i>{{ item.btn1 }}</span>
+        {% set category_key = item.main_category or '' %}
+        {% set category_icon = item.icon if item.icon is defined else 'bi bi-pin-map' %}
+        {% set category_span = item.span if item.span is defined else 'catIcon cats-1' %}
+        {% set category_title = item.name if item.name is defined else 'Listing' %}
+        {% set category_plus = item.plus if item.plus is defined else '' %}
+
+        {% if category_key == 'accommodation' %}
+            {% set category_icon = 'bi bi-house-check' %}
+            {% set category_span = 'catIcon cats-2' %}
+            {% set category_title = 'Accommodation' %}
+        {% elif category_key == 'food_drink' %}
+            {% set category_icon = 'bi bi-cup-straw' %}
+            {% set category_span = 'catIcon cats-4' %}
+            {% set category_title = 'Food & Drink' %}
+        {% elif category_key == 'activities_experiences' %}
+            {% set category_icon = 'bi bi-lamp' %}
+            {% set category_span = 'catIcon cats-3' %}
+            {% set category_title = 'Activities & Experiences' %}
+        {% elif category_key == 'free_activities' %}
+            {% set category_icon = 'bi bi-stars' %}
+            {% set category_span = 'catIcon cats-8' %}
+            {% set category_title = 'Free Activities' %}
+        {% elif category_key == 'tourism_services' %}
+            {% set category_icon = 'bi bi-briefcase' %}
+            {% set category_span = 'catIcon cats-6' %}
+            {% set category_title = 'Tourism & Services' %}
+        {% endif %}
+
+        {% if item.slug is defined and item.slug %}
+            {% set listing_url = url_for('main.grid_layout_01', q=item.slug, category=category_key) if category_key else url_for('main.grid_layout_01', q=item.slug) %}
+        {% elif item.title is defined %}
+            {% set listing_url = url_for('main.single_listing_01', title=slugify(item.title)) %}
+        {% else %}
+            {% set listing_url = url_for('main.grid_layout_01') %}
+        {% endif %}
+
+        <div class="singleItem">
+            <div class="listingitem-container">
+                <div class="singlelisting-item">
+                    <div class="listing-top-item">
+                        <a href="{{ listing_url }}" class="topLink">
+                            <div class="position-absolute start-0 top-0 ms-3 mt-3 z-2">
+                                <div class="d-flex align-items-center justify-content-start gap-2">
+                                    <span class="badge badge-xs text-uppercase {{ status_class }}">{{ status_text }}</span>
+                                    <span class="badge badge-xs badge-transparent">{{ price_value }}</span>
+                                    {% if is_featured %}
+                                        <span class="badge badge-xs badge-transparent"><i class="bi bi-star mb-0 me-1"></i>Featured</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <img src="{{ cover_url }}" class="img-fluid" alt="{{ display_title }}">
+                        </a>
+                        <div class="position-absolute end-0 bottom-0 me-3 mb-3 z-2">
+                            <a href="{{ listing_url }}" class="bookmarkList" data-bs-toggle="tooltip" data-bs-title="View Listing"><i class="bi bi-suit-heart m-0"></i></a>
+                        </div>
+                    </div>
+                    <div class="listing-middle-item">
+                        <div class="listing-avatar">
+                            <a href="{{ listing_url }}" class="avatarImg"><img src="{{ logo_url }}" class="img-fluid circle" alt="{{ display_title }}"></a>
+                        </div>
+                        <div class="listing-details">
+                            <h4 class="listingTitle"><a href="{{ listing_url }}" class="titleLink">{{ display_title }}<span class="verified"><i class="bi bi-patch-check-fill m-0"></i></span></a></h4>
+                            <p>{{ display_desc }}</p>
+                        </div>
+                        <div class="listing-info-details">
+                            <div class="d-flex align-items-center justify-content-start gap-4">
+                                <div class="list-calls"><i class="bi bi-telephone mb-0 me-2"></i>{{ phone_value }}</div>
+                                <div class="list-distance"><i class="bi bi-geo-alt mb-0 me-2"></i>{{ location_value }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="listing-footer-item">
+                        <div class="d-flex align-items-center justify-content-between gap-2">
+                            <div class="catdWraps">
+                                <div class="flex-start">
+                                    <a href="{{ url_for('main.grid_layout_01', category=category_key) if category_key else '#' }}" class="d-flex align-items-center justify-content-start gap-2">
+                                        <span class="{{ category_span }}"><i class="{{ category_icon }}"></i></span>
+                                        <span class="catTitle">{{ category_title }}</span>
+                                    </a>
+                                </div>
+                                {% if category_plus %}
+                                    <div class="flex-end"><span class="moreCatcounter">{{ category_plus }}</span></div>
                                 {% endif %}
-
                             </div>
-                        </div>
-                        <img src="{{ item.img }}" class="img-fluid" alt="Listing Image">
-                    </a>
-                    <div class="position-absolute end-0 bottom-0 me-3 mb-3 z-2">
-                        <a href="#" class="bookmarkList" data-bs-toggle="tooltip" data-bs-title="Save Listing"><i class="bi bi-suit-heart m-0"></i></a>
-                    </div>
-                </div>
-                <div class="listing-middle-item">
-                    <div class="listing-avatar">
-                        <a href="#" class="avatarImg"><img src="{{ item.img1 }}" class="img-fluid circle" alt="Avatar"></a>
-                    </div>
-                    <div class="listing-details">
-                        <h4 class="listingTitle"><a href="{{ url_for('main.single_listing_01', title=slugify(item.title)) }}" class="titleLink">{{ item.title }}<span class="verified"><i class="bi bi-patch-check-fill m-0"></i></span></a></h4>
-                        <p>{{ item.desc }}</p>
-                    </div>
-                    <div class="listing-info-details">
-                        <div class="d-flex align-items-center justify-content-start gap-4">
-                            <div class="list-calls"><i class="bi bi-telephone mb-0 me-2"></i>{{ item.number }}</div>
-                            <div class="list-distance"><i class="bi bi-geo-alt mb-0 me-2"></i>{{ item.miles }}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="listing-footer-item">
-                    <div class="d-flex align-items-center justify-content-between gap-2">
-                        <div class="catdWraps">
-                            <div class="flex-start">
-                                <a href="#" class="d-flex align-items-center justify-content-start gap-2">
-                                    <span class="{{ item.span }}"><i class="{{ item.icon }}"></i></span>
-                                    <span class="catTitle">{{ item.name }}</span>
-                                </a>
-                            </div>
-                            <div class="flex-end"><span class="moreCatcounter">{{ item.plus }}</span></div>
-                        </div>
-                        <div class="listing-rates">
-                            <div class="d-flex align-items-center justify-content-start gap-1">
-                                <span class="ratingAvarage {{ item.avarage }}">{{ item.rating }}</span>
-                                <span class="overallrates">{{ item.reviews }}</span>
+                            <div class="listing-rates">
+                                <div class="d-flex align-items-center justify-content-start gap-1">
+                                    <span class="ratingAvarage {{ rating_class }}">{{ '%.1f'|format(rating_float) }}</span>
+                                    <span class="overallrates">{{ reviews_value }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    {% endfor %}
+{% else %}
+    <div class="singleItem">
+        <div class="listingitem-container">
+            <div class="singlelisting-item p-4 text-center">
+                <p class="m-0">No active listings available right now.</p>
+            </div>
+        </div>
     </div>
-{% endfor %}
+{% endif %}

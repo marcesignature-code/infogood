@@ -1,19 +1,103 @@
+{% set email_prefill = newsletter_email_prefill if newsletter_email_prefill is defined else '' %}
+
 <div class="row align-items-center justify-content-between g-4">
-			
     <div class="col-xl-5 col-lg-5 col-md-5">
         <div class="callsTitles">
             <h4 class="text-white mb-0 lh-base">Subscribe Our Newsletter!</h4>
-            <p class="text-white opacity-75 m-0">Subscribe our marketing platforms for latest updates</p>
-        </div>
-    </div>
-    
-    <div class="col-xl-5 col-lg-6 col-md-6">
-        <div class="subscribeForm">
-            <div class="inputGroup">
-                <input type="email" class="form-control" placeholder="Your Email Here...">
-                <button class="btn btn-whites"><i class="fa-regular fa-paper-plane me-2"></i>Subscribe</button>
-            </div>
+            <p class="text-white opacity-75 m-0">Subscribe for platform updates, promotions, and travel ideas.</p>
         </div>
     </div>
 
+    <div class="col-xl-5 col-lg-6 col-md-6">
+        <div class="subscribeForm">
+            <form method="post" action="{{ url_for('main.newsletter_subscribe_step_1') }}" class="inputGroup" id="newsletterStep1Form">
+                <input type="email" name="email" class="form-control" id="newsletterStep1Email" value="{{ email_prefill }}" placeholder="Your Email Here..." required>
+                <button class="btn btn-whites" type="submit"><i class="fa-regular fa-paper-plane me-2"></i>Subscribe</button>
+            </form>
+        </div>
+    </div>
 </div>
+
+<div class="row mt-3 {{ '' if (newsletter_status_message is defined and newsletter_status_message) else 'd-none' }}" id="newsletterStatusRow">
+    <div class="col-12">
+        <div class="alert {{ 'alert-warning' if newsletter_status == 'invalid_email' or newsletter_status == 'profile_email_invalid' or newsletter_status == 'profile_email_taken' else 'alert-success' }} mb-0" id="newsletterStatusAlert">
+            {{ newsletter_status_message if newsletter_status_message is defined else '' }}
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var form = document.getElementById("newsletterStep1Form");
+    if (!form || typeof fetch === "undefined") {
+        return;
+    }
+
+    var emailInput = document.getElementById("newsletterStep1Email");
+    var statusRow = document.getElementById("newsletterStatusRow");
+    var statusAlert = document.getElementById("newsletterStatusAlert");
+
+    function showStatus(message, ok) {
+        if (!statusRow || !statusAlert) {
+            return;
+        }
+        statusRow.classList.remove("d-none");
+        statusAlert.classList.remove("alert-success", "alert-warning");
+        statusAlert.classList.add(ok ? "alert-success" : "alert-warning");
+        statusAlert.textContent = message;
+    }
+
+    function openStep2Modal(email) {
+        var modalElement = document.getElementById("newsletterProfileModal");
+        if (!modalElement || typeof bootstrap === "undefined") {
+            return;
+        }
+
+        var originalEmail = modalElement.querySelector('input[name="original_email"]');
+        var profileEmail = modalElement.querySelector('input[name="email"]');
+        if (originalEmail) {
+            originalEmail.value = email || "";
+        }
+        if (profileEmail) {
+            profileEmail.value = email || "";
+        }
+
+        var modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+        modal.show();
+    }
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        var formData = new FormData(form);
+        fetch(form.action, {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "Accept": "application/json"
+            }
+        })
+            .then(function (response) {
+                return response.json().then(function (data) {
+                    return { ok: response.ok, data: data };
+                });
+            })
+            .then(function (result) {
+                var email = (result.data && result.data.email) || (emailInput ? emailInput.value : "");
+                var message = (result.data && result.data.message) || "Unexpected response.";
+                showStatus(message, result.ok && result.data && result.data.ok);
+
+                if (emailInput && email) {
+                    emailInput.value = email;
+                }
+                if (result.ok && result.data && result.data.ok) {
+                    openStep2Modal(email);
+                }
+            })
+            .catch(function () {
+                showStatus("Could not complete the subscription. Please try again.", false);
+            });
+    });
+});
+</script>

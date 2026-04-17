@@ -1,17 +1,469 @@
-from flask import Blueprint, render_template, request
+import re
+
+from flask import Blueprint, jsonify, redirect, render_template, request, url_for
 from slugify import slugify  # déjalo si ya lo usas en otras funciones
-from .models import Listing
+from app.models.listing import Listing
+from app.models.newsletter_subscriber import NewsletterSubscriber
+from app.extensions import db
+from sqlalchemy import inspect, or_, text
 
 
 main = Blueprint("main", __name__)
+
+ALLOWED_MAIN_CATEGORIES = [
+    "accommodation",
+    "food_drink",
+    "activities_experiences",
+    "free_activities",
+    "tourism_services",
+]
+
+HERO_NAV_CATEGORIES = [
+    {
+        "value": "accommodation",
+        "label": "Accommodation",
+        "subcategories": [
+            {"value": "hotel", "label": "Hotel"},
+            {"value": "hostel", "label": "Hostel"},
+            {"value": "boutique_hotel", "label": "Boutique Hotel"},
+            {"value": "hacienda_lodge", "label": "Hacienda Lodge"},
+            {"value": "apartment_stay", "label": "Apartment Stay"},
+            {"value": "resort", "label": "Resort"},
+            {"value": "guesthouse", "label": "Guesthouse"},
+            {"value": "cabin_glamping", "label": "Cabin & Glamping"},
+        ],
+    },
+    {
+        "value": "food_drink",
+        "label": "Food & Drink",
+        "subcategories": [
+            {"value": "restaurant", "label": "Restaurant"},
+            {"value": "cafe", "label": "Cafe"},
+            {"value": "bakery_dessert", "label": "Bakery & Dessert"},
+            {"value": "bar_pub", "label": "Bar & Pub"},
+            {"value": "fine_dining", "label": "Fine Dining"},
+            {"value": "local_cuisine", "label": "Local Cuisine"},
+            {"value": "fast_casual", "label": "Fast Casual"},
+            {"value": "rooftop_lounge", "label": "Rooftop Lounge"},
+        ],
+    },
+    {
+        "value": "activities_experiences",
+        "label": "Activities & Experiences",
+        "subcategories": [
+            {"value": "outdoor_adventure", "label": "Outdoor Adventure"},
+            {"value": "cultural_experience", "label": "Cultural Experience"},
+            {"value": "nature_experience", "label": "Nature Experience"},
+            {"value": "wellness_experience", "label": "Wellness Experience"},
+            {"value": "city_tour", "label": "City Tour"},
+            {"value": "nightlife_experience", "label": "Nightlife Experience"},
+            {"value": "family_activity", "label": "Family Activity"},
+            {"value": "workshop_class", "label": "Workshop & Class"},
+        ],
+    },
+    {
+        "value": "free_activities",
+        "label": "Free Activities",
+        "subcategories": [
+            {"value": "parks_public_spaces", "label": "Parks & Public Spaces"},
+            {"value": "museums_free_entry", "label": "Museums (Free Entry)"},
+            {"value": "scenic_viewpoints", "label": "Scenic Viewpoints"},
+            {"value": "public_cultural_activities", "label": "Public Cultural Activities"},
+            {"value": "free_family_activities", "label": "Free Family Activities"},
+        ],
+    },
+    {
+        "value": "tourism_services",
+        "label": "Tourism & Services",
+        "subcategories": [
+            {"value": "tourist_transport", "label": "Tourist Transport"},
+            {"value": "tour_operator", "label": "Tour Operator"},
+            {"value": "travel_agency", "label": "Travel Agency"},
+            {"value": "car_rental", "label": "Car Rental"},
+            {"value": "shuttle_service", "label": "Shuttle Service"},
+            {"value": "guide_service", "label": "Guide Service"},
+            {"value": "local_travel_support", "label": "Local Travel Support"},
+        ],
+    },
+]
+
+ALLOWED_SUBCATEGORIES = {
+    subcategory["value"]
+    for category in HERO_NAV_CATEGORIES
+    for subcategory in category["subcategories"]
+}
+
+HOME_CATEGORY_META = [
+    {
+        "value": "accommodation",
+        "label": "Accommodation",
+        "icon": "bi bi-house-check",
+    },
+    {
+        "value": "food_drink",
+        "label": "Food & Drink",
+        "icon": "bi bi-cup-straw",
+    },
+    {
+        "value": "activities_experiences",
+        "label": "Activities & Experiences",
+        "icon": "bi bi-lamp",
+    },
+    {
+        "value": "free_activities",
+        "label": "Free Activities",
+        "icon": "bi bi-stars",
+    },
+    {
+        "value": "tourism_services",
+        "label": "Tourism & Services",
+        "icon": "bi bi-briefcase",
+    },
+]
+
+HOME_POPULAR_LISTINGS_LIMIT = 8
+
+HOME_LATEST_UPDATES_LIMIT = 3
+HOME_LATEST_UPDATES_PLACEHOLDERS = [
+    {
+        "title": "New Weekend Routes Added for Quito and Cotopaxi",
+        "excerpt": "We added new route collections to help travelers compare stay, food, and activity options faster.",
+        "post_type": "Announcement",
+        "display_date": "Apr 10, 2026",
+        "cover_image_url": "/static/assets/img/blog-1.jpg",
+    },
+    {
+        "title": "April Partner Promotions: Local Tours and Family Plans",
+        "excerpt": "Discover seasonal promotions from tourism partners with clear pricing and updated booking links.",
+        "post_type": "Promotion",
+        "display_date": "Apr 5, 2026",
+        "cover_image_url": "/static/assets/img/blog-2.jpg",
+    },
+    {
+        "title": "How to Build a 2-Day Escape with InfoGoodTrip",
+        "excerpt": "A practical planning guide to combine accommodation, food, and experiences in one itinerary.",
+        "post_type": "Blog Post",
+        "display_date": "Mar 29, 2026",
+        "cover_image_url": "/static/assets/img/blog-3.jpg",
+    },
+]
+
+# Temporary home placeholders until platform reviews are sourced from external channels.
+HOME_PLATFORM_REVIEWS = [
+    {
+        "reviewer_name": "Daniel Morgan",
+        "reviewer_role": "Frequent Traveler",
+        "rating": 5,
+        "review_text": "InfoGoodTrip helped me compare options quickly and plan a full weekend without jumping between multiple sites.",
+    },
+    {
+        "reviewer_name": "Sophia Reed",
+        "reviewer_role": "Content Creator",
+        "rating": 4,
+        "review_text": "The category filters are clear and practical. I can find places that fit my plans in just a few minutes.",
+    },
+    {
+        "reviewer_name": "Ethan Walker",
+        "reviewer_role": "Small Business Owner",
+        "rating": 5,
+        "review_text": "I like how the platform balances useful information with a clean interface. It feels organized and easy to trust.",
+    },
+    {
+        "reviewer_name": "Maya Thompson",
+        "reviewer_role": "Family Trip Planner",
+        "rating": 4,
+        "review_text": "InfoGoodTrip makes trip planning simpler for families. The listings are easier to browse than most directories I have used.",
+    },
+]
+
+NEWSLETTER_EMAIL_REGEX = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+NEWSLETTER_STATUS_MESSAGES = {
+    "saved": "Thanks. Your email has been saved. You can complete your profile below.",
+    "duplicate": "This email is already subscribed. You can still update profile details below.",
+    "invalid_email": "Please enter a valid email address.",
+    "profile_updated": "Subscriber profile updated successfully.",
+    "subscriber_not_found": "Please subscribe with your email first.",
+    "profile_email_invalid": "Please provide a valid email in step 2.",
+    "profile_email_taken": "That email is already used by another subscriber.",
+}
 
 @main.context_processor
 def inject_slugify():
     return {'slugify': slugify}
 
+
+def _normalize_email(value):
+    return (value or "").strip().lower()
+
+
+def _is_valid_email(value):
+    return bool(NEWSLETTER_EMAIL_REGEX.match(_normalize_email(value)))
+
+
+def _home_with_newsletter_state(status, email="", step=1):
+    params = {
+        "newsletter_status": status,
+        "newsletter_step": str(step),
+    }
+    if email:
+        params["newsletter_email"] = email
+    return redirect(url_for("main.index", **params))
+
+
+def _is_ajax_request():
+    return (
+        request.headers.get("X-Requested-With", "").lower() == "xmlhttprequest"
+        or "application/json" in (request.headers.get("Accept", "").lower())
+    )
+
+
+def _format_display_date(raw_value):
+    if not raw_value:
+        return "-"
+    if hasattr(raw_value, "strftime"):
+        return raw_value.strftime("%b %d, %Y")
+    raw_text = str(raw_value)
+    return raw_text[:10] if len(raw_text) >= 10 else raw_text
+
+
+def _select_latest_updates(limit=HOME_LATEST_UPDATES_LIMIT):
+    fallback = HOME_LATEST_UPDATES_PLACEHOLDERS[:limit]
+    try:
+        inspector = inspect(db.engine)
+        if not inspector.has_table("posts"):
+            return fallback
+
+        columns = {column["name"] for column in inspector.get_columns("posts")}
+        if not columns:
+            return fallback
+
+        title_col = next((c for c in ["title", "name", "headline"] if c in columns), None)
+        if not title_col:
+            return fallback
+
+        excerpt_col = next((c for c in ["excerpt", "summary", "short_description", "description", "content"] if c in columns), None)
+        post_type_col = next((c for c in ["post_type", "type", "category"] if c in columns), None)
+        published_col = next((c for c in ["published_at", "publish_date", "published_on", "created_at", "date"] if c in columns), None)
+        image_col = next((c for c in ["cover_image_url", "cover_image", "image_url", "featured_image_url", "img"] if c in columns), None)
+        status_col = next((c for c in ["status", "is_published", "published", "is_active"] if c in columns), None)
+        order_col = published_col or ("id" if "id" in columns else title_col)
+
+        query_parts = [f"{title_col} AS title"]
+        query_parts.append(f"{excerpt_col} AS excerpt" if excerpt_col else "'' AS excerpt")
+        query_parts.append(f"{post_type_col} AS post_type" if post_type_col else "'Update' AS post_type")
+        query_parts.append(f"{published_col} AS published_at" if published_col else "NULL AS published_at")
+        query_parts.append(f"{image_col} AS cover_image_url" if image_col else "NULL AS cover_image_url")
+
+        where_parts = []
+        if status_col == "status":
+            where_parts.append("status IN ('published', 'active')")
+        elif status_col in {"is_published", "published", "is_active"}:
+            where_parts.append(f"{status_col} = true")
+
+        sql = f"SELECT {', '.join(query_parts)} FROM posts"
+        if where_parts:
+            sql += f" WHERE {' AND '.join(where_parts)}"
+        sql += f" ORDER BY {order_col} DESC LIMIT :limit"
+
+        rows = db.session.execute(text(sql), {"limit": limit}).mappings().all()
+        items = []
+        for row in rows:
+            title = (row.get("title") or "").strip()
+            if not title:
+                continue
+            items.append(
+                {
+                    "title": title,
+                    "excerpt": (row.get("excerpt") or "").strip() or "Latest platform update from InfoGoodTrip.",
+                    "post_type": (row.get("post_type") or "Update").strip().title(),
+                    "display_date": _format_display_date(row.get("published_at")),
+                    "cover_image_url": row.get("cover_image_url") or "/static/assets/img/blog-1.jpg",
+                }
+            )
+
+        return items if items else fallback
+    except Exception:
+        db.session.rollback()
+        return fallback
+
+
+@main.route("/newsletter/subscribe", methods=["POST"])
+def newsletter_subscribe_step_1():
+    email = _normalize_email(request.form.get("email"))
+    if not _is_valid_email(email):
+        if _is_ajax_request():
+            return jsonify(
+                {
+                    "ok": False,
+                    "status": "invalid_email",
+                    "email": "",
+                    "message": NEWSLETTER_STATUS_MESSAGES["invalid_email"],
+                }
+            ), 400
+        return _home_with_newsletter_state("invalid_email", step=1)
+
+    existing = NewsletterSubscriber.query.filter_by(email=email).first()
+    if existing:
+        if not existing.is_active:
+            existing.is_active = True
+            db.session.commit()
+        if _is_ajax_request():
+            return jsonify(
+                {
+                    "ok": True,
+                    "status": "duplicate",
+                    "email": email,
+                    "message": NEWSLETTER_STATUS_MESSAGES["duplicate"],
+                }
+            )
+        return _home_with_newsletter_state("duplicate", email=email, step=2)
+
+    subscriber = NewsletterSubscriber(
+        email=email,
+        source="home_newsletter",
+        language_preference="en",
+        is_active=True,
+    )
+    db.session.add(subscriber)
+    db.session.commit()
+    if _is_ajax_request():
+        return jsonify(
+            {
+                "ok": True,
+                "status": "saved",
+                "email": email,
+                "message": NEWSLETTER_STATUS_MESSAGES["saved"],
+            }
+        )
+    return _home_with_newsletter_state("saved", email=email, step=2)
+
+
+@main.route("/newsletter/profile", methods=["POST"])
+def newsletter_subscribe_step_2():
+    original_email = _normalize_email(request.form.get("original_email"))
+    if not original_email:
+        return _home_with_newsletter_state("subscriber_not_found", step=1)
+
+    subscriber = NewsletterSubscriber.query.filter_by(email=original_email).first()
+    if not subscriber:
+        return _home_with_newsletter_state("subscriber_not_found", step=1)
+
+    submitted_email = _normalize_email(request.form.get("email")) or original_email
+    if not _is_valid_email(submitted_email):
+        return _home_with_newsletter_state("profile_email_invalid", email=original_email, step=2)
+
+    if submitted_email != original_email:
+        other = NewsletterSubscriber.query.filter_by(email=submitted_email).first()
+        if other and other.id != subscriber.id:
+            return _home_with_newsletter_state("profile_email_taken", email=original_email, step=2)
+
+    language_preference = (request.form.get("language_preference") or "").strip().lower() or "en"
+    subscriber.email = submitted_email
+    subscriber.full_name = (request.form.get("full_name") or "").strip() or None
+    subscriber.language_preference = language_preference
+    subscriber.country = (request.form.get("country") or "").strip() or None
+    subscriber.city = (request.form.get("city") or "").strip() or None
+    subscriber.interests = (request.form.get("interests") or "").strip() or None
+    subscriber.notes = (request.form.get("notes") or "").strip() or None
+    subscriber.is_active = True
+
+    db.session.commit()
+    return _home_with_newsletter_state("profile_updated", email=submitted_email, step=2)
+
 @main.route("/")
 def index():
-    return render_template("pages/index.html")
+    newsletter_step = (request.args.get("newsletter_step") or "").strip() == "2"
+    newsletter_email = _normalize_email(request.args.get("newsletter_email"))
+    newsletter_status = (request.args.get("newsletter_status") or "").strip()
+    newsletter_status_message = NEWSLETTER_STATUS_MESSAGES.get(newsletter_status, "")
+
+    newsletter_subscriber = None
+    if newsletter_email:
+        newsletter_subscriber = NewsletterSubscriber.query.filter_by(email=newsletter_email).first()
+
+    categories = []
+
+    for category_meta in HOME_CATEGORY_META:
+        category_value = category_meta["value"]
+        if category_value == "free_activities":
+            count = Listing.query.filter(
+                Listing.is_active.is_(True),
+                Listing.is_free.is_(True),
+            ).count()
+        else:
+            count = Listing.query.filter(
+                Listing.is_active.is_(True),
+                Listing.main_category == category_value,
+            ).count()
+
+        categories.append(
+            {
+                "value": category_value,
+                "title": category_meta["label"],
+                "icon": category_meta["icon"],
+                "count": count,
+            }
+        )
+
+    selected_listings = []
+    selected_ids = set()
+
+    def _append_unique(rows):
+        for row in rows:
+            if len(selected_listings) >= HOME_POPULAR_LISTINGS_LIMIT:
+                break
+            if row.id in selected_ids:
+                continue
+            selected_listings.append(row)
+            selected_ids.add(row.id)
+
+    home_featured = (
+        Listing.query.filter(
+            Listing.is_active.is_(True),
+            Listing.is_home_featured.is_(True),
+        )
+        .order_by(Listing.home_feature_rank.asc(), Listing.created_at.desc())
+        .limit(HOME_POPULAR_LISTINGS_LIMIT)
+        .all()
+    )
+    _append_unique(home_featured)
+
+    if len(selected_listings) < HOME_POPULAR_LISTINGS_LIMIT:
+        featured = (
+            Listing.query.filter(
+                Listing.is_active.is_(True),
+                Listing.is_featured.is_(True),
+            )
+            .order_by(Listing.created_at.desc())
+            .limit(HOME_POPULAR_LISTINGS_LIMIT * 3)
+            .all()
+        )
+        _append_unique(featured)
+
+    if len(selected_listings) < HOME_POPULAR_LISTINGS_LIMIT:
+        recent = (
+            Listing.query.filter(Listing.is_active.is_(True))
+            .order_by(Listing.created_at.desc())
+            .limit(HOME_POPULAR_LISTINGS_LIMIT * 5)
+            .all()
+        )
+        _append_unique(recent)
+
+    latest_updates = _select_latest_updates()
+
+    return render_template(
+        "pages/index.html",
+        categories=categories,
+        popular_listings=selected_listings,
+        platform_reviews=HOME_PLATFORM_REVIEWS,
+        latest_updates=latest_updates,
+        hero_nav_categories=HERO_NAV_CATEGORIES,
+        newsletter_step=newsletter_step,
+        newsletter_email_prefill=newsletter_email,
+        newsletter_status=newsletter_status,
+        newsletter_status_message=newsletter_status_message,
+        newsletter_subscriber=newsletter_subscriber,
+    )
 
 
 @main.route("/home-splash/")
@@ -26,13 +478,69 @@ def home_map():
 
 @main.route("/grid-layout-01/")
 def grid_layout_01():
-    listings = (
-        Listing.query
-        .filter_by(is_active=True)
-        .order_by(Listing.sort_priority.desc(), Listing.created_at.desc())
-        .all()
+    query_text = (request.args.get("q") or "").strip()
+    location_text = (request.args.get("location") or "").strip()
+    category = (request.args.get("category") or "").strip().lower()
+    subcategory = (request.args.get("subcategory") or "").strip().lower()
+
+    if category not in ALLOWED_MAIN_CATEGORIES:
+        category = ""
+    if subcategory not in ALLOWED_SUBCATEGORIES:
+        subcategory = ""
+
+    query = Listing.query.filter(Listing.is_active.is_(True))
+
+    if query_text:
+        query_like = f"%{query_text}%"
+        query = query.filter(
+            or_(
+                Listing.listing_name.ilike(query_like),
+                Listing.name.ilike(query_like),
+                Listing.short_description.ilike(query_like),
+                Listing.long_description.ilike(query_like),
+                Listing.main_category.ilike(query_like),
+                Listing.subcategory.ilike(query_like),
+                Listing.search_keywords.ilike(query_like),
+                Listing.tags_csv.ilike(query_like),
+                Listing.environment.ilike(query_like),
+                Listing.occasion.ilike(query_like),
+            )
+        )
+
+    if location_text:
+        location_like = f"%{location_text}%"
+        query = query.filter(
+            or_(
+                Listing.country.ilike(location_like),
+                Listing.province.ilike(location_like),
+                Listing.city.ilike(location_like),
+                Listing.canton.ilike(location_like),
+                Listing.zone.ilike(location_like),
+                Listing.neighborhood.ilike(location_like),
+                Listing.address.ilike(location_like),
+            )
+        )
+
+    if category:
+        query = query.filter(Listing.main_category == category)
+    if subcategory:
+        query = query.filter(Listing.subcategory == subcategory)
+
+    listings = query.order_by(
+        Listing.is_home_featured.desc(),
+        Listing.home_feature_rank.asc(),
+        Listing.created_at.desc(),
+    ).all()
+
+    return render_template(
+        "pages/grid-layout-01.html",
+        listings=listings,
+        search_query=query_text,
+        search_location=location_text,
+        selected_category=category,
+        selected_subcategory=subcategory,
+        allowed_main_categories=ALLOWED_MAIN_CATEGORIES,
     )
-    return render_template("pages/grid-layout-01.html", listings=listings)
 
 
 @main.route("/grid-layout-02/")

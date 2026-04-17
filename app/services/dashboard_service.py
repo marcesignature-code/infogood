@@ -8,7 +8,9 @@ from flask_login import current_user
 from sqlalchemy import func
 
 from app.extensions import db
-from app.models import Listing, ProviderProfile, UserProfile
+from app.models.listing import Listing
+from app.models.provider import ProviderProfile
+from app.models.user import UserProfile
 
 
 DEFAULT_AVATAR = "assets/img/user.jpg"

@@ -1,11 +1,19 @@
 {% for item in categories %}
 	<div class="singleCategory">
 		<div class="category-small-wrapper light">
-			<a href="#" class="categoryBox">
+			<a href="{{ url_for('main.grid_layout_01', category=item.value) if item.value else '#' }}" class="categoryBox">
 				<div class="categoryCapstions">
 					<div class="catsIcons"><div class="icoBoxx"><i class="{{ item.icon }}"></i></div></div>
 					<div class="catsTitle"><h5>{{ item.title }}</h5></div>
-					<div class="CatsLists"><span class="categorycounter">{{ item.lists }}</span></div>
+					<div class="CatsLists">
+						<span class="categorycounter">
+							{% if item.count is defined %}
+								{{ item.count }} Listings
+							{% else %}
+								{{ item.lists }}
+							{% endif %}
+						</span>
+					</div>
 				</div>
 			</a>
 		</div>	

@@ -1,0 +1,113 @@
+{% set subscriber = newsletter_subscriber if newsletter_subscriber is defined else none %}
+{% set email_prefill = newsletter_email_prefill if newsletter_email_prefill is defined else '' %}
+{% if not email_prefill and subscriber %}
+    {% set email_prefill = subscriber.email or '' %}
+{% endif %}
+
+<div class="modal fade" id="newsletterProfileModal" tabindex="-1" aria-labelledby="newsletterProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 700px;">
+        <div class="modal-content border-0 bg-transparent shadow-none">
+            <div class="modal-body p-0">
+                <div class="authWrap">
+                    <div class="authhead">
+                        <div class="text-center mb-4">
+                            <a href="{{ url_for('main.home_map') }}">
+                                <img
+                                    class="img-fluid"
+                                    src="{{ url_for('static', filename='assets/img/logo-principal-light.png') }}"
+                                    alt="InfoGoodTrip logo"
+                                    style="max-width: 300px; width: 100%; height: auto;"
+                                >
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="authbody d-black">
+                        <div class="card rounded-4 p-sm-4 p-3 border-0 shadow-sm">
+                            <div class="card-body p-0">
+                                <div class="d-flex align-items-start justify-content-between mb-3">
+                                    <div>
+                                        <h1 class="mb-1 fs-2" id="newsletterProfileModalLabel">Complete Your Profile</h1>
+                                        <p class="text-muted mb-0">Step 2 (optional): add details for better recommendations.</p>
+                                    </div>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <form class="text-start" method="post" action="{{ url_for('main.newsletter_subscribe_step_2') }}" id="newsletterStep2Form">
+                                    <input type="hidden" name="original_email" id="newsletterStep2OriginalEmail" value="{{ email_prefill }}">
+
+                                    <div class="row g-2">
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-0">
+                                                <label>Full Name</label>
+                                                <input type="text" name="full_name" class="form-control" placeholder="Your full name" value="{{ (subscriber.full_name or '') if subscriber else '' }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-0">
+                                                <label>Email</label>
+                                                <input type="email" name="email" id="newsletterStep2Email" class="form-control" placeholder="name@example.com" value="{{ email_prefill }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-0">
+                                                <label>Language</label>
+                                                <select name="language_preference" class="form-select">
+                                                    {% set lang = (subscriber.language_preference if subscriber and subscriber.language_preference else 'en') %}
+                                                    <option value="en" {{ 'selected' if lang == 'en' else '' }}>English</option>
+                                                    <option value="es" {{ 'selected' if lang == 'es' else '' }}>Spanish</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-0">
+                                                <label>Country</label>
+                                                <input type="text" name="country" class="form-control" placeholder="Country" value="{{ (subscriber.country or '') if subscriber else '' }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-0">
+                                                <label>City</label>
+                                                <input type="text" name="city" class="form-control" placeholder="City" value="{{ (subscriber.city or '') if subscriber else '' }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-0">
+                                                <label>Interests</label>
+                                                <input type="text" name="interests" class="form-control" placeholder="Food, Nature, Weekend Trips..." value="{{ (subscriber.interests or '') if subscriber else '' }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-0">
+                                                <label>Notes</label>
+                                                <input type="text" name="notes" class="form-control" placeholder="Optional notes" value="{{ (subscriber.notes or '') if subscriber else '' }}">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center justify-content-end gap-2 mt-3">
+                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save Profile</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var modalElement = document.getElementById("newsletterProfileModal");
+    if (!modalElement || typeof bootstrap === "undefined") {
+        return;
+    }
+    var modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+    {% if newsletter_step %}
+    modal.show();
+    {% endif %}
+});
+</script>

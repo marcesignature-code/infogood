@@ -1,19 +1,25 @@
-{% for item in blogs[0:3] %}
+{% set source_items = updates if updates is defined else blogs %}
+{% for item in source_items[0:3] %}
+    {% set title = item.title %}
+    {% set excerpt = item.excerpt if item.excerpt is defined else item.desc %}
+    {% set post_type = item.post_type if item.post_type is defined else "Update" %}
+    {% set display_date = item.display_date if item.display_date is defined else item.date %}
+    {% set cover_image = item.cover_image_url if item.cover_image_url is defined else item.img %}
     <div class="col-xl-4 col-lg-4 col-md-6">
         <div class="card rounded-4 shadow-sm h-100">
             <a href="#" class="d-block bg-gradient rounded-top">
-                <img class="card-img-top hover-fade-out" src="{{ item.img }}" alt="blog image">
+                <img class="card-img-top hover-fade-out" src="{{ cover_image or url_for('static', filename='assets/img/blog-1.jpg') }}" alt="update image">
             </a>
             <div class="card-body">
-                <a href="{{ url_for('main.blog_detail', title=slugify(item.title)) }}"><h4 class="fw-medium fs-5 lh-base mb-3">{{ item.title }}</h4></a>
-                <p>{{ item.desc }}</p>
+                <a href="{{ url_for('main.blog_detail', title=slugify(title)) }}"><h4 class="fw-medium fs-5 lh-base mb-3">{{ title }}</h4></a>
+                <p>{{ excerpt }}</p>
                 <div class="d-flex align-items-center justify-content-start mt-4">
-                    <a href="#" class="badge badge-primary rounded-pill">Continue Reading</a>
+                    <a href="#" class="badge badge-primary rounded-pill">{{ post_type }}</a>
                 </div>
             </div>
             <div class="card-footer bg-white d-flex justify-content-between align-items-center py-3">
-                <a href="#" class="text-dark fw-medium text-md"><i class="bi bi-calendar-check me-2"></i>{{ item.date }}</a>
-                <div class="text-muted text-md"><i class="bi bi-eye-fill me-2"></i>{{ item.views }}</div>
+                <a href="#" class="text-dark fw-medium text-md"><i class="bi bi-calendar-check me-2"></i>{{ display_date }}</a>
+                <div class="text-muted text-md"><i class="bi bi-broadcast me-2"></i>{{ post_type }}</div>
             </div>
         </div>
     </div>

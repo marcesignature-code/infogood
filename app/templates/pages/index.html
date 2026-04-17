@@ -39,150 +39,54 @@
 				<!-- Search Form Row -->
 				<div class="row align-items-start justify-content-center mb-lg-5 mb-4">
 					<div class="col-xl-11 col-lg-12 col-md-12 col-sm-12">
-						<div class="heroSearch style-01 shadow">
+						<form action="{{ url_for('main.grid_layout_01') }}" method="get" class="heroSearch style-01 shadow">
 							<div class="row gx-lg-2 gx-md-2 gx-3 gy-sm-2 gy-2">
 
 								<div class="col-xl-4 col-lg-3 col-md-12 col-sm-12">
-									<div class="form-group position-relative">
-										<input type="text" class="form-control fs-6 fw-medium border-0 ps-md-2" placeholder="What are you looking for?">
+									<div class="form-group fw-medium lights-bg no-border">
+										<div class="selects">
+											<select id="hero-main-category" name="category" class="hero-dropdown-select">
+												<option value="" label="What are you looking for">What are you looking for</option>
+												{% for nav_category in hero_nav_categories %}
+												<option value="{{ nav_category.value }}">{{ nav_category.label }}</option>
+												{% endfor %}
+											</select>
+										</div>
 									</div>
 								</div>
 
-								<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 side-border">
+								<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 single-border">
+									<div class="form-group fw-medium lights-bg no-border">
+										<div class="selects">
+											<select id="hero-subcategory" name="subcategory" class="hero-dropdown-select" disabled>
+												<option value="" label="Sub category">Sub category</option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 single-border">
 									<div class="form-group position-relative">
-										<input type="text" class="form-control fs-6 fw-medium border-0" placeholder="Location">
+										<input type="text" name="location" class="form-control fs-6 fw-medium border-0" placeholder="Location">
 										<span class="position-absolute top-50 end-0 translate-middle me-2">
 											<i class="fa-solid fa-location-dot text-muted opacity-50 fs-5"></i>
 										</span>
 									</div>
 								</div>
 
-								<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12">
-									<div class="form-group fw-medium lights-bg no-border">
-										<div class="selects">
-											<select id="my-select">
-												<option label="All Categories"></option> 
-												<option value="lv">Eat & Drinking</option>
-												<option value="la">Rental Property</option>
-												<option value="kc">Classifieds</option>
-												<option value="no">Bank Services</option>
-												<option value="kc">Shopping</option>
-												<option value="lb">Fintess & Gym</option>
-												<option value="cl">Coaching</option>
-												<option value="cn">Other Services</option>
-											</select>
-										</div>
+								<div class="col-xl-2 col-lg-3 col-md-12 col-sm-12">
+									<div class="form-group">
+										<button type="submit" class="btn btn-primary full-width fw-medium">
+											<i class="bi bi-search me-2"></i>Search
+										</button>
 									</div>
 								</div>
 
-								<div class="col-xl-2 col-lg-3 col-md-12 col-sm-12">
-										<div class="form-group">
-											<button
-												type="button"
-												class="btn btn-primary full-width fw-medium"
-												onclick='window.location.href="{{ url_for("main.grid_layout_01") }}"'>
-												<i class="bi bi-search me-2"></i>Search
-											</button>
-										</div>
-									</div>
-
 							</div>
-						</div>
+						</form>
 					</div>
 				</div>
 				<!-- End Search Form Row -->
-
-				<div class="row align-items-center justify-content-center">
-					<div class="col-xl-12 col-lg-12 col-md-12 col-12 mb-2">
-						<div class="text-center">
-							<h6 class="fw-semibold">Explore Popular Categories</h6>
-						</div>
-					</div>
-
-					<div class="col-xl-12 col-lg-12 col-md-12 col-12">
-						<div class="popularSearches d-flex align-items-center justify-content-center column-gap-3 row-gap-1 flex-wrap">
-
-							<div class="singleItem">
-								<a href="#" class="badge badge-transparent rounded-pill">Ciudad-campo</a>
-							</div>
-
-							<div class="singleItem">
-								<a href="#" class="badge badge-transparent rounded-pill">Hospedaje</a>
-							</div>
-
-							<div class="singleItem">
-								<a href="#" class="badge badge-transparent rounded-pill">Comida</a>
-							</div>
-
-							<div class="singleItem">
-								<a href="#" class="badge badge-transparent rounded-pill">Postres</a>
-							</div>
-
-							<div class="singleItem dropdown price-dropdown">
-								<a href="#"
-								class="badge badge-transparent rounded-pill dropdown-toggle category-pill-link"
-								data-bs-toggle="dropdown"
-								aria-expanded="false">
-									Precio
-								</a>
-								<ul class="dropdown-menu category-pill-menu">
-									<li><a class="dropdown-item" href="#">$</a></li>
-									<li><a class="dropdown-item" href="#">$$</a></li>
-									<li><a class="dropdown-item" href="#">$$$</a></li>
-								</ul>
-							</div>
-
-							<div class="singleItem dropdown free-activities-dropdown">
-								<a href="#"
-								   class="badge badge-transparent rounded-pill dropdown-toggle category-pill-link"
-								   data-bs-toggle="dropdown"
-								   aria-expanded="false">
-									Actividades gratuitas
-								</a>
-								<ul class="dropdown-menu category-pill-menu">
-									<li><a class="dropdown-item" href="#">Ministerio de turismo</a></li>
-									<li><a class="dropdown-item" href="#">Municipio de Quito</a></li>
-									<li><a class="dropdown-item" href="#">Concejo Provincial</a></li>
-									<li><a class="dropdown-item" href="#">Municipio de Rumiñahui</a></li>
-									<li><a class="dropdown-item" href="#">Municipio de cotopaxi</a></li>
-									<li><a class="dropdown-item" href="#">Prefectura de Cotopaxi</a></li>
-									<li><a class="dropdown-item" href="#">Municipio de Otavalo</a></li>
-									<li><a class="dropdown-item" href="#">Prefectura de Imbabura</a></li>
-								</ul>
-							</div>
-
-							<div class="singleItem dropdown services-dropdown">
-								<a href="#"
-								class="badge badge-transparent rounded-pill dropdown-toggle category-pill-link"
-								data-bs-toggle="dropdown"
-								aria-expanded="false">
-									Servicios
-								</a>
-
-								<ul class="dropdown-menu category-pill-menu services-menu">
-									<li class="dropdown-submenu">
-										<a href="#" class="dropdown-item submenu-toggle">Transporte</a>
-										<ul class="dropdown-menu submenu">
-											<li><a class="dropdown-item" href="#">Transporte VIP</a></li>
-											<li><a class="dropdown-item" href="#">Transporte Vans</a></li>
-											<li><a class="dropdown-item" href="#">Transporte Ejecutivo</a></li>
-										</ul>
-									</li>
-
-									<li class="dropdown-submenu">
-										<a href="#" class="dropdown-item submenu-toggle">Operadores turísticos</a>
-										<ul class="dropdown-menu submenu">
-											<li><a class="dropdown-item" href="#">Inglés</a></li>
-											<li><a class="dropdown-item" href="#">Francés</a></li>
-											<li><a class="dropdown-item" href="#">Alemán</a></li>
-										</ul>
-									</li>
-								</ul>
-							</div>
-
-						</div>
-					</div>
-				</div>
 
 			</div>
 		</div>
@@ -257,7 +161,9 @@
 				<div class="owl-carousel owl-theme itemslider">
 					
 					<!-- Components/Home/index/listings.html -->
+                    {% with listings=popular_listings %}
                     {% include 'Components/Home/index/listings.html' %}
+                    {% endwith %}
 					
 				</div>
 			</div>
@@ -285,7 +191,9 @@
 				<div class="owl-carousel owl-theme reviewsSlide">
 
 					<!-- Components/Home/index/reviews.html -->
+                    {% with reviews=platform_reviews %}
                     {% include 'Components/Home/index/reviews.html' %}
+                    {% endwith %}
 					
 				</div>
 			</div>
@@ -312,7 +220,9 @@
 		<div class="row align-items-center justify-content-center g-4">
 		
 			<!-- Components/Home/index/blog.html -->
+            {% with updates=latest_updates %}
 			{% include 'Components/Home/index/blog.html' %}
+            {% endwith %}
 			
 		</div>
 	
@@ -351,6 +261,116 @@
 		</div>
 	</div>
 </div>
+
+{% include 'newsletter/_profile_modal.html' %}
+
+<style>
+.heroSearch.style-01 .hero-dropdown-select {
+  width: 100%;
+  height: 56px;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background-color: transparent;
+  color: #6f7683;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0 2.2rem 0 0.8rem;
+  border-radius: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%239ca3af'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.116l3.71-3.886a.75.75 0 1 1 1.08 1.04l-4.25 4.45a.75.75 0 0 1-1.08 0l-4.25-4.45a.75.75 0 0 1 .02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
+  background-size: 1rem 1rem;
+}
+
+.heroSearch.style-01 .hero-dropdown-select:disabled {
+  color: #9aa0aa;
+  opacity: 1;
+  cursor: pointer;
+}
+
+.heroSearch.style-01 input[name="location"] {
+  height: 56px;
+  color: #6f7683;
+}
+
+.heroSearch.style-01 input[name="location"]::placeholder {
+  color: #6f7683;
+  opacity: 1;
+}
+
+.heroSearch.style-01 .hero-dropdown-select:focus,
+.heroSearch.style-01 input[name="location"]:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 991px) {
+  .heroSearch.style-01 .hero-dropdown-select {
+    border: 1px solid var(--bs-border-color) !important;
+    border-radius: 0.375rem;
+    padding-left: 0.9rem;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+	const mainCategorySelect = document.getElementById('hero-main-category');
+	const subcategorySelect = document.getElementById('hero-subcategory');
+
+	if (!mainCategorySelect || !subcategorySelect) {
+		return;
+	}
+
+	const categoryMap = {
+		{% for nav_category in hero_nav_categories %}
+		"{{ nav_category.value }}": [
+			{% for subcategory in nav_category.subcategories %}
+			{ value: "{{ subcategory.value }}", label: "{{ subcategory.label }}" }{% if not loop.last %},{% endif %}
+			{% endfor %}
+		]{% if not loop.last %},{% endif %}
+		{% endfor %}
+	};
+
+	const resetSubcategory = function () {
+		subcategorySelect.innerHTML = '';
+		const defaultOption = document.createElement('option');
+		defaultOption.value = '';
+		defaultOption.label = 'Sub category';
+		defaultOption.textContent = 'Sub category';
+		subcategorySelect.appendChild(defaultOption);
+		subcategorySelect.value = '';
+		subcategorySelect.disabled = true;
+	};
+
+	const populateSubcategories = function (categoryValue) {
+		resetSubcategory();
+		const subcategories = categoryMap[categoryValue] || [];
+		if (!subcategories.length) {
+			return;
+		}
+
+		subcategories.forEach(function (subcategory) {
+			const option = document.createElement('option');
+			option.value = subcategory.value;
+			option.textContent = subcategory.label;
+			subcategorySelect.appendChild(option);
+		});
+
+		subcategorySelect.disabled = false;
+	};
+
+	mainCategorySelect.addEventListener('change', function () {
+		populateSubcategories(mainCategorySelect.value);
+	});
+
+	resetSubcategory();
+});
+</script>
 
 {% include 'Base/footer.html' %} 
 

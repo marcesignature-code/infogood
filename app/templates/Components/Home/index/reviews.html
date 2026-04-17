@@ -1,30 +1,36 @@
 {% for item in reviews %}
+    {% set reviewer_name = item.reviewer_name if item.reviewer_name is defined else item.name %}
+    {% set reviewer_role = item.reviewer_role if item.reviewer_role is defined else item.name1 %}
+    {% set review_text = item.review_text if item.review_text is defined else item.desc %}
+    {% set rating = item.rating if item.rating is defined else 5 %}
+    {% set review_title = item.title if item.title is defined else "Platform Review" %}
     <div class="singleItem">
         <div class="reviews-wrappers">
             <div class="reviewsBox card border-0 rounded-4 shadow-sm">
                 <div class="card-body p-xl-5 p-lg-5 p-4">
                     <div class="reviews-topHeader d-flex flex-column mb-3">
                         <div class="d-flex align-items-center justify-content-center mb-2">
-                        <span class="me-1 text-sm text-warning"><i class="fa-solid fa-star"></i></span>
-                        <span class="me-1 text-sm text-warning"><i class="fa-solid fa-star"></i></span>
-                        <span class="me-1 text-sm text-warning"><i class="fa-solid fa-star"></i></span>
-                        <span class="me-1 text-sm text-warning"><i class="fa-solid fa-star"></i></span>
-                        <span class="me-1 text-sm text-warning"><i class="fa-solid fa-star"></i></span>
+                            {% for i in range(1, 6) %}
+                                <span class="me-1 text-sm {{ 'text-warning' if i <= rating else 'text-muted opacity-50' }}">
+                                    <i class="fa-solid fa-star"></i>
+                                </span>
+                            {% endfor %}
                         </div>
                         <div class="revws-desc text-center">
-                            <p class="text-dark fw-semibold mb-1">"{{ item.title }}"</p>
-                            <p class="m-0 text-dark">{{ item.desc }}</p>
+                            <p class="text-dark fw-semibold mb-1">"{{ review_title }}"</p>
+                            <p class="m-0 text-dark">{{ review_text }}</p>
                         </div>
                     </div>
                 </div>
-                
             </div>
             <div class="reviewsers d-flex flex-column mt-5">
                 <div class="d-flex align-items-center flex-column flex-thumbes gap-2">
-                    <div class="revws-pic"><img src="{{ item.img }}" class="img-fluid circle" width="55" alt=""></div>
+                    <div class="revws-pic">
+                        <img src="{{ item.img if item.img is defined else url_for('static', filename='assets/img/user.jpg') }}" class="img-fluid circle" width="55" alt="{{ reviewer_name }}">
+                    </div>
                     <div class="revws-caps text-center">
-                        <h6 class="fw-medium fs-6 m-0">{{ item.name }}</h6>
-                        <p class="text-muted-2 text-md m-0">{{ item.name1 }}</p>
+                        <h6 class="fw-medium fs-6 m-0">{{ reviewer_name }}</h6>
+                        <p class="text-muted-2 text-md m-0">{{ reviewer_role }}</p>
                     </div>
                 </div>
             </div>
