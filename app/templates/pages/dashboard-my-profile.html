@@ -3,6 +3,7 @@
 {% block hero_content %}
 
 {% include 'Base/navbar7.html' %}
+{% set du = dashboard_user|default({}, true) %}
 
 <div id="preloader">
 	<div class="preloader"><span></span><span></span></div>
@@ -41,7 +42,7 @@
 										<div class="row align-items-start">
 											<div class="col-xl-12 col-lg-12 col-md-12 col-12">
 												<div class="cardTitle d-flex align-items-center justify-content-start mb-3">
-													<h6 class="fw-semibold">Agent Basic information</h6>
+													<h6 class="fw-semibold">Profile Basic Information</h6>
 												</div>
 											</div>
 										</div>
@@ -52,35 +53,35 @@
 											<div class="col-xl-6 col-lg-6 col-md-6">
 												<div class="form-group">
 													<label>First Name</label>
-													<input type="text" class="form-control" placeholder="Daniel">
+													<input type="text" class="form-control" value="{{ du.first_name|default('', true) }}" placeholder="First name">
 												</div>
 											</div>
 											
 											<div class="col-xl-6 col-lg-6 col-md-6">
 												<div class="form-group">
 													<label>Last Name</label>
-													<input type="text" class="form-control" placeholder="Decuze">
+													<input type="text" class="form-control" value="{{ du.last_name|default('', true) }}" placeholder="Last name">
 												</div>
 											</div>
 											
 											<div class="col-xl-6 col-lg-6 col-md-6">
 												<div class="form-group">
 													<label>Phone</label>
-													<input type="tel" class="form-control" placeholder="5684526582">
+													<input type="tel" class="form-control" placeholder="Phone number">
 												</div>
 											</div>
 											
 											<div class="col-xl-6 col-lg-6 col-md-6">
 												<div class="form-group">
 													<label>Email</label>
-													<input type="email" class="form-control" placeholder="danieldecuze@gmail.com">
+													<input type="email" class="form-control" value="{{ du.email|default('', true) }}" placeholder="Email">
 												</div>
 											</div>
 											
 											<div class="col-xl-12 col-lg-12 col-md-12">
 												<div class="form-group">
 													<label>Member of</label>
-													<input type="text" class="form-control" placeholder="Daniel">
+													<input type="text" class="form-control" placeholder="Organization">
 												</div>
 											</div>
 											
@@ -115,49 +116,49 @@
 											<div class="col-xl-12 col-lg-12 col-md-12">
 												<div class="form-group">
 													<label>Address 1</label>
-													<input type="text" class="form-control" placeholder="123 Moobek Marg, Sirathu">
+													<input type="text" class="form-control" placeholder="Street address">
 												</div>
 											</div>
 											
 											<div class="col-xl-6 col-lg-6 col-md-6">
 												<div class="form-group">
 													<label>City</label>
-													<input type="text" class="form-control" placeholder="Denver">
+													<input type="text" class="form-control" placeholder="City">
 												</div>
 											</div>
 											
 											<div class="col-xl-6 col-lg-6 col-md-6">
 												<div class="form-group">
 													<label>State</label>
-													<input type="tel" class="form-control" placeholder="New York">
+													<input type="tel" class="form-control" placeholder="State / Province">
 												</div>
 											</div>
 											
 											<div class="col-xl-6 col-lg-6 col-md-6">
 												<div class="form-group">
 													<label>Country</label>
-													<input type="text" class="form-control" placeholder="United State">
+													<input type="text" class="form-control" placeholder="Country">
 												</div>
 											</div>
 											
 											<div class="col-xl-6 col-lg-6 col-md-6">
 												<div class="form-group">
 													<label>Zip Code</label>
-													<input type="text" class="form-control" placeholder="HQ4560R">
+													<input type="text" class="form-control" placeholder="Postal code">
 												</div>
 											</div>
 											
 											<div class="col-xl-6 col-lg-6 col-md-6">
 												<div class="form-group">
 													<label>Latitude</label>
-													<input type="text" class="form-control" placeholder="+568452568">
+													<input type="text" class="form-control" placeholder="Latitude (optional)">
 												</div>
 											</div>
 											
 											<div class="col-xl-6 col-lg-6 col-md-6">
 												<div class="form-group">
 													<label>Longitude</label>
-													<input type="text" class="form-control" placeholder="-45695824">
+													<input type="text" class="form-control" placeholder="Longitude (optional)">
 												</div>
 											</div>
 											
@@ -300,7 +301,7 @@
 										<div class="dash-prf-start d-flex flex-column align-items-start justify-content-start">
 											<div class="dash-prf-start-upper mx-auto">
 												<div class="dash-prf-start-thumb w-40 h-40 mb-2">
-													<figure><img src="{{ url_for('static', filename='assets/img/team-2.jpg') }}" class="img-fluid circle" alt=""></figure>
+													<figure><img src="{{ du.avatar_url|default(url_for('static', filename='assets/img/user.jpg'), true) }}" class="img-fluid circle" alt=""></figure>
 												</div>
 											</div>
 											<div class="dash-prf-start-bottom mx-auto mt-3">
@@ -319,7 +320,7 @@
 						<!-- Row Start -->
 						<div class="row align-items-start g-4">
 							<div class="col-xl-12 col-lg-12 col-md-12">
-								<p class="text-muted m-0">© <script>document.write(new Date().getFullYear())</script> ListingHub. Develop with <i class="mdi mdi-heart text-danger"></i> by <a href="https://shreethemes.in" target="_blank" class="text-reset">Shreethemes</a>.</p>
+								<p class="text-muted m-0">&copy; <script>document.write(new Date().getFullYear())</script> InfoGoodTrip. Dashboard preview mode.</p>
 							</div>
 						</div>
 						

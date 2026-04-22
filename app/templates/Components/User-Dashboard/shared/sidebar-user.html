@@ -1,15 +1,17 @@
 <div class="user-dashboard-inner h-100 border-end border-2 py-5 p-3 d-lg-block d-none dashboard-sidebar">
+    {% set du = dashboard_user|default({}, true) %}
+    {% set unread_count = messages2|default([], true)|length %}
     <button id="sidebarToggle" class="sidebar-toggle-btn" type="button" aria-label="Minimizar menú">
         <i class="bi bi-chevron-left"></i>
     </button>
 
     <div class="dashboard_users mb-4">
         <div class="square--80 circle mx-auto mb-1 dashboard-user-avatar">
-            <img src="{{ dashboard_user.avatar_url }}" class="img-fluid circle" alt="User Image">
+            <img src="{{ du.avatar_url|default(url_for('static', filename='assets/img/user.jpg'), true) }}" class="img-fluid circle" alt="User Image">
         </div>
         <div class="user-nameTitle text-center">
-            <h4 class="lh-base fw-semibold text-light mb-0">{{ dashboard_user.role|title }} Dashboard</h4>
-            <h6 class="text-light fw-medium opacity-75 mb-0">{{ dashboard_user.full_name }}</h6>
+            <h4 class="lh-base fw-semibold text-light mb-0">{{ du.role|default('user', true)|title }} Dashboard</h4>
+            <h6 class="text-light fw-medium opacity-75 mb-0">{{ du.full_name|default('Guest User', true) }}</h6>
         </div>
     </div>
 
@@ -46,7 +48,7 @@
             <li>
                 <a href="/dashboard-bookmarks/" class="{% if request.path == '/dashboard-bookmarks/' %}active{% endif %}">
                     <i class="bi bi-bookmark-star me-2"></i>
-                    <span class="sidebar-text">Bookmarkes</span>
+                    <span class="sidebar-text">Bookmarks</span>
                 </a>
             </li>
 
@@ -54,7 +56,9 @@
                 <a href="/dashboard-messages/" class="{% if request.path == '/dashboard-messages/' %}active{% endif %}">
                     <i class="bi bi-chat-dots me-2"></i>
                     <span class="sidebar-text">Messages</span>
-                    <span class="notti_coun style-1">3</span>
+                    {% if unread_count > 0 %}
+                    <span class="notti_coun style-1">{{ unread_count }}</span>
+                    {% endif %}
                 </a>
             </li>
 

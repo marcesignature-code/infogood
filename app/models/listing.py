@@ -118,6 +118,13 @@ class Listing(db.Model):
         db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow
     )
 
+    bookmarks = db.relationship(
+        "Bookmark",
+        back_populates="listing",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
+
     @property
     def open_badge_text(self):
         return "OPEN" if (self.status or "").lower() == "open" else (self.status or "").upper()

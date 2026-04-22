@@ -34,7 +34,7 @@
 						<div class="row align-items-start g-4 mb-4">
 							<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
 								<div class="alert alert-success alert-dismissible fade show" role="alert">
-									Your last payout <strong>$450 USD</strong> has been withdrawa!.
+									{{ dashboard_alert.message|default('Wallet metrics are up to date for your account.', true) }}
 									<button type="button" class="btn-close text-sm text-primary" data-bs-dismiss="alert" aria-label="Close"></button>
 								</div>
 							</div>
@@ -55,7 +55,7 @@
 							<div class="col-xl-12 col-lg-12 col-md-12">
 								<div class="card rounded-3 shadow-sm">
 									<div class="card-header flex-wrap gap-3 px-4">
-										<div class="cardTitle"><h4>Your Earning</h4></div>
+										<div class="cardTitle"><h4>Earnings History</h4></div>
 										
 										<div class="headerInformations">
 											<div class="d-flex align-items-center justify-content-start justify-content-md-between flex-wrap gap-3">
@@ -84,7 +84,13 @@
 											<tbody>
 
 												<!-- Components/User-Dashboard/dashboard-wallet/earning.html -->
-												{% include 'Components/User-Dashboard/dashboard-wallet/earning.html' %}
+												{% if earnings|default([], true)|length > 0 %}
+											{% include 'Components/User-Dashboard/dashboard-wallet/earning.html' %}
+											{% else %}
+											<tr>
+												<td colspan='5' class='text-center text-muted py-4'>No wallet transactions yet.</td>
+											</tr>
+											{% endif %}
 
 											</tbody>
 										</table>
@@ -97,7 +103,7 @@
 						<!-- Row Start -->
 						<div class="row align-items-start g-4">
 							<div class="col-xl-12 col-lg-12 col-md-12">
-								<p class="text-muted m-0">© <script>document.write(new Date().getFullYear())</script> ListingHub. Develop with <i class="mdi mdi-heart text-danger"></i> by <a href="https://shreethemes.in" target="_blank" class="text-reset">Shreethemes</a>.</p>
+								<p class="text-muted m-0">&copy; <script>document.write(new Date().getFullYear())</script> InfoGoodTrip. Dashboard preview mode.</p>
 							</div>
 						</div>
 						

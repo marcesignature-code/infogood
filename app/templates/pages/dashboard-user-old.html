@@ -24,7 +24,7 @@
 					
 					<!-- Dashboard Title -->
 					<div class="dashHeader p-xl-5 p-4 pb-xl-0 pb-0">
-						<h2 class="fw-medium mb-0">Hello, Shreethemes</h2>
+						<h2 class="fw-medium mb-0">Hello, {{ dashboard_user.first_name|default('Guest', true) }}</h2>
 					</div>
 					
 					<!-- Dashboard Details -->
@@ -34,7 +34,7 @@
 						<div class="row align-items-start g-4 mb-4">
 							<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
 								<div class="alert alert-primary alert-dismissible fade show" role="alert">
-									Your listing <strong>Holy Guacamole!3</strong> has been approved!.
+									{{ dashboard_alert.message|default('Your dashboard is ready with default values.', true) }}
 									<button type="button" class="btn-close text-sm text-primary" data-bs-dismiss="alert" aria-label="Close"></button>
 								</div>
 							</div>
@@ -61,7 +61,11 @@
 										<ul class="dashboardListgroup">
 
 											<!-- Components/User-Dashboard/dashboard-user/activities.html -->
-											{% include 'Components/User-Dashboard/dashboard-user/activities.html' %}
+											{% if activities|default([], true)|length > 0 %}
+									{% include 'Components/User-Dashboard/dashboard-user/activities.html' %}
+									{% else %}
+									<li class='p-4 text-muted'>No recent activity yet. Your account actions will appear here.</li>
+									{% endif %}
 
 										</ul>
 									</div>
@@ -78,7 +82,11 @@
 										<div class="messagesWrapers d-flex flex-column gap-4">
 
 											<!-- Components/User-Dashboard/dashboard-user/messages.html -->
-											{% include 'Components/User-Dashboard/dashboard-user/messages.html' %}
+											{% if messages|default([], true)|length > 0 %}
+									{% include 'Components/User-Dashboard/dashboard-user/messages.html' %}
+									{% else %}
+									<p class='text-muted m-0'>No messages yet. New conversations will appear here.</p>
+									{% endif %}
 										
 										</div>
 									</div>
@@ -121,7 +129,13 @@
 											<tbody>
 
 												<!-- Components/User-Dashboard/dashboard-user/invoices.html -->
-												{% include 'Components/User-Dashboard/dashboard-user/invoices.html' %}
+												{% if invoices|default([], true)|length > 0 %}
+											{% include 'Components/User-Dashboard/dashboard-user/invoices.html' %}
+											{% else %}
+											<tr>
+												<td colspan='5' class='text-center text-muted py-4'>No billing records available yet.</td>
+											</tr>
+											{% endif %}
 
 											</tbody>
 										</table>
@@ -134,7 +148,7 @@
 						<!-- Row Start -->
 						<div class="row align-items-start g-4">
 							<div class="col-xl-12 col-lg-12 col-md-12">
-								<p class="text-muted m-0">© <script>document.write(new Date().getFullYear())</script> ListingHub. Develop with <i class="mdi mdi-heart text-danger"></i> by <a href="https://shreethemes.in" target="_blank" class="text-reset">Shreethemes</a>.</p>
+								<p class="text-muted m-0">&copy; <script>document.write(new Date().getFullYear())</script> InfoGoodTrip. Dashboard preview mode.</p>
 							</div>
 						</div>
 						

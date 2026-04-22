@@ -1,5 +1,7 @@
 {% if listings and listings|length > 0 %}
   {% for item in listings %}
+    {% set listing_id = item.id|string if item.id is defined and item.id else '' %}
+    {% set is_bookmarked = listing_id and listing_id in (bookmarked_listing_ids|default([], true)) %}
     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
       <div class="card list-layout-block border rounded-3 p-2">
 
@@ -53,7 +55,20 @@
               <strong>{{ '%.1f'|format(item.rating_avg or 0) }}</strong>
               <span class="text-muted">({{ item.reviews_count or 0 }} Reviews)</span>
             </div>
-            <a href="/listing/{{ item.slug }}" class="btn btn-sm btn-light">View</a>
+            <div class="d-flex align-items-center gap-2">
+              <a
+                href="#"
+                class="bookmarkList{% if is_bookmarked %} is-saved{% endif %}"
+                data-bookmark-toggle
+                data-listing-id="{{ listing_id }}"
+                data-saved="{{ 'true' if is_bookmarked else 'false' }}"
+                data-bs-toggle="tooltip"
+                data-bs-title="{{ 'Remove Bookmark' if is_bookmarked else 'Save Listing' }}"
+              >
+                <i class="bi {% if is_bookmarked %}bi-suit-heart-fill{% else %}bi-suit-heart{% endif %} m-0"></i>
+              </a>
+              <a href="/listing/{{ item.slug }}" class="btn btn-sm btn-light">View</a>
+            </div>
           </div>
         </div>
       </div>

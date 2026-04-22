@@ -52,6 +52,8 @@
         {% else %}
             {% set listing_url = url_for('main.grid_layout_01') %}
         {% endif %}
+        {% set listing_id = item.id|string if item.id is defined and item.id else '' %}
+        {% set is_bookmarked = listing_id and listing_id in (bookmarked_listing_ids|default([], true)) %}
 
         <div class="singleItem">
             <div class="listingitem-container">
@@ -70,7 +72,17 @@
                             <img src="{{ cover_url }}" class="img-fluid" alt="{{ display_title }}">
                         </a>
                         <div class="position-absolute end-0 bottom-0 me-3 mb-3 z-2">
-                            <a href="{{ listing_url }}" class="bookmarkList" data-bs-toggle="tooltip" data-bs-title="View Listing"><i class="bi bi-suit-heart m-0"></i></a>
+                            <a
+                                href="#"
+                                class="bookmarkList{% if is_bookmarked %} is-saved{% endif %}"
+                                data-bookmark-toggle
+                                data-listing-id="{{ listing_id }}"
+                                data-saved="{{ 'true' if is_bookmarked else 'false' }}"
+                                data-bs-toggle="tooltip"
+                                data-bs-title="{{ 'Remove Bookmark' if is_bookmarked else 'Save Listing' }}"
+                            >
+                                <i class="bi {% if is_bookmarked %}bi-suit-heart-fill{% else %}bi-suit-heart{% endif %} m-0"></i>
+                            </a>
                         </div>
                     </div>
                     <div class="listing-middle-item">

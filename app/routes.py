@@ -1,10 +1,14 @@
 import re
 
 from flask import Blueprint, jsonify, redirect, render_template, request, url_for
+from flask_login import current_user
 from slugify import slugify  # déjalo si ya lo usas en otras funciones
+from app.models.bookmark import Bookmark
 from app.models.listing import Listing
 from app.models.newsletter_subscriber import NewsletterSubscriber
+from app.models.user import UserProfile
 from app.extensions import db
+from app.services.dashboard_context import get_dashboard_context
 from sqlalchemy import inspect, or_, text
 
 
@@ -190,6 +194,45 @@ NEWSLETTER_STATUS_MESSAGES = {
 @main.context_processor
 def inject_slugify():
     return {'slugify': slugify}
+
+
+def _resolve_actor_profile():
+    try:
+        if current_user.is_authenticated:
+            return current_user
+    except Exception:
+        pass
+
+    try:
+        return (
+            UserProfile.query.filter_by(is_active=True)
+            .order_by(UserProfile.created_at.asc())
+            .first()
+        )
+    except Exception:
+        db.session.rollback()
+        return None
+
+
+def _bookmarked_listing_id_strings(profile):
+    if not profile:
+        return set()
+    try:
+        listing_ids = (
+            db.session.query(Bookmark.listing_id)
+            .filter(Bookmark.user_id == profile.id)
+            .all()
+        )
+        return {str(row[0]) for row in listing_ids if row and row[0]}
+    except Exception:
+        db.session.rollback()
+        return set()
+
+
+@main.context_processor
+def inject_bookmark_state():
+    profile = _resolve_actor_profile()
+    return {"bookmarked_listing_ids": _bookmarked_listing_id_strings(profile)}
 
 
 def _normalize_email(value):
@@ -541,6 +584,40 @@ def grid_layout_01():
         selected_subcategory=subcategory,
         allowed_main_categories=ALLOWED_MAIN_CATEGORIES,
     )
+
+
+@main.route("/bookmark/toggle/<uuid:listing_id>", methods=["POST"])
+def bookmark_toggle(listing_id):
+    profile = _resolve_actor_profile()
+    if not profile:
+        return jsonify({"ok": False, "error": "Authentication required."}), 401
+
+    listing = Listing.query.filter_by(id=listing_id, is_active=True).first()
+    if not listing:
+        return jsonify({"ok": False, "error": "Listing not found."}), 404
+
+    try:
+        bookmark = Bookmark.query.filter_by(
+            user_id=profile.id,
+            listing_id=listing.id,
+        ).first()
+
+        if bookmark:
+            db.session.delete(bookmark)
+            saved = False
+        else:
+            db.session.add(Bookmark(user_id=profile.id, listing_id=listing.id))
+            saved = True
+
+        db.session.commit()
+        return jsonify({
+            "ok": True,
+            "saved": saved,
+            "listing_id": str(listing.id),
+        })
+    except Exception:
+        db.session.rollback()
+        return jsonify({"ok": False, "error": "Could not update bookmark."}), 500
 
 
 @main.route("/grid-layout-02/")
@@ -1364,47 +1441,58 @@ def single_listing_05(title):
 
 @main.route("/dashboard-user/")
 def dashboard_user():
-    return render_template("pages/dashboard-user.html")
+    # pages/dashboard-user.html does not exist yet, so we keep legacy compatibility
+    # by rendering the old dashboard shell with a safe shared context.
+    context = get_dashboard_context()
+    return render_template("pages/dashboard-user-old.html", **context)
 
 
 @main.route("/dashboard-my-profile/")
 def dashboard_my_profile():
-    return render_template("pages/dashboard-my-profile.html")
+    context = get_dashboard_context()
+    return render_template("pages/dashboard-my-profile.html", **context)
 
 
 @main.route("/dashboard-my-bookings/")
 def dashboard_my_bookings():
-    return render_template("pages/dashboard-my-bookings.html")
+    context = get_dashboard_context()
+    return render_template("pages/dashboard-my-bookings.html", **context)
 
 
 @main.route("/dashboard-my-listings/")
 def dashboard_my_listings():
-    return render_template("pages/dashboard-my-listings.html")
+    context = get_dashboard_context()
+    return render_template("pages/dashboard-my-listings.html", **context)
 
 
 @main.route("/dashboard-bookmarks/")
 def dashboard_bookmarks():
-    return render_template("pages/dashboard-bookmarks.html")
+    context = get_dashboard_context()
+    return render_template("pages/dashboard-bookmarks.html", **context)
 
 
 @main.route("/dashboard-messages/")
 def dashboard_messages():
-    return render_template("pages/dashboard-messages.html")
+    context = get_dashboard_context()
+    return render_template("pages/dashboard-messages.html", **context)
 
 
 @main.route("/dashboard-reviews/")
 def dashboard_reviews():
-    return render_template("pages/dashboard-reviews.html")
+    context = get_dashboard_context()
+    return render_template("pages/dashboard-reviews.html", **context)
 
 
 @main.route("/dashboard-wallet/")
 def dashboard_wallet():
-    return render_template("pages/dashboard-wallet.html")
+    context = get_dashboard_context()
+    return render_template("pages/dashboard-wallet.html", **context)
 
 
 @main.route("/dashboard-add-listing/")
 def dashboard_add_listing():
-    return render_template("pages/dashboard-add-listing.html")
+    context = get_dashboard_context()
+    return render_template("pages/dashboard-add-listing.html", **context)
 
 
 @main.route("/login/")
@@ -1586,8 +1674,6 @@ def viewcart():
     return render_template("pages/viewcart.html")
 
 
-from flask import Blueprint, render_template
-
 from app.services.dashboard_service import DashboardService
 
 dashboard_bp = Blueprint("dashboard", __name__)
@@ -1609,6 +1695,10 @@ def sales_dashboard():
 @dashboard_bp.route("/dashboard/admin")
 def admin_dashboard():
     return render_template("Components/User-Dashboard/admin/dashboard-admin.html")
+
+
+
+
 
 
 

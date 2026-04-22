@@ -1,4 +1,10 @@
 <!-- Start Navigation -->
+{% set du = dashboard_user|default({}, true) %}
+{% set navbar_avatar = du.avatar_url|default(url_for('static', filename='assets/img/user.jpg'), true) %}
+{% set navbar_name = du.full_name|default('Guest User', true) %}
+{% set navbar_first = du.first_name|default('Guest', true) %}
+{% set saved_count = saveds|default([], true)|length %}
+{% set unread_count = messages2|default([], true)|length %}
 <div class="header navdark header-dark " data-sticky-element="">
     <div class="container-fluid">
         <nav id="navigation" class="navigation navigation-landscape">
@@ -8,10 +14,10 @@
                 <div class="mobile_nav">
                     <ul>
                         <li>
-                            <a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample" class="d-inline-flex py-0 pt-1 px-1"><div class="d-inline-flex w-8 h-8 circle overflow-hidden"><img src="{{ url_for('static', filename='assets/img/team-2.jpg') }}" class="img-fluid" alt=""></div></a>
+                            <a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample" class="d-inline-flex py-0 pt-1 px-1"><div class="d-inline-flex w-8 h-8 circle overflow-hidden"><img src="{{ navbar_avatar }}" class="img-fluid" alt=""></div></a>
                         </li>
                         <li>
-                            <a href="#cartSlider" class="cart-content" data-bs-toggle="offcanvas" role="button" aria-controls="cartSlider"><i class="bi bi-basket2"></i><span class="head-cart-counter">3</span></a>
+                            <a href="#cartSlider" class="cart-content" data-bs-toggle="offcanvas" role="button" aria-controls="cartSlider"><i class="bi bi-basket2"></i><span class="head-cart-counter">{{ saved_count }}</span></a>
                         </li>
                         <li>
                             <a href="#searchSlider" class="d-flex align-items-center" data-bs-toggle="offcanvas" role="button" aria-controls="searchSlider"><i class="bi bi-search me-1"></i></a>
@@ -23,17 +29,17 @@
 
                 <ul class="nav-menu nav-menu-social align-to-right">
                     <li>
-                        <a href="#cartSlider" class="cart-content" data-bs-toggle="offcanvas" role="button" aria-controls="cartSlider"><i class="bi bi-basket2"></i><span class="head-cart-counter">3</span></a>
+                        <a href="#cartSlider" class="cart-content" data-bs-toggle="offcanvas" role="button" aria-controls="cartSlider"><i class="bi bi-basket2"></i><span class="head-cart-counter">{{ saved_count }}</span></a>
                     </li>
                     <li>
                         <div class="btn-group account-drop">
                             <a href="#" class="nav-link btn-order-by-filt" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <div class="d-inline-flex w-8 h-8 circle overflow-hidden"><img src="{{ url_for('static', filename='assets/img/team-2.jpg') }}" class="img-fluid" alt=""></div>
-                                <span class="fw-medium d-inline-flex ms-2 text-light">Shreethemes<i class="fa-solid fa-sort-down ms-1"></i></span>
+                                <div class="d-inline-flex w-8 h-8 circle overflow-hidden"><img src="{{ navbar_avatar }}" class="img-fluid" alt=""></div>
+                                <span class="fw-medium d-inline-flex ms-2 text-light">{{ navbar_name }}<i class="fa-solid fa-sort-down ms-1"></i></span>
                             </a>
                             <div class="dropdown-menu pull-right animated flipInX">
                                 <div class="drp_menu_headr bg-primary">
-                                    <h4>Hi, Shreethemes</h4>
+                                    <h4>Hi, {{ navbar_first }}</h4>
                                     <div class="drp_menu_headr-right"><button type="button" class="btn btn-whites text-dark">My Profile</button></div>
                                 </div>
                                 <ul>
@@ -41,8 +47,8 @@
                                     <li><a href="/dashboard-my-profile/" class="sub-menu-item"><i class="bi bi-person-lines-fill me-2"></i>My Profile</a></li>
                                     <li><a href="/dashboard-my-bookings/" class="sub-menu-item"><i class="bi bi-journal-check me-2"></i>My Bookings</a></li>
                                     <li><a href="/dashboard-my-listings/" class="sub-menu-item"><i class="bi bi-ui-radios-grid me-2"></i>My Listings</a></li>
-                                    <li><a href="/dashboard-bookmarks/" class="sub-menu-item"><i class="bi bi-bookmark-star me-2"></i>Bookmarkes</a></li>
-                                    <li><a href="/dashboard-messages/" class="sub-menu-item"><i class="bi bi-chat-dots me-2"></i>Messages<span class="notti_coun style-1">3</span></a></li>
+                                    <li><a href="/dashboard-bookmarks/" class="sub-menu-item"><i class="bi bi-bookmark-star me-2"></i>Bookmarks</a></li>
+                                    <li><a href="/dashboard-messages/" class="sub-menu-item"><i class="bi bi-chat-dots me-2"></i>Messages{% if unread_count > 0 %}<span class="notti_coun style-1">{{ unread_count }}</span>{% endif %}</a></li>
                                     <li><a href="/dashboard-reviews/" class="sub-menu-item"><i class="bi bi-yelp me-2"></i>Reviews</a></li>
                                     <li><a href="/dashboard-wallet/" class="sub-menu-item"><i class="bi bi-wallet me-2"></i>Wallet</a></li>
                                     <li><a href="/dashboard-add-listing/" class="sub-menu-item"><i class="bi bi-patch-plus me-2"></i>Add Listing</a></li>
@@ -73,8 +79,8 @@
             <li><a href="/dashboard-my-profile/" class="sub-menu-item"><i class="bi bi-person-lines-fill me-2"></i>My Profile</a></li>
             <li><a href="/dashboard-my-bookings/" class="sub-menu-item"><i class="bi bi-journal-check me-2"></i>My Bookings</a></li>
             <li><a href="/dashboard-my-listings/" class="sub-menu-item"><i class="bi bi-ui-radios-grid me-2"></i>My Listings</a></li>
-            <li><a href="/dashboard-bookmarks/" class="sub-menu-item"><i class="bi bi-bookmark-star me-2"></i>Bookmarkes</a></li>
-            <li><a href="/dashboard-messages/" class="sub-menu-item"><i class="bi bi-chat-dots me-2"></i>Messages<span class="notti_coun style-1">3</span></a></li>
+            <li><a href="/dashboard-bookmarks/" class="sub-menu-item"><i class="bi bi-bookmark-star me-2"></i>Bookmarks</a></li>
+            <li><a href="/dashboard-messages/" class="sub-menu-item"><i class="bi bi-chat-dots me-2"></i>Messages{% if unread_count > 0 %}<span class="notti_coun style-1">{{ unread_count }}</span>{% endif %}</a></li>
             <li><a href="/dashboard-reviews/" class="sub-menu-item"><i class="bi bi-yelp me-2"></i>Reviews</a></li>
             <li><a href="/dashboard-wallet/" class="sub-menu-item"><i class="bi bi-wallet me-2"></i>Wallet</a></li>
             <li><a href="/dashboard-add-listing/" class="sub-menu-item"><i class="bi bi-patch-plus me-2"></i>Add Listing</a></li>

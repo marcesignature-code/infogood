@@ -2,6 +2,7 @@ from datetime import datetime
 import uuid
 
 from flask_login import UserMixin
+from sqlalchemy.dialects.postgresql import UUID
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.extensions import db
@@ -10,7 +11,7 @@ from app.extensions import db
 class UserProfile(UserMixin, db.Model):
     __tablename__ = "profiles"
 
-    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     email = db.Column(db.String(255), unique=True, nullable=False, index=True)
     username = db.Column(db.String(80), unique=True, nullable=True, index=True)
     password_hash = db.Column(db.Text, nullable=False)
@@ -24,6 +25,18 @@ class UserProfile(UserMixin, db.Model):
 
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    metrics = db.relationship(
+        "DashboardMetrics",
+        back_populates="user",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+    bookmarks = db.relationship(
+        "Bookmark",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
 
     def get_id(self):
         return str(self.id)

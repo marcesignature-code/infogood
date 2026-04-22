@@ -24,7 +24,7 @@
 					
 					<!-- Dashboard Title -->
 					<div class="dashHeader p-xl-5 p-4 pb-xl-0 pb-0">
-						<h2 class="fw-medium mb-0">Bookmarked</h2>
+						<h2 class="fw-medium mb-0">Bookmarks</h2>
 					</div>
 					
 					<!-- Dashboard Details -->
@@ -41,7 +41,11 @@
 										<ul class="dashboardListgroup">
 
 											<!-- Components/User-Dashboard/dashboard-bookmarks/saved.html -->
-											{% include 'Components/User-Dashboard/dashboard-bookmarks/saved.html' %}
+											{% if saveds|default([], true)|length > 0 %}
+									{% include 'Components/User-Dashboard/dashboard-bookmarks/saved.html' %}
+									{% else %}
+									<li class='p-4 text-muted'>You have no saved listings yet. Save places to build your travel shortlist.</li>
+									{% endif %}
 											
 										</ul>
 									</div>
@@ -54,7 +58,7 @@
 						<!-- Row Start -->
 						<div class="row align-items-start g-4">
 							<div class="col-xl-12 col-lg-12 col-md-12">
-								<p class="text-muted m-0">© <script>document.write(new Date().getFullYear())</script> ListingHub. Develop with <i class="mdi mdi-heart text-danger"></i> by <a href="https://shreethemes.in" target="_blank" class="text-reset">Shreethemes</a>.</p>
+								<p class="text-muted m-0">&copy; <script>document.write(new Date().getFullYear())</script> InfoGoodTrip. Dashboard preview mode.</p>
 							</div>
 						</div>
 						
