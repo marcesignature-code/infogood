@@ -2,13 +2,26 @@
   {% for item in listings %}
     {% set listing_id = item.id|string if item.id is defined and item.id else '' %}
     {% set is_bookmarked = listing_id and listing_id in (bookmarked_listing_ids|default([], true)) %}
+    {% set default_food_cover = 'https://gckfkoljsjzfkrfewmrh.supabase.co/storage/v1/object/public/listings/Default/food-drink/default-food-drink-cover.png' %}
+    {% set default_food_logo = 'https://gckfkoljsjzfkrfewmrh.supabase.co/storage/v1/object/public/listings/Default/food-drink/default-food-drink-logo2.png' %}
+    {% set default_accommodation_cover = 'https://gckfkoljsjzfkrfewmrh.supabase.co/storage/v1/object/public/listings/Default/accommodation/default-accommodation-cover.png' %}
+    {% set default_accommodation_logo = 'https://gckfkoljsjzfkrfewmrh.supabase.co/storage/v1/object/public/listings/Default/accommodation/default-logo-accommodation2.png' %}
+    {% set category_key_raw = item.main_category or (item.category.slug if item.category is defined and item.category and item.category.slug is defined else '') or (item.category.name if item.category is defined and item.category and item.category.name is defined else '') %}
+    {% set category_key = (category_key_raw|string)|lower %}
+    {% set is_accommodation = category_key == 'accommodation' %}
+    {% set cover_fallback_url = default_accommodation_cover if is_accommodation else default_food_cover %}
+    {% set logo_fallback_url = default_accommodation_logo if is_accommodation else default_food_logo %}
+    {% set cover_url = item.cover_image_url or cover_fallback_url %}
+    {% set logo_image_url = (item.logo_image_url if item.logo_image_url is defined else '')|string|trim %}
+    {% set logo_url = logo_image_url if logo_image_url else logo_fallback_url %}
     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
       <div class="card list-layout-block border rounded-3 p-2">
 
         <div class="position-relative">
           <a href="/listing/{{ item.slug }}">
             <img
-              src="{{ item.cover_image_url or url_for('static', filename='assets/img/default-listing.jpg') }}"
+              src="{{ cover_url }}"
+              onerror="this.onerror=null;this.src='{{ cover_fallback_url }}';"
               class="card-img-top rounded-3"
               alt="{{ item.name }}"
             >
@@ -26,7 +39,8 @@
         <div class="card-body px-0 pb-0">
           <div class="d-flex align-items-center mb-2">
             <img
-              src="{{ item.logo_image_url or url_for('static', filename='assets/img/default-logo.png') }}"
+              src="{{ logo_url }}"
+              onerror="this.onerror=null;this.src='{{ logo_fallback_url }}';"
               alt="{{ item.name }}"
               class="rounded-circle me-2"
               width="40" height="40"

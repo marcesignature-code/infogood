@@ -1,6 +1,8 @@
-{% for item in closes %}
-    <div class="alert tag-alert alert-light alert-dismissible fade show" role="alert">
-        <span>{{ item.title }}</span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-{% endfor %}
+{% if active_filters is defined and active_filters %}
+    {% for item in active_filters %}
+        <div class="alert tag-alert alert-light alert-dismissible fade show" role="alert">
+            <span>{{ item.label }}</span>
+            <a href="{{ item.remove_url }}" class="btn-close" aria-label="Remove filter"></a>
+        </div>
+    {% endfor %}
+{% endif %}

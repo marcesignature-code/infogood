@@ -33,33 +33,41 @@
 		<div class="row align-items-center justify-content-center">
 			<div class="col-xl-11 col-lg-12 col-md-12 col-12">
 				<div class="heroSearch style-01 shadow-sm">
-					<div class="row gx-lg-2 gx-md-2 gx-3 gy-sm-2 gy-2">
-						<div class="col-xl-10 col-lg-9 col-md-12">
-							<div class="row gx-lg-2 gx-md-2 gx-3 gy-sm-2 gy-2">
-								<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-									<div class="form-group">
-										<div class="mobSearch d-flex align-items-center justify-content-start">
-											<div class="flexStart ps-2"><span class="fw-semibold text-dark">Find</span></div>
-											<input type="text" class="form-control fs-6 fw-medium border-0" placeholder="What are you looking for?">
+					<form method="get" action="{{ url_for('main.grid_layout_01') }}">
+						{% for key, value in request.args.items() %}
+							{% if key not in ['q', 'location', 'page'] %}
+								<input type="hidden" name="{{ key }}" value="{{ value }}">
+							{% endif %}
+						{% endfor %}
+						<input type="hidden" name="page" value="1">
+						<div class="row gx-lg-2 gx-md-2 gx-3 gy-sm-2 gy-2">
+							<div class="col-xl-10 col-lg-9 col-md-12">
+								<div class="row gx-lg-2 gx-md-2 gx-3 gy-sm-2 gy-2">
+									<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+										<div class="form-group">
+											<div class="mobSearch d-flex align-items-center justify-content-start">
+												<div class="flexStart ps-2"><span class="fw-semibold text-dark">Find</span></div>
+												<input type="text" name="q" value="{{ search_query or '' }}" class="form-control fs-6 fw-medium border-0" placeholder="What are you looking for?">
+											</div>
 										</div>
 									</div>
-								</div>
-								<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 single-border">
-									<div class="form-group">
-										<div class="mobSearch d-flex align-items-center justify-content-start">
-											<div class="flexStart ps-2"><span class="fw-semibold text-dark">Where</span></div>
-											<input type="text" class="form-control fs-6 fw-medium border-0" placeholder="Location">
+									<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 single-border">
+										<div class="form-group">
+											<div class="mobSearch d-flex align-items-center justify-content-start">
+												<div class="flexStart ps-2"><span class="fw-semibold text-dark">Where</span></div>
+												<input type="text" name="location" value="{{ search_location or '' }}" class="form-control fs-6 fw-medium border-0" placeholder="Location">
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div class="col-xl-2 col-lg-3 col-md-12 col-sm-12">
-							<div class="form-group">
-								<button type="button" class="btn btn-primary full-width fw-medium"><i class="bi bi-search me-2"></i>Search</button>
+							<div class="col-xl-2 col-lg-3 col-md-12 col-sm-12">
+								<div class="form-group">
+									<button type="submit" class="btn btn-primary full-width fw-medium"><i class="bi bi-search me-2"></i>Search</button>
+								</div>
 							</div>
 						</div>
-					</div>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -91,9 +99,17 @@
 								<div class="search-inner">
 									
 									<div class="filter-search-box mb-4">
-										<div class="form-group">
-											<input type="text" class="form-control" placeholder="Search listing..">
-										</div>
+										<form method="get" action="{{ url_for('main.grid_layout_01') }}">
+											{% for key, value in request.args.items() %}
+												{% if key not in ['q', 'page'] %}
+													<input type="hidden" name="{{ key }}" value="{{ value }}">
+												{% endif %}
+											{% endfor %}
+											<input type="hidden" name="page" value="1">
+											<div class="form-group">
+												<input type="text" name="q" value="{{ search_query or '' }}" class="form-control" placeholder="Search listing..">
+											</div>
+										</form>
 									</div>
 									
 									<div class="prtsTypes mb-4">
@@ -129,6 +145,13 @@
 													<input type="text" class="pricefilter" name="my_range" value="" data-skin="round"
 														data-type="double" data-min="0" data-max="500" data-grid="false">
 												</div>
+												<div class="d-flex align-items-center justify-content-start flex-wrap gap-2 mt-3">
+													<a href="{{ build_filter_url(price_level='') if build_filter_url is defined else '#' }}" class="btn btn-sm btn-secondary rounded-1 fw-medium{% if not selected_price_level %} active{% endif %}">All</a>
+													<a href="{{ build_filter_url(price_level='$') if build_filter_url is defined else '#' }}" class="btn btn-sm btn-secondary rounded-1 fw-medium{% if selected_price_level == '$' %} active{% endif %}">$</a>
+													<a href="{{ build_filter_url(price_level='$$') if build_filter_url is defined else '#' }}" class="btn btn-sm btn-secondary rounded-1 fw-medium{% if selected_price_level == '$$' %} active{% endif %}">$$</a>
+													<a href="{{ build_filter_url(price_level='$$$') if build_filter_url is defined else '#' }}" class="btn btn-sm btn-secondary rounded-1 fw-medium{% if selected_price_level == '$$$' %} active{% endif %}">$$$</a>
+													<a href="{{ build_filter_url(price_level='$$$$') if build_filter_url is defined else '#' }}" class="btn btn-sm btn-secondary rounded-1 fw-medium{% if selected_price_level == '$$$$' %} active{% endif %}">$$$$</a>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -142,6 +165,7 @@
 													<input type="text" class="distancefilter" name="my_range" value="" data-skin="round"
 													data-type="single" data-grid="false">
 												</div>
+												<p class="text-muted small mb-0 mt-2">Distance filter coming soon.</p>
 											</div>
 										</div>
 									</div>
@@ -180,7 +204,7 @@
 							{% include 'Components/Listings/Grid-Layouts/grid-layout-01/close.html' %}
 							
 							<div class="clearList">
-								<a href="#" class="fw-medium text-primary text-md">Clear All</a>
+								<a href="{{ clear_all_url if clear_all_url is defined else url_for('main.grid_layout_01') }}" class="fw-medium text-primary text-md">Clear All</a>
 							</div>
 							
 						</div>
@@ -189,7 +213,7 @@
 			
 				<div class="row align-items-center justify-content-between mb-4">
 					<div class="col-xl- 5 col-lg-5 col-md-5 col-sm-6 col-6">
-						<h6 class="m-0">{{ listings|length }} Listings Found</h6>
+						<h6 class="m-0">{{ total_results if total_results is defined else listings|length }} Listings Found</h6>
 					</div>
 					
 					<div class="col-xl- 5 col-lg-5 col-md-5 col-sm-6 col-6">
@@ -197,7 +221,7 @@
 							<!-- Rating Filter -->
 							<div class="btn-group">
 								<button type="button" class="py-2 px-3 dropdown-toggle toogleDrops" id="shortfilter" data-bs-toggle="dropdown" aria-expanded="false">
-									Short Listings
+									{{ selected_sort_label if selected_sort_label is defined else 'Default Order' }}
 								</button>
 								<ul class="dropdown-menu dropdown-menu-end border">
 

@@ -1,8 +1,35 @@
-{% for item in amenities %}
-    <div class="col-6">
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="{{ item.id }}">
-            <label class="form-check-label" for="{{ item.id }}">{{ item.title }}</label>
+{% set functional_amenity_ids = ['parkings', 'freewifi', 'petallow', 'breakfast'] %}
+<form method="get" action="{{ url_for('main.grid_layout_01') }}" class="row align-items-center justify-content-between gy-2 w-100 m-0">
+    {% for key, value in request.args.items() %}
+        {% if key not in functional_amenity_ids and key != 'page' %}
+            <input type="hidden" name="{{ key }}" value="{{ value }}">
+        {% endif %}
+    {% endfor %}
+    <input type="hidden" name="page" value="1">
+    {% for item in amenities %}
+        {% set amenity_id = (item.id|string)|lower %}
+        {% set is_functional = amenity_id in functional_amenity_ids %}
+        {% set is_checked = false %}
+        {% if amenity_id == 'parkings' %}
+            {% set is_checked = selected_amenity_parking %}
+        {% elif amenity_id == 'freewifi' %}
+            {% set is_checked = selected_amenity_freewifi %}
+        {% elif amenity_id == 'petallow' %}
+            {% set is_checked = selected_amenity_petallow %}
+        {% elif amenity_id == 'breakfast' %}
+            {% set is_checked = selected_amenity_breakfast %}
+        {% endif %}
+        <div class="col-6">
+            <div class="form-check">
+                <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="{{ item.id }}"
+                    {% if is_functional %}name="{{ amenity_id }}" value="1" onchange="this.form.submit()"{% endif %}
+                    {% if is_checked %}checked{% endif %}
+                >
+                <label class="form-check-label" for="{{ item.id }}">{{ item.title }}</label>
+            </div>
         </div>
-    </div>
-{% endfor %}
+    {% endfor %}
+</form>

@@ -1,3 +1,15 @@
-{% for item in slistings %}
-    <li><a class="{{ item.class }} dropdown-item" href="#">{{ item.title }}</a></li>
+{% set sort_options = [
+    ('default', 'Default Order'),
+    ('highest_rated', 'Highest Rated'),
+    ('most_reviewed', 'Most Reviewed'),
+    ('newest', 'Newest Listings'),
+    ('oldest', 'Oldest Listings'),
+    ('featured', 'Featured Listings'),
+    ('most_viewed', 'Most Viewed'),
+    ('a_to_z', 'Sort By A to Z')
+] %}
+{% for sort_key, sort_label in sort_options %}
+    <li>
+        <a class="dropdown-item{% if selected_sort == sort_key %} active{% endif %}" href="{{ build_filter_url(sort=sort_key) if build_filter_url is defined else '#' }}">{{ sort_label }}</a>
+    </li>
 {% endfor %}

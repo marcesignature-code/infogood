@@ -1,4 +1,5 @@
 import re
+from math import ceil
 
 from flask import Blueprint, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user
@@ -9,7 +10,7 @@ from app.models.newsletter_subscriber import NewsletterSubscriber
 from app.models.user import UserProfile
 from app.extensions import db
 from app.services.dashboard_context import get_dashboard_context
-from sqlalchemy import inspect, or_, text
+from sqlalchemy import func, inspect, or_, text
 
 
 main = Blueprint("main", __name__)
@@ -519,69 +520,430 @@ def home_map():
     return render_template("pages/home-map.html")
 
 
-@main.route("/grid-layout-01/")
-def grid_layout_01():
+GRID_PER_PAGE = 12
+GRID_TEXT_SEARCH_COLUMNS = (
+    Listing.listing_name,
+    Listing.name,
+    Listing.short_description,
+    Listing.long_description,
+    Listing.main_category,
+    Listing.subcategory,
+    Listing.search_keywords,
+    Listing.tags_csv,
+    Listing.environment,
+    Listing.occasion,
+)
+GRID_LOCATION_SEARCH_COLUMNS = (
+    Listing.country,
+    Listing.province,
+    Listing.city,
+    Listing.canton,
+    Listing.zone,
+    Listing.neighborhood,
+    Listing.address,
+)
+GRID_INACTIVE_FILTER_KEYS = {
+    "distance",
+    "distance_km",
+    "radius",
+    "radius_km",
+    "my_range",
+    "lat",
+    "lng",
+    "latitude",
+    "longitude",
+}
+GRID_SORT_OPTIONS = {
+    "default": "Default Order",
+    "highest_rated": "Highest Rated",
+    "most_reviewed": "Most Reviewed",
+    "newest": "Newest Listings",
+    "oldest": "Oldest Listings",
+    "featured": "Featured Listings",
+    "most_viewed": "Most Viewed",
+    "a_to_z": "Sort By A to Z",
+}
+GRID_SUBCATEGORY_OPTIONS = {
+    "food_drink": [
+        ("Restaurant", "restaurant"),
+        ("Cafe", "cafe"),
+        ("Bar", "bar"),
+        ("Fine Dining", "fine_dining"),
+        ("Bakery", "bakery"),
+    ],
+    "accommodation": [
+        ("Hotel", "hotel"),
+        ("Hostel", "hostel"),
+        ("Boutique Hotel", "boutique_hotel"),
+        ("Apartment", "apartment"),
+        ("Lodge", "lodge"),
+    ],
+    "activities_experiences": [
+        ("Tour", "tour"),
+        ("Experience", "experience"),
+        ("Adventure", "adventure"),
+        ("Cultural Activity", "cultural_activity"),
+        ("Wellness", "wellness"),
+    ],
+    "tourism_services": [
+        ("Travel Agency", "travel_agency"),
+        ("Transportation", "transportation"),
+        ("Guide", "guide"),
+        ("Car Rental", "car_rental"),
+        ("Airport Transfer", "airport_transfer"),
+    ],
+    "free_activities": [
+        ("Park", "park"),
+        ("Museum", "museum"),
+        ("Viewpoint", "viewpoint"),
+        ("Historic Site", "historic_site"),
+        ("Cultural Site", "cultural_site"),
+    ],
+}
+
+
+def _parse_grid_layout_filters():
     query_text = (request.args.get("q") or "").strip()
     location_text = (request.args.get("location") or "").strip()
     category = (request.args.get("category") or "").strip().lower()
     subcategory = (request.args.get("subcategory") or "").strip().lower()
+    price_level = (request.args.get("price_level") or "").strip()
+    status = (request.args.get("status") or "").strip().lower()
+    rating_min_raw = (request.args.get("rating_min") or "").strip()
+    sort = (request.args.get("sort") or "default").strip().lower()
+    amenity_parking = (request.args.get("parkings") or "").strip().lower() in {
+        "1",
+        "true",
+        "on",
+        "yes",
+    }
+    amenity_freewifi = (request.args.get("freewifi") or "").strip().lower() in {
+        "1",
+        "true",
+        "on",
+        "yes",
+    }
+    amenity_petallow = (request.args.get("petallow") or "").strip().lower() in {
+        "1",
+        "true",
+        "on",
+        "yes",
+    }
+    amenity_breakfast = (request.args.get("breakfast") or "").strip().lower() in {
+        "1",
+        "true",
+        "on",
+        "yes",
+    }
+    page = request.args.get("page", 1, type=int) or 1
+    rating_min = None
 
     if category not in ALLOWED_MAIN_CATEGORIES:
         category = ""
-    if subcategory not in ALLOWED_SUBCATEGORIES:
+    valid_subcategories = {
+        option_value
+        for _label, option_value in GRID_SUBCATEGORY_OPTIONS.get(category, [])
+    } if category else set()
+    if not category or subcategory not in valid_subcategories:
         subcategory = ""
+    if sort not in GRID_SORT_OPTIONS:
+        sort = "default"
+    if rating_min_raw:
+        try:
+            parsed_rating = float(rating_min_raw)
+            if parsed_rating in {3.0, 4.0, 5.0}:
+                rating_min = parsed_rating
+        except (TypeError, ValueError):
+            rating_min = None
+    if page < 1:
+        page = 1
+
+    return {
+        "query_text": query_text,
+        "location_text": location_text,
+        "category": category,
+        "subcategory": subcategory,
+        "price_level": price_level,
+        "status": status,
+        "rating_min": rating_min,
+        "sort": sort,
+        "amenity_parking": amenity_parking,
+        "amenity_freewifi": amenity_freewifi,
+        "amenity_petallow": amenity_petallow,
+        "amenity_breakfast": amenity_breakfast,
+        "page": page,
+    }
+
+
+def _apply_grid_layout_filters(base_query, filters):
+    query = base_query
+
+    if filters["query_text"]:
+        query_like = f"%{filters['query_text']}%"
+        query = query.filter(
+            or_(*(column.ilike(query_like) for column in GRID_TEXT_SEARCH_COLUMNS))
+        )
+
+    if filters["location_text"]:
+        location_like = f"%{filters['location_text']}%"
+        query = query.filter(
+            or_(
+                *(column.ilike(location_like) for column in GRID_LOCATION_SEARCH_COLUMNS)
+            )
+        )
+
+    if filters["category"]:
+        query = query.filter(Listing.main_category == filters["category"])
+    if filters["subcategory"]:
+        query = query.filter(Listing.subcategory == filters["subcategory"])
+    if filters["price_level"]:
+        query = query.filter(Listing.price_level == filters["price_level"])
+    if filters["status"]:
+        query = query.filter(Listing.status == filters["status"])
+    if filters["rating_min"] is not None:
+        query = query.filter(func.coalesce(Listing.rating_avg, 0) >= filters["rating_min"])
+    if filters["amenity_parking"]:
+        query = query.filter(Listing.parking_available.is_(True))
+    if filters["amenity_freewifi"]:
+        query = query.filter(Listing.wifi_available.is_(True))
+    if filters["amenity_petallow"]:
+        query = query.filter(Listing.pet_friendly.is_(True))
+    if filters["amenity_breakfast"]:
+        query = query.filter(Listing.breakfast_included.is_(True))
+
+    return query
+
+
+def _apply_grid_layout_default_order(query):
+    # Step 1: oldest imported listings first, with stable fallback keys.
+    return query.order_by(
+        Listing.created_at.asc().nulls_last(),
+        Listing.listing_name.asc().nulls_last(),
+        Listing.id.asc(),
+    )
+
+
+def _apply_grid_layout_sort(query, sort_key):
+    if sort_key == "highest_rated":
+        return query.order_by(
+            func.coalesce(Listing.rating_avg, 0).desc(),
+            Listing.created_at.asc().nulls_last(),
+            Listing.id.asc(),
+        )
+    if sort_key == "most_reviewed":
+        return query.order_by(
+            func.coalesce(Listing.reviews_count, 0).desc(),
+            Listing.created_at.asc().nulls_last(),
+            Listing.id.asc(),
+        )
+    if sort_key == "newest":
+        return query.order_by(
+            Listing.created_at.desc().nulls_last(),
+            Listing.listing_name.asc().nulls_last(),
+            Listing.id.asc(),
+        )
+    if sort_key == "oldest":
+        return _apply_grid_layout_default_order(query)
+    if sort_key == "featured":
+        sort_priority_column = getattr(Listing, "sort_priority", Listing.home_feature_rank)
+        return query.order_by(
+            Listing.is_featured.desc(),
+            sort_priority_column.asc().nulls_last(),
+            Listing.created_at.asc().nulls_last(),
+            Listing.id.asc(),
+        )
+    if sort_key == "most_viewed":
+        return query.order_by(
+            func.coalesce(Listing.view_count, 0).desc(),
+            Listing.created_at.asc().nulls_last(),
+            Listing.id.asc(),
+        )
+    if sort_key == "a_to_z":
+        return query.order_by(
+            Listing.listing_name.asc().nulls_last(),
+            Listing.created_at.asc().nulls_last(),
+            Listing.id.asc(),
+        )
+    return _apply_grid_layout_default_order(query)
+
+
+def _grid_query_params_without_inactive(raw_params):
+    params = dict(raw_params)
+    for key in GRID_INACTIVE_FILTER_KEYS:
+        params.pop(key, None)
+    return params
+
+
+@main.route("/grid-layout-01/")
+def grid_layout_01():
+    filters = _parse_grid_layout_filters()
+    page = filters["page"]
+    per_page = GRID_PER_PAGE
 
     query = Listing.query.filter(Listing.is_active.is_(True))
+    query = _apply_grid_layout_filters(query, filters)
 
-    if query_text:
-        query_like = f"%{query_text}%"
-        query = query.filter(
-            or_(
-                Listing.listing_name.ilike(query_like),
-                Listing.name.ilike(query_like),
-                Listing.short_description.ilike(query_like),
-                Listing.long_description.ilike(query_like),
-                Listing.main_category.ilike(query_like),
-                Listing.subcategory.ilike(query_like),
-                Listing.search_keywords.ilike(query_like),
-                Listing.tags_csv.ilike(query_like),
-                Listing.environment.ilike(query_like),
-                Listing.occasion.ilike(query_like),
-            )
+    total_results = query.count()
+    total_pages = ceil(total_results / per_page) if total_results > 0 else 0
+
+    if total_pages == 0 and page != 1:
+        redirect_args = request.args.to_dict(flat=True)
+        redirect_args["page"] = 1
+        return redirect(url_for("main.grid_layout_01", **redirect_args))
+
+    if total_pages > 0 and page > total_pages:
+        redirect_args = request.args.to_dict(flat=True)
+        redirect_args["page"] = total_pages
+        return redirect(url_for("main.grid_layout_01", **redirect_args))
+
+    ordered_query = _apply_grid_layout_sort(query, filters["sort"])
+    offset = (page - 1) * per_page
+    listings = ordered_query.offset(offset).limit(per_page).all()
+    pagination_args = _grid_query_params_without_inactive(
+        request.args.to_dict(flat=True)
+    )
+    pagination_args.pop("page", None)
+
+    def build_page_url(target_page):
+        params = dict(pagination_args)
+        params["page"] = target_page
+        return url_for("main.grid_layout_01", **params)
+
+    def build_filter_url(**updates):
+        params = _grid_query_params_without_inactive(request.args.to_dict(flat=True))
+        for key, value in updates.items():
+            if value is None or value == "":
+                params.pop(key, None)
+            else:
+                params[key] = value
+        params["page"] = 1
+        return url_for("main.grid_layout_01", **params)
+
+    def build_remove_filter_url(*keys):
+        params = _grid_query_params_without_inactive(request.args.to_dict(flat=True))
+        for key in keys:
+            params.pop(key, None)
+        params["page"] = 1
+        return url_for("main.grid_layout_01", **params)
+
+    category_labels = {item["value"]: item["label"] for item in HOME_CATEGORY_META}
+    subcategory_labels = {
+        subcategory_item["value"]: subcategory_item["label"]
+        for category_item in HERO_NAV_CATEGORIES
+        for subcategory_item in category_item["subcategories"]
+    }
+
+    active_filters = []
+    if filters["query_text"]:
+        active_filters.append(
+            {
+                "label": f"Search: {filters['query_text']}",
+                "remove_url": build_remove_filter_url("q"),
+            }
         )
-
-    if location_text:
-        location_like = f"%{location_text}%"
-        query = query.filter(
-            or_(
-                Listing.country.ilike(location_like),
-                Listing.province.ilike(location_like),
-                Listing.city.ilike(location_like),
-                Listing.canton.ilike(location_like),
-                Listing.zone.ilike(location_like),
-                Listing.neighborhood.ilike(location_like),
-                Listing.address.ilike(location_like),
-            )
+    if filters["location_text"]:
+        active_filters.append(
+            {
+                "label": f"Location: {filters['location_text']}",
+                "remove_url": build_remove_filter_url("location"),
+            }
         )
-
-    if category:
-        query = query.filter(Listing.main_category == category)
-    if subcategory:
-        query = query.filter(Listing.subcategory == subcategory)
-
-    listings = query.order_by(
-        Listing.is_home_featured.desc(),
-        Listing.home_feature_rank.asc(),
-        Listing.created_at.desc(),
-    ).all()
+    if filters["category"]:
+        active_filters.append(
+            {
+                "label": f"Category: {category_labels.get(filters['category'], filters['category'])}",
+                "remove_url": build_remove_filter_url("category", "subcategory"),
+            }
+        )
+    if filters["subcategory"]:
+        active_filters.append(
+            {
+                "label": f"Subcategory: {subcategory_labels.get(filters['subcategory'], filters['subcategory'])}",
+                "remove_url": build_remove_filter_url("subcategory"),
+            }
+        )
+    if filters["rating_min"] is not None:
+        active_filters.append(
+            {
+                "label": f"Rating {filters['rating_min']:.1f}+",
+                "remove_url": build_remove_filter_url("rating_min"),
+            }
+        )
+    if filters["price_level"]:
+        active_filters.append(
+            {
+                "label": f"Price: {filters['price_level']}",
+                "remove_url": build_remove_filter_url("price_level"),
+            }
+        )
+    if filters["amenity_parking"]:
+        active_filters.append(
+            {
+                "label": "Parking",
+                "remove_url": build_remove_filter_url("parkings"),
+            }
+        )
+    if filters["amenity_freewifi"]:
+        active_filters.append(
+            {
+                "label": "Free WiFi",
+                "remove_url": build_remove_filter_url("freewifi"),
+            }
+        )
+    if filters["amenity_petallow"]:
+        active_filters.append(
+            {
+                "label": "Pet Allow",
+                "remove_url": build_remove_filter_url("petallow"),
+            }
+        )
+    if filters["amenity_breakfast"]:
+        active_filters.append(
+            {
+                "label": "Breakfast",
+                "remove_url": build_remove_filter_url("breakfast"),
+            }
+        )
+    if filters["status"]:
+        active_filters.append(
+            {
+                "label": f"Status: {filters['status']}",
+                "remove_url": build_remove_filter_url("status"),
+            }
+        )
+    if filters["sort"] != "default":
+        active_filters.append(
+            {
+                "label": f"Sort: {GRID_SORT_OPTIONS.get(filters['sort'], filters['sort'])}",
+                "remove_url": build_remove_filter_url("sort"),
+            }
+        )
 
     return render_template(
         "pages/grid-layout-01.html",
         listings=listings,
-        search_query=query_text,
-        search_location=location_text,
-        selected_category=category,
-        selected_subcategory=subcategory,
+        page=page,
+        per_page=per_page,
+        total_results=total_results,
+        total_pages=total_pages,
+        search_query=filters["query_text"],
+        search_location=filters["location_text"],
+        selected_category=filters["category"],
+        selected_subcategory=filters["subcategory"],
+        grid_subcategory_options=GRID_SUBCATEGORY_OPTIONS,
+        selected_price_level=filters["price_level"],
+        selected_status=filters["status"],
+        selected_rating_min=filters["rating_min"],
+        selected_sort=filters["sort"],
+        selected_sort_label=GRID_SORT_OPTIONS.get(filters["sort"], GRID_SORT_OPTIONS["default"]),
+        selected_amenity_parking=filters["amenity_parking"],
+        selected_amenity_freewifi=filters["amenity_freewifi"],
+        selected_amenity_petallow=filters["amenity_petallow"],
+        selected_amenity_breakfast=filters["amenity_breakfast"],
+        active_filters=active_filters,
+        clear_all_url=url_for("main.grid_layout_01"),
+        build_page_url=build_page_url,
+        build_filter_url=build_filter_url,
         allowed_main_categories=ALLOWED_MAIN_CATEGORIES,
     )
 

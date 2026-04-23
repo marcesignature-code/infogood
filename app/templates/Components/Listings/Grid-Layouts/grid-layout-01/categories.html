@@ -1,6 +1,27 @@
-{% for item in categories3 %}
+{% set main_categories = [
+    ('Food & Drink', 'food_drink'),
+    ('Accommodation', 'accommodation'),
+    ('Activities & Experiences', 'activities_experiences'),
+    ('Tourism Services', 'tourism_services'),
+    ('Free Activities', 'free_activities')
+] %}
+{% for category_label, category_value in main_categories %}
     <div class="form-checks flex-fill">
-        <input type="checkbox" class="btn-check" id="{{ item.id }}" {{ item.check }}>
-        <label class="btn btn-sm btn-secondary rounded-1 fw-medium full-width" for="{{ item.id }}">{{ item.title }}</label>
+        <a href="{{ build_filter_url(category=category_value, subcategory='') if build_filter_url is defined else '#' }}" class="btn btn-sm btn-secondary rounded-1 fw-medium full-width{% if selected_category == category_value %} active{% endif %}">{{ category_label }}</a>
     </div>
 {% endfor %}
+
+<div class="col-12 mt-3">
+    <div class="filtersearch-title"><h6 class="mb-2 lh-base text-sm text-uppercase fw-medium">Subcategories</h6></div>
+    {% if selected_category and grid_subcategory_options is defined and selected_category in grid_subcategory_options %}
+        <div class="d-flex align-items-center justify-content-center flex-wrap gap-2">
+            {% for subcategory_label, subcategory_value in grid_subcategory_options[selected_category] %}
+                <div class="form-checks flex-fill">
+                    <a href="{{ build_filter_url(category=selected_category, subcategory=subcategory_value) if build_filter_url is defined else '#' }}" class="btn btn-sm btn-secondary rounded-1 fw-medium full-width{% if selected_subcategory == subcategory_value %} active{% endif %}">{{ subcategory_label }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted small mb-0">Select a category to see subcategories.</p>
+    {% endif %}
+</div>
