@@ -1,0 +1,169 @@
+{% extends "Base/base.html" %}
+
+{% block hero_content %}
+
+{% include 'Base/navbar.html' %}
+
+<style>
+    .header.header-transparent {
+        background: rgba(26, 33, 43, 0.96) !important;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+    }
+    .provider-public-hero {
+        margin-top: 76px;
+        min-height: 360px;
+    }
+</style>
+
+{% set business_name = listing.listing_name or listing.name or "Business Profile" %}
+{% set category_name = listing.main_category|replace('_', ' ')|title if listing.main_category else "Category pending" %}
+{% set subcategory_name = listing.subcategory|replace('_', ' ')|title if listing.subcategory else "Subcategory pending" %}
+{% set short_description = listing.short_description or "This business is preparing its public profile with updated details." %}
+{% set long_description = listing.long_description or "Full business description will be published soon. Come back in a few moments for more information." %}
+{% set business_city = listing.city or "City pending" %}
+{% set business_address = listing.address or "Address will be available soon." %}
+{% set business_phone = listing.phone_primary or listing.phone_secondary or "Phone not published yet" %}
+{% set business_email = listing.email or listing.provider_email or "Email not published yet" %}
+{% set business_website = listing.website_url or listing.website %}
+{% set cover_url = listing.cover_image_url or url_for('static', filename='assets/img/single-1.jpg') %}
+{% set logo_url = listing.logo_image_url or url_for('static', filename='assets/img/user.jpg') %}
+{% set maps_url = listing.google_maps_url %}
+{% set gallery_raw = listing.gallery_urls or '' %}
+
+<section class="bg-cover position-relative py-0 provider-public-hero" style="background:url('{{ cover_url }}') no-repeat center center / cover;" data-overlay="5">
+    <div class="container h-100">
+        <div class="row align-items-end h-100 pb-5">
+            <div class="col-xl-9 col-lg-10 col-md-12">
+                <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+                    <div class="square--90 circle bg-white p-1 shadow-sm">
+                        <img src="{{ logo_url }}" class="img-fluid circle" alt="Business logo">
+                    </div>
+                    <div>
+                        <h1 class="text-light fw-semibold mb-1">{{ business_name }}</h1>
+                        <p class="text-light opacity-75 m-0">{{ category_name }} | {{ subcategory_name }}</p>
+                    </div>
+                </div>
+                <p class="text-light mb-0">{{ short_description }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="gray-simple pt-5 pb-5">
+    <div class="container">
+        <div class="row align-items-start g-4">
+            <div class="col-xl-8 col-lg-8 col-md-12">
+                <div class="listingSingleblock mb-4">
+                    <div class="SingleblockHeader">
+                        <h4 class="listingcollapseTitle m-0">About This Business</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <p class="mb-0">{{ long_description }}</p>
+                    </div>
+                </div>
+
+                <div class="listingSingleblock mb-4">
+                    <div class="SingleblockHeader">
+                        <h4 class="listingcollapseTitle m-0">Business Details</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <p class="text-muted mb-1">Category</p>
+                                <p class="mb-0 fw-medium">{{ category_name }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="text-muted mb-1">Subcategory</p>
+                                <p class="mb-0 fw-medium">{{ subcategory_name }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="text-muted mb-1">Status</p>
+                                <p class="mb-0 fw-medium text-capitalize">{{ listing.status or "draft" }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="text-muted mb-1">City</p>
+                                <p class="mb-0 fw-medium">{{ business_city }}</p>
+                            </div>
+                            <div class="col-md-12">
+                                <p class="text-muted mb-1">Address</p>
+                                <p class="mb-0 fw-medium">{{ business_address }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="listingSingleblock mb-4">
+                    <div class="SingleblockHeader">
+                        <h4 class="listingcollapseTitle m-0">Gallery</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                            {% set gallery_ns = namespace(count=0) %}
+                            {% for image_url in gallery_raw.split(',') if image_url.strip() %}
+                            {% set gallery_ns.count = gallery_ns.count + 1 %}
+                            <div class="col-xl-4 col-lg-4 col-md-6">
+                                <img src="{{ image_url.strip() }}" class="img-fluid rounded-3 border" alt="Business gallery image">
+                            </div>
+                            {% endfor %}
+                            {% if gallery_ns.count == 0 %}
+                            <div class="col-xl-4 col-lg-4 col-md-6">
+                                <img src="{{ cover_url }}" class="img-fluid rounded-3 border" alt="Default gallery image">
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6">
+                                <img src="{{ url_for('static', filename='assets/img/blog-1.jpg') }}" class="img-fluid rounded-3 border" alt="Default gallery image">
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6">
+                                <img src="{{ url_for('static', filename='assets/img/blog-2.jpg') }}" class="img-fluid rounded-3 border" alt="Default gallery image">
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="listingSingleblock">
+                    <div class="SingleblockHeader">
+                        <h4 class="listingcollapseTitle m-0">Map</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        {% if maps_url %}
+                        <a href="{{ maps_url }}" target="_blank" class="btn btn-primary">
+                            Open Location in Google Maps
+                        </a>
+                        {% else %}
+                        <p class="mb-0 text-muted">Map link will be available once the provider adds Google Maps URL.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-lg-4 col-md-12">
+                <div class="card rounded-3 shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="mb-3">Contact Information</h5>
+                        <div class="d-flex flex-column gap-3">
+                            <div>
+                                <p class="text-muted mb-1">Phone</p>
+                                <p class="m-0 fw-medium">{{ business_phone }}</p>
+                            </div>
+                            <div>
+                                <p class="text-muted mb-1">Email</p>
+                                <p class="m-0 fw-medium">{{ business_email }}</p>
+                            </div>
+                            <div>
+                                <p class="text-muted mb-1">Website</p>
+                                {% if business_website %}
+                                {% set normalized_website = business_website if business_website.startswith('http') else 'https://' ~ business_website %}
+                                <a href="{{ normalized_website }}" target="_blank" class="fw-medium">{{ business_website }}</a>
+                                {% else %}
+                                <p class="m-0 text-muted">Website not published yet.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

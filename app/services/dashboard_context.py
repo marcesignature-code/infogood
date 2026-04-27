@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from flask import has_request_context, request, url_for
+from flask import url_for
 from flask_login import current_user
 
 from app.extensions import db
@@ -31,11 +31,7 @@ def _resolve_user(user: UserProfile | None = None) -> UserProfile | None:
     except Exception:
         pass
 
-    preview_id = request.args.get("profile_id") if has_request_context() else None
     try:
-        if preview_id:
-            return UserProfile.query.filter_by(id=preview_id, is_active=True).first()
-
         return (
             UserProfile.query.filter_by(is_active=True)
             .order_by(UserProfile.created_at.asc())
@@ -206,18 +202,28 @@ def _build_saveds(profile: UserProfile | None) -> list[dict[str, Any]]:
 
 def get_dashboard_context(user: UserProfile | None = None) -> dict[str, Any]:
     profile = _resolve_user(user)
-    metrics = getattr(profile, "metrics", None) if profile else None
+    profile_metrics = getattr(profile, "metrics", None) if profile else None
     saveds = _build_saveds(profile)
 
-    active_listings = _safe_int(getattr(metrics, "active_listings_count", 0))
-    total_views = _safe_int(getattr(metrics, "total_views", 0))
-    total_saved = max(_safe_int(getattr(metrics, "total_saved", 0)), len(saveds))
-    total_reviews = _safe_int(getattr(metrics, "total_reviews", 0))
-    wallet_balance = _safe_int(getattr(metrics, "wallet_balance_usd", 0))
-    wallet_total_earning = _safe_int(getattr(metrics, "wallet_total_earning_usd", 0))
-    wallet_total_orders = _safe_int(getattr(metrics, "wallet_total_orders", 0))
+    active_listings = _safe_int(getattr(profile_metrics, "active_listings_count", 0))
+    total_views = _safe_int(getattr(profile_metrics, "total_views", 0))
+    total_saved = len(saveds) if saveds else 0
+    total_reviews = _safe_int(getattr(profile_metrics, "total_reviews", 0))
+    wallet_balance = _safe_int(getattr(profile_metrics, "wallet_balance_usd", 0))
+    wallet_total_earning = _safe_int(getattr(profile_metrics, "wallet_total_earning_usd", 0))
+    wallet_total_orders = _safe_int(getattr(profile_metrics, "wallet_total_orders", 0))
+    metrics = profile_metrics or {
+        "active_listings_count": 0,
+        "total_views": 0,
+        "total_saved": 0,
+        "total_reviews": 0,
+        "wallet_balance_usd": 0,
+    }
 
     dashboard_user = _dashboard_user_payload(profile)
+    user_name = dashboard_user["full_name"]
+    user_email = dashboard_user["email"]
+    user_avatar_url = dashboard_user["avatar_url"]
     alert_message = (
         f"Hi {dashboard_user['first_name']}, your dashboard is ready with default values."
         if profile
@@ -225,6 +231,17 @@ def get_dashboard_context(user: UserProfile | None = None) -> dict[str, Any]:
     )
 
     return {
+        "profile": profile,
+        "user_name": user_name,
+        "user_email": user_email,
+        "user_avatar_url": user_avatar_url,
+        "metrics": metrics,
+        "active_listings_count": active_listings,
+        "total_views": total_views,
+        "total_saved": total_saved,
+        "total_reviews": total_reviews,
+        "wallet_balance_usd": wallet_balance,
+        "saved_listings": saveds,
         "dashboard_user": dashboard_user,
         "dashboard_alert": {
             "type": "info" if profile else "warning",

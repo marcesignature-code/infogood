@@ -5,7 +5,9 @@
 {% set navbar_first = du.first_name|default('Guest', true) %}
 {% set saved_count = saveds|default([], true)|length %}
 {% set unread_count = messages2|default([], true)|length %}
-<div class="header navdark header-dark " data-sticky-element="">
+{% set auth_role = nav_role|default((du.role|default('user', true)|lower), true) %}
+{% set provider_public_url = provider_public_listing_url|default(nav_provider_public_listing_url, true) %}
+<div class="header navdark header-dark dashboard-topbar" data-sticky-element="">
     <div class="container-fluid">
         <nav id="navigation" class="navigation navigation-landscape">
             <div class="nav-header">
@@ -14,10 +16,7 @@
                 <div class="mobile_nav">
                     <ul>
                         <li>
-                            <a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample" class="d-inline-flex py-0 pt-1 px-1"><div class="d-inline-flex w-8 h-8 circle overflow-hidden"><img src="{{ navbar_avatar }}" class="img-fluid" alt=""></div></a>
-                        </li>
-                        <li>
-                            <a href="#cartSlider" class="cart-content" data-bs-toggle="offcanvas" role="button" aria-controls="cartSlider"><i class="bi bi-basket2"></i><span class="head-cart-counter">{{ saved_count }}</span></a>
+                            <a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample" class="d-inline-flex py-0 pt-1 px-1"><div class="d-inline-flex w-8 h-8 circle overflow-hidden auth-nav-avatar"><img src="{{ navbar_avatar }}" class="img-fluid avater-img" alt=""></div></a>
                         </li>
                         <li>
                             <a href="#searchSlider" class="d-flex align-items-center" data-bs-toggle="offcanvas" role="button" aria-controls="searchSlider"><i class="bi bi-search me-1"></i></a>
@@ -29,20 +28,42 @@
 
                 <ul class="nav-menu nav-menu-social align-to-right">
                     <li>
-                        <a href="#cartSlider" class="cart-content" data-bs-toggle="offcanvas" role="button" aria-controls="cartSlider"><i class="bi bi-basket2"></i><span class="head-cart-counter">{{ saved_count }}</span></a>
-                    </li>
-                    <li>
                         <div class="btn-group account-drop">
-                            <a href="#" class="nav-link btn-order-by-filt" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <div class="d-inline-flex w-8 h-8 circle overflow-hidden"><img src="{{ navbar_avatar }}" class="img-fluid" alt=""></div>
+                            <a href="#" class="nav-link btn-order-by-filt auth-nav-trigger" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="d-inline-flex w-8 h-8 circle overflow-hidden auth-nav-avatar"><img src="{{ navbar_avatar }}" class="img-fluid avater-img" alt=""></div>
                                 <span class="fw-medium d-inline-flex ms-2 text-light">{{ navbar_name }}<i class="fa-solid fa-sort-down ms-1"></i></span>
                             </a>
                             <div class="dropdown-menu pull-right animated flipInX">
                                 <div class="drp_menu_headr bg-primary">
                                     <h4>Hi, {{ navbar_first }}</h4>
-                                    <div class="drp_menu_headr-right"><button type="button" class="btn btn-whites text-dark">My Profile</button></div>
+                                    {% if auth_role == "provider" %}
+                                    <div class="drp_menu_headr-right"><a href="/dashboard/provider/business" class="btn btn-whites text-dark">Business Info</a></div>
+                                    {% elif auth_role == "admin" %}
+                                    <div class="drp_menu_headr-right"><a href="/dashboard/admin" class="btn btn-whites text-dark">Admin Panel</a></div>
+                                    {% elif auth_role == "sales" %}
+                                    <div class="drp_menu_headr-right"><a href="/dashboard/sales" class="btn btn-whites text-dark">Sales Panel</a></div>
+                                    {% else %}
+                                    <div class="drp_menu_headr-right"><a href="/dashboard-my-profile/" class="btn btn-whites text-dark">My Profile</a></div>
+                                    {% endif %}
                                 </div>
                                 <ul>
+                                    {% if auth_role == "provider" %}
+                                    <li><a href="/dashboard/provider" class="sub-menu-item"><i class="bi bi-speedometer me-2"></i>Provider Dashboard</a></li>
+                                    <li><a href="/dashboard/provider/business" class="sub-menu-item"><i class="bi bi-shop-window me-2"></i>Business Information</a></li>
+                                    <li><a href="/dashboard/provider/media" class="sub-menu-item"><i class="bi bi-images me-2"></i>Logo & Cover</a></li>
+                                    {% if provider_public_url %}
+                                    <li><a href="{{ provider_public_url }}" target="_blank" class="sub-menu-item"><i class="bi bi-box-arrow-up-right me-2"></i>My Public Listing</a></li>
+                                    {% else %}
+                                    <li><a href="#" class="sub-menu-item"><i class="bi bi-box-arrow-up-right me-2"></i>My Public Listing</a></li>
+                                    {% endif %}
+                                    <li><a href="/auth/logout" class="sub-menu-item"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                                    {% elif auth_role == "admin" %}
+                                    <li><a href="/dashboard/admin" class="sub-menu-item"><i class="bi bi-shield-lock me-2"></i>Admin Dashboard</a></li>
+                                    <li><a href="/auth/logout" class="sub-menu-item"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                                    {% elif auth_role == "sales" %}
+                                    <li><a href="/dashboard/sales" class="sub-menu-item"><i class="bi bi-briefcase me-2"></i>Sales Dashboard</a></li>
+                                    <li><a href="/auth/logout" class="sub-menu-item"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                                    {% else %}
                                     <li><a href="/dashboard-user/" class="sub-menu-item"><i class="bi bi-speedometer me-2"></i>Dashboard Area</a></li>
                                     <li><a href="/dashboard-my-profile/" class="sub-menu-item"><i class="bi bi-person-lines-fill me-2"></i>My Profile</a></li>
                                     <li><a href="/dashboard-my-bookings/" class="sub-menu-item"><i class="bi bi-journal-check me-2"></i>My Bookings</a></li>
@@ -51,13 +72,11 @@
                                     <li><a href="/dashboard-messages/" class="sub-menu-item"><i class="bi bi-chat-dots me-2"></i>Messages{% if unread_count > 0 %}<span class="notti_coun style-1">{{ unread_count }}</span>{% endif %}</a></li>
                                     <li><a href="/dashboard-reviews/" class="sub-menu-item"><i class="bi bi-yelp me-2"></i>Reviews</a></li>
                                     <li><a href="/dashboard-wallet/" class="sub-menu-item"><i class="bi bi-wallet me-2"></i>Wallet</a></li>
-                                    <li><a href="/dashboard-add-listing/" class="sub-menu-item"><i class="bi bi-patch-plus me-2"></i>Add Listing</a></li>
+                                    <li><a href="/auth/logout" class="sub-menu-item"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>
-                    </li>
-                    <li class="list-buttons">
-                        <a href="/register/"><i class="bi bi-geo-alt fs-6 me-1"></i>Add Listing</a>
                     </li>
                 </ul>
             </div>
@@ -75,6 +94,23 @@
     </div>
     <div class="offcanvas-body" id="offcanvasExampleLabel">
         <ul>
+            {% if auth_role == "provider" %}
+            <li><a href="/dashboard/provider" class="sub-menu-item"><i class="bi bi-speedometer me-2"></i>Provider Dashboard</a></li>
+            <li><a href="/dashboard/provider/business" class="sub-menu-item"><i class="bi bi-shop-window me-2"></i>Business Information</a></li>
+            <li><a href="/dashboard/provider/media" class="sub-menu-item"><i class="bi bi-images me-2"></i>Logo & Cover</a></li>
+            {% if provider_public_url %}
+            <li><a href="{{ provider_public_url }}" target="_blank" class="sub-menu-item"><i class="bi bi-box-arrow-up-right me-2"></i>My Public Listing</a></li>
+            {% else %}
+            <li><a href="#" class="sub-menu-item"><i class="bi bi-box-arrow-up-right me-2"></i>My Public Listing</a></li>
+            {% endif %}
+            <li><a href="/auth/logout" class="sub-menu-item"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+            {% elif auth_role == "admin" %}
+            <li><a href="/dashboard/admin" class="sub-menu-item"><i class="bi bi-shield-lock me-2"></i>Admin Dashboard</a></li>
+            <li><a href="/auth/logout" class="sub-menu-item"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+            {% elif auth_role == "sales" %}
+            <li><a href="/dashboard/sales" class="sub-menu-item"><i class="bi bi-briefcase me-2"></i>Sales Dashboard</a></li>
+            <li><a href="/auth/logout" class="sub-menu-item"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+            {% else %}
             <li><a href="/dashboard-user/" class="sub-menu-item"><i class="bi bi-speedometer me-2"></i>Dashboard Area</a></li>
             <li><a href="/dashboard-my-profile/" class="sub-menu-item"><i class="bi bi-person-lines-fill me-2"></i>My Profile</a></li>
             <li><a href="/dashboard-my-bookings/" class="sub-menu-item"><i class="bi bi-journal-check me-2"></i>My Bookings</a></li>
@@ -83,7 +119,8 @@
             <li><a href="/dashboard-messages/" class="sub-menu-item"><i class="bi bi-chat-dots me-2"></i>Messages{% if unread_count > 0 %}<span class="notti_coun style-1">{{ unread_count }}</span>{% endif %}</a></li>
             <li><a href="/dashboard-reviews/" class="sub-menu-item"><i class="bi bi-yelp me-2"></i>Reviews</a></li>
             <li><a href="/dashboard-wallet/" class="sub-menu-item"><i class="bi bi-wallet me-2"></i>Wallet</a></li>
-            <li><a href="/dashboard-add-listing/" class="sub-menu-item"><i class="bi bi-patch-plus me-2"></i>Add Listing</a></li>
+            <li><a href="/auth/logout" class="sub-menu-item"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+            {% endif %}
         </ul>
     </div>
 </div>

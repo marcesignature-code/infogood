@@ -466,14 +466,28 @@
 	
 	$("body").on("click", ".toggle-password", function () {
         $(this).toggleClass("fa-eye-slash");
-    
-        const passwordInput = $("#password-field");
-        const currentType = passwordInput.attr("type");
-    
+
+        const $container = $(this).closest(".position-relative");
+        const $passwordInput = $container.find("input[type='password'], input[type='text']").first();
+        const currentType = $passwordInput.attr("type");
+
         if (currentType === "password") {
-            passwordInput.attr("type", "text");
+            $passwordInput.attr("type", "text");
         } else {
-            passwordInput.attr("type", "password");
+            $passwordInput.attr("type", "password");
+        }
+    });
+
+    // Dashboard avatar upload: submit profile image form right after file selection.
+    $("body").on("change", "input[type='file'][name='myfile']", function () {
+        const hasFile = this.files && this.files.length > 0;
+        if (!hasFile) {
+            return;
+        }
+
+        const $form = $(this).closest("form");
+        if ($form.length) {
+            $form.trigger("submit");
         }
     });
 

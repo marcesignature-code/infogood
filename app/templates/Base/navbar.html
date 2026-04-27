@@ -1,4 +1,5 @@
 <!-- Start Navigation -->
+{% set unread_count = messages2|default([], true)|length %}
 <div class="header header-transparent dark navdark" data-sticky-element="">
     <div class="container-fluid">
         <nav id="navigation" class="navigation navigation-landscape">
@@ -170,16 +171,86 @@
                         </ul>
                     </li> -->
                     
+                    {% if current_user.is_authenticated %}
+                    <li><a class="mob-addlisting light" href="{{ nav_dashboard_home_url|default('/dashboard-user/', true) }}"><i class="bi bi-person-circle me-1"></i>My Dashboard</a></li>
+                    {% else %}
                     <li><a class="mob-addlisting light" href="/register/"><i class="bi bi-geo-alt-fill me-1"></i>Join now 1</a></li>
+                    {% endif %}
 
                 </ul>
 
                 <ul class="nav-menu nav-menu-social align-to-right">
+                    {% if current_user.is_authenticated %}
+                    {% set auth_avatar = current_user.avatar_url|default(current_user.profile_image_url|default(current_user.image_url|default(url_for('static', filename='assets/img/user.jpg'), true), true), true) %}
+                    {% if current_user.full_name %}
+                    {% set auth_name = current_user.full_name %}
+                    {% elif current_user.first_name or current_user.last_name %}
+                    {% set auth_name = (current_user.first_name|default('', true) ~ ' ' ~ current_user.last_name|default('', true))|trim %}
+                    {% elif current_user.email %}
+                    {% set auth_name = current_user.email.split('@')[0] %}
+                    {% else %}
+                    {% set auth_name = 'User' %}
+                    {% endif %}
+                    {% set auth_first = current_user.first_name|default(auth_name, true) %}
+                    {% set auth_role = nav_role|default((current_user.role|default('user', true)|lower), true) %}
+                    <li>
+                        <div class="btn-group account-drop">
+                            <a href="#" class="nav-link btn-order-by-filt auth-nav-trigger" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="d-inline-flex w-8 h-8 circle overflow-hidden auth-nav-avatar"><img src="{{ auth_avatar }}" class="img-fluid avater-img" alt=""></div>
+                                <span class="fw-medium d-inline-flex ms-2 text-light auth-nav-name">{{ auth_name }}<i class="fa-solid fa-sort-down ms-1"></i></span>
+                            </a>
+                            <div class="dropdown-menu pull-right animated flipInX">
+                                <div class="drp_menu_headr bg-primary">
+                                    <h4>Hi, {{ auth_first }}</h4>
+                                    {% if auth_role == "provider" %}
+                                    <div class="drp_menu_headr-right"><a href="/dashboard/provider/business" class="btn btn-whites text-dark">Business Info</a></div>
+                                    {% elif auth_role == "admin" %}
+                                    <div class="drp_menu_headr-right"><a href="/dashboard/admin" class="btn btn-whites text-dark">Admin Panel</a></div>
+                                    {% elif auth_role == "sales" %}
+                                    <div class="drp_menu_headr-right"><a href="/dashboard/sales" class="btn btn-whites text-dark">Sales Panel</a></div>
+                                    {% else %}
+                                    <div class="drp_menu_headr-right"><a href="/dashboard-my-profile/" class="btn btn-whites text-dark">My Profile</a></div>
+                                    {% endif %}
+                                </div>
+                                <ul>
+                                    {% if auth_role == "provider" %}
+                                    <li><a href="/dashboard/provider" class="sub-menu-item"><i class="bi bi-speedometer me-2"></i>Provider Dashboard</a></li>
+                                    <li><a href="/dashboard/provider/business" class="sub-menu-item"><i class="bi bi-shop-window me-2"></i>Business Information</a></li>
+                                    <li><a href="/dashboard/provider/media" class="sub-menu-item"><i class="bi bi-images me-2"></i>Logo & Cover</a></li>
+                                    {% if nav_provider_public_listing_url %}
+                                    <li><a href="{{ nav_provider_public_listing_url }}" target="_blank" class="sub-menu-item"><i class="bi bi-box-arrow-up-right me-2"></i>My Public Listing</a></li>
+                                    {% else %}
+                                    <li><a href="#" class="sub-menu-item"><i class="bi bi-box-arrow-up-right me-2"></i>My Public Listing</a></li>
+                                    {% endif %}
+                                    <li><a href="/auth/logout" class="sub-menu-item"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                                    {% elif auth_role == "admin" %}
+                                    <li><a href="/dashboard/admin" class="sub-menu-item"><i class="bi bi-shield-lock me-2"></i>Admin Dashboard</a></li>
+                                    <li><a href="/auth/logout" class="sub-menu-item"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                                    {% elif auth_role == "sales" %}
+                                    <li><a href="/dashboard/sales" class="sub-menu-item"><i class="bi bi-briefcase me-2"></i>Sales Dashboard</a></li>
+                                    <li><a href="/auth/logout" class="sub-menu-item"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                                    {% else %}
+                                    <li><a href="/dashboard-user/" class="sub-menu-item"><i class="bi bi-speedometer me-2"></i>Dashboard Area</a></li>
+                                    <li><a href="/dashboard-my-profile/" class="sub-menu-item"><i class="bi bi-person-lines-fill me-2"></i>My Profile</a></li>
+                                    <li><a href="/dashboard-my-bookings/" class="sub-menu-item"><i class="bi bi-journal-check me-2"></i>My Bookings</a></li>
+                                    <li><a href="/dashboard-my-listings/" class="sub-menu-item"><i class="bi bi-ui-radios-grid me-2"></i>My Listings</a></li>
+                                    <li><a href="/dashboard-bookmarks/" class="sub-menu-item"><i class="bi bi-bookmark-star me-2"></i>Bookmarks</a></li>
+                                    <li><a href="/dashboard-messages/" class="sub-menu-item"><i class="bi bi-chat-dots me-2"></i>Messages{% if unread_count > 0 %}<span class="notti_coun style-1">{{ unread_count }}</span>{% endif %}</a></li>
+                                    <li><a href="/dashboard-reviews/" class="sub-menu-item"><i class="bi bi-yelp me-2"></i>Reviews</a></li>
+                                    <li><a href="/dashboard-wallet/" class="sub-menu-item"><i class="bi bi-wallet me-2"></i>Wallet</a></li>
+                                    <li><a href="/auth/logout" class="sub-menu-item"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    {% else %}
                     <li class="list-buttons">
                         <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
                             <i class="bi bi-person-circle fs-6 me-1"></i>Join Now 3
                         </a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>

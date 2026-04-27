@@ -1,0 +1,82 @@
+{% extends "Base/base.html" %}
+
+{% block hero_content %}
+
+{% include 'Base/navbar7.html' %}
+{% set pl = provider_listing %}
+
+<div id="preloader">
+	<div class="preloader"><span></span><span></span></div>
+</div>
+
+<section class="p-0">
+	<div class="container-fluid p-0">
+		<div id="dashboardShell" class="row user-dashboard g-0 pt-lg-0 pt-5 dashboard-shell">
+			<div class="col-xl-2 col-lg-3 col-md-12 dashboard-sidebar-column">
+				{% include "Components/User-Dashboard/shared/sidebar-provider.html" %}
+			</div>
+
+			<div class="col-xl-10 col-lg-9 col-md-12">
+				<div class="user-dashboard-box bg-light">
+					<div class="dashHeader p-xl-5 p-4 pb-xl-0 pb-0">
+						<h2 class="fw-medium mb-0">Logo & Cover</h2>
+					</div>
+
+					<div class="dashCaption p-xl-5 p-3 p-md-4">
+						{% with messages = get_flashed_messages(with_categories=true) %}
+						{% if messages %}
+						<div class="mb-4">
+							{% for category, message in messages %}
+							<div class="alert alert-{{ 'danger' if category in ['error', 'danger'] else category }} mb-2">{{ message }}</div>
+							{% endfor %}
+						</div>
+						{% endif %}
+						{% endwith %}
+
+						<form method="POST" action="{{ url_for('main.dashboard_provider_media') }}">
+							<div class="card rounded-3 shadow-sm mb-4">
+								<div class="card-body p-4">
+									<div class="row g-3">
+										<div class="col-xl-12">
+											<label>Cover Image URL</label>
+											<input type="text" class="form-control" name="cover_image_url" value="{{ pl.cover_image_url if pl else '' }}" placeholder="https://...">
+										</div>
+										<div class="col-xl-12">
+											<label>Logo Image URL</label>
+											<input type="text" class="form-control" name="logo_image_url" value="{{ pl.logo_image_url if pl else '' }}" placeholder="https://...">
+										</div>
+										{% if provider_fields.gallery_urls %}
+										<div class="col-xl-12">
+											<label>Gallery URLs (comma separated)</label>
+											<textarea class="form-control" name="gallery_urls" rows="5" placeholder="https://... , https://...">{{ pl.gallery_urls if pl else '' }}</textarea>
+										</div>
+										{% endif %}
+										<div class="col-xl-6 col-lg-6 col-md-6">
+											<h6 class="text-muted mb-2">Logo Preview</h6>
+											<img src="{{ pl.logo_image_url if pl and pl.logo_image_url else url_for('static', filename='assets/img/user.jpg') }}" alt="Logo preview" class="img-fluid rounded-3 border" style="max-height:140px;">
+										</div>
+										<div class="col-xl-6 col-lg-6 col-md-6">
+											<h6 class="text-muted mb-2">Cover Preview</h6>
+											<img src="{{ pl.cover_image_url if pl and pl.cover_image_url else url_for('static', filename='assets/img/banner-1.jpg') }}" alt="Cover preview" class="img-fluid rounded-3 border" style="max-height:140px;">
+										</div>
+										<div class="col-xl-12">
+											<div class="d-flex align-items-center justify-content-start flex-wrap gap-3 mt-2">
+												<button class="btn btn-primary fw-medium" type="submit">Save Media</button>
+												<a href="{{ url_for('main.dashboard_provider') }}" class="btn btn-light-primary fw-medium">Back to Dashboard</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+{% include 'Components/Home/index/cart.html' %}
+{% include 'Components/Home/index/search.html' %}
+
+{% endblock %}

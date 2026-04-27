@@ -1,11 +1,59 @@
-{% for item in rows %}
-    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-        <div class="card rounded-3 position-relative p-4">
-            <div class="position-absolute w-30 h-100 {{ item.style }} start-0 top-0 rounded-end-pill"><div class="position-absolute top-50 start-50 translate-middle"><i class="{{ item.icon }}"></i></div></div>
-            <div class="d-flex flex-column align-items-end justify-content-end ht-80">
-                <h2 class="mb-0"><span class="ctr counter-value" data-bs-target="{{ item.value }}</span>{{ item.symbol }}</h2>
-                <p class="text-muted-2 fw-medium mb-0">{{ item.title }}</p>
-            </div>
+{% if active_listings_count is defined and total_views is defined and total_saved is defined and total_reviews is defined %}
+<div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+    <div class="card rounded-3 position-relative p-4">
+        <div class="position-absolute w-30 h-100 bg-light-success start-0 top-0 rounded-end-pill"><div class="position-absolute top-50 start-50 translate-middle"><i class="bi bi-pin-map-fill text-success fs-2"></i></div></div>
+        <div class="d-flex flex-column align-items-end justify-content-end ht-80">
+            <h2 class="mb-0"><span class="ctr counter-value" data-bs-target="{{ active_listings_count }}">{{ active_listings_count }}</span></h2>
+            <p class="text-muted-2 fw-medium mb-0">Active Listings</p>
         </div>
     </div>
+</div>
+<div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+    <div class="card rounded-3 position-relative p-4">
+        <div class="position-absolute w-30 h-100 bg-light-danger start-0 top-0 rounded-end-pill"><div class="position-absolute top-50 start-50 translate-middle"><i class="bi bi-graph-up-arrow text-danger fs-2"></i></div></div>
+        <div class="d-flex flex-column align-items-end justify-content-end ht-80">
+            <h2 class="mb-0"><span class="ctr counter-value" data-bs-target="{{ total_views }}">{{ total_views }}</span></h2>
+            <p class="text-muted-2 fw-medium mb-0">Total Views</p>
+        </div>
+    </div>
+</div>
+<div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+    <div class="card rounded-3 position-relative p-4">
+        <div class="position-absolute w-30 h-100 bg-light-warning start-0 top-0 rounded-end-pill"><div class="position-absolute top-50 start-50 translate-middle"><i class="bi bi-suit-heart text-warning fs-2"></i></div></div>
+        <div class="d-flex flex-column align-items-end justify-content-end ht-80">
+            <h2 class="mb-0"><span class="ctr counter-value" data-bs-target="{{ total_saved }}">{{ total_saved }}</span></h2>
+            <p class="text-muted-2 fw-medium mb-0">Total Saved</p>
+        </div>
+    </div>
+</div>
+<div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+    <div class="card rounded-3 position-relative p-4">
+        <div class="position-absolute w-30 h-100 bg-light-info start-0 top-0 rounded-end-pill"><div class="position-absolute top-50 start-50 translate-middle"><i class="bi bi-chat-left-text text-info fs-2"></i></div></div>
+        <div class="d-flex flex-column align-items-end justify-content-end ht-80">
+            <h2 class="mb-0"><span class="ctr counter-value" data-bs-target="{{ total_reviews }}">{{ total_reviews }}</span></h2>
+            <p class="text-muted-2 fw-medium mb-0">Total Reviews</p>
+        </div>
+    </div>
+</div>
+<div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+    <div class="card rounded-3 position-relative p-4">
+        <div class="position-absolute w-30 h-100 bg-danger start-0 top-0 rounded-end-pill"><div class="position-absolute top-50 start-50 translate-middle"><i class="bi bi-wallet text-white fs-2"></i></div></div>
+        <div class="d-flex flex-column align-items-end justify-content-end ht-80">
+            <h2 class="mb-0"><span class="ctr counter-value" data-bs-target="{{ wallet_balance_usd }}">{{ wallet_balance_usd }}</span></h2>
+            <p class="text-muted-2 fw-medium mb-0">Wallet Balance (USD)</p>
+        </div>
+    </div>
+</div>
+{% else %}
+{% for item in rows %}
+<div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+    <div class="card rounded-3 position-relative p-4">
+        <div class="position-absolute w-30 h-100 {{ item.style }} start-0 top-0 rounded-end-pill"><div class="position-absolute top-50 start-50 translate-middle"><i class="{{ item.icon }}"></i></div></div>
+        <div class="d-flex flex-column align-items-end justify-content-end ht-80">
+            <h2 class="mb-0"><span class="ctr counter-value" data-bs-target="{{ item.value }}"></span>{{ item.symbol }}</h2>
+            <p class="text-muted-2 fw-medium mb-0">{{ item.title }}</p>
+        </div>
+    </div>
+</div>
 {% endfor %}
+{% endif %}

@@ -1,9 +1,12 @@
 import re
 from math import ceil
+from pathlib import Path
+from uuid import uuid4
 
-from flask import Blueprint, jsonify, redirect, render_template, request, url_for
+from flask import Blueprint, current_app, flash, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user
 from slugify import slugify  # déjalo si ya lo usas en otras funciones
+from werkzeug.utils import secure_filename
 from app.models.bookmark import Bookmark
 from app.models.listing import Listing
 from app.models.newsletter_subscriber import NewsletterSubscriber
@@ -191,6 +194,14 @@ NEWSLETTER_STATUS_MESSAGES = {
     "profile_email_invalid": "Please provide a valid email in step 2.",
     "profile_email_taken": "That email is already used by another subscriber.",
 }
+ALLOWED_AVATAR_EXTENSIONS = {"jpg", "jpeg", "png", "webp"}
+
+
+def _avatar_extension(filename):
+    name = (filename or "").strip()
+    if "." not in name:
+        return ""
+    return name.rsplit(".", 1)[1].lower()
 
 @main.context_processor
 def inject_slugify():
@@ -234,6 +245,37 @@ def _bookmarked_listing_id_strings(profile):
 def inject_bookmark_state():
     profile = _resolve_actor_profile()
     return {"bookmarked_listing_ids": _bookmarked_listing_id_strings(profile)}
+
+
+@main.context_processor
+def inject_navigation_role_context():
+    role = "guest"
+    dashboard_home_url = "/dashboard-user/"
+    provider_public_listing_url = None
+
+    try:
+        if current_user.is_authenticated:
+            role = (getattr(current_user, "role", "") or "user").strip().lower()
+            if role == "provider":
+                dashboard_home_url = "/dashboard/provider"
+                listing = _resolve_provider_listing(current_user)
+                provider_public_listing_url = _provider_public_listing_url(listing)
+            elif role == "admin":
+                dashboard_home_url = "/dashboard/admin"
+            elif role == "sales":
+                dashboard_home_url = "/dashboard/sales"
+            else:
+                dashboard_home_url = "/dashboard-user/"
+    except Exception:
+        role = "guest"
+        dashboard_home_url = "/dashboard-user/"
+        provider_public_listing_url = None
+
+    return {
+        "nav_role": role,
+        "nav_dashboard_home_url": dashboard_home_url,
+        "nav_provider_public_listing_url": provider_public_listing_url,
+    }
 
 
 def _normalize_email(value):
@@ -1803,14 +1845,434 @@ def single_listing_05(title):
 
 @main.route("/dashboard-user/")
 def dashboard_user():
+    if getattr(current_user, "is_authenticated", False):
+        role = (getattr(current_user, "role", "") or "").strip().lower()
+        if role == "provider":
+            return redirect(url_for("main.dashboard_provider"))
+        if role == "sales":
+            return redirect(url_for("dashboard.sales_dashboard"))
+        if role == "admin":
+            return redirect(url_for("dashboard.admin_dashboard"))
     # pages/dashboard-user.html does not exist yet, so we keep legacy compatibility
     # by rendering the old dashboard shell with a safe shared context.
     context = get_dashboard_context()
     return render_template("pages/dashboard-user-old.html", **context)
 
 
-@main.route("/dashboard-my-profile/")
+PROVIDER_ALLOWED_ROLES = {"provider", "admin"}
+PROVIDER_BUSINESS_FIELDS = {
+    "listing_name": "listing_name",
+    "name": "name",
+    "main_category": "main_category",
+    "subcategory": "subcategory",
+    "short_description": "short_description",
+    "long_description": "long_description",
+    "address": "address",
+    "country": "country",
+    "province": "province",
+    "city": "city",
+    "canton": "canton",
+    "zone": "zone",
+    "neighborhood": "neighborhood",
+    "google_maps_url": "google_maps_url",
+    "phone": "phone_primary",
+    "email": "email",
+    "website_url": "website_url",
+    "whatsapp_url": "whatsapp",
+    "instagram_url": "instagram_url",
+    "facebook_url": "facebook_url",
+    "price_level": "price_level",
+    "search_keywords": "search_keywords",
+    "tags": "tags_csv",
+    "opening_hours": "opening_hours",
+    "business_hours": "business_hours",
+    "hours": "hours",
+}
+PROVIDER_MEDIA_FIELDS = {
+    "cover_image_url": "cover_image_url",
+    "logo_image_url": "logo_image_url",
+    "gallery_urls": "gallery_urls",
+}
+
+
+def _provider_slug_seed(profile, listing_name):
+    safe_name = (listing_name or "new-business").strip()
+    safe_email = ((getattr(profile, "email", None) or "").split("@")[0] or "provider").strip()
+    return f"{safe_name}-{safe_email}"
+
+
+def _build_provider_slug(profile, listing_name):
+    base = slugify(_provider_slug_seed(profile, listing_name))[:150] or "new-business"
+    candidate = base
+    attempts = 0
+    while Listing.query.filter_by(slug=candidate).first():
+        attempts += 1
+        candidate = f"{base}-{uuid4().hex[:8]}"[:180]
+        if attempts > 8:
+            break
+    return candidate
+
+
+def _require_provider_account():
+    if not getattr(current_user, "is_authenticated", False):
+        return None, redirect(url_for("auth.login"))
+
+    role = (getattr(current_user, "role", "") or "").strip().lower()
+    if role not in PROVIDER_ALLOWED_ROLES:
+        flash("Provider access is only available for provider accounts.", "error")
+        return None, redirect(url_for("main.dashboard_user"))
+
+    return current_user, None
+
+
+def _resolve_provider_listing(profile):
+    if not profile:
+        return None
+
+    profile_email = _normalize_email(getattr(profile, "email", None))
+    if not profile_email:
+        return None
+
+    try:
+        return (
+            Listing.query.filter(
+                or_(
+                    func.lower(Listing.provider_email) == profile_email,
+                    func.lower(Listing.email) == profile_email,
+                )
+            )
+            .order_by(Listing.created_at.asc())
+            .first()
+        )
+    except Exception:
+        db.session.rollback()
+        return None
+
+
+def _provider_listing_metrics(listing):
+    if not listing:
+        return {
+            "status_label": "Pending Setup",
+            "status_raw": "draft",
+            "category_label": "-",
+            "subcategory_label": "-",
+            "business_name": "New Business",
+            "city_label": "-",
+            "views_count": 0,
+            "reviews_count": 0,
+            "saved_count": 0,
+        }
+
+    category_parts = [listing.main_category, listing.subcategory]
+    reviews_count = int(getattr(listing, "reviews_count", 0) or getattr(listing, "review_count", 0) or 0)
+
+    return {
+        "status_label": (listing.status or ("active" if listing.is_active else "draft")).replace("_", " ").title(),
+        "status_raw": (listing.status or ("active" if listing.is_active else "draft")).lower(),
+        "category_label": " / ".join(part for part in category_parts if part) or "-",
+        "subcategory_label": listing.subcategory or "-",
+        "business_name": listing.listing_name or listing.name or "New Business",
+        "city_label": listing.city or "-",
+        "views_count": int(getattr(listing, "view_count", 0) or 0),
+        "reviews_count": reviews_count,
+        "saved_count": int(getattr(listing, "favorite_count", 0) or 0),
+    }
+
+
+def _provider_public_listing_url(listing):
+    if not listing or not getattr(listing, "slug", None):
+        return None
+    return url_for("main.public_listing", slug=listing.slug)
+
+
+def _listing_column_names():
+    try:
+        return {column.name for column in Listing.__table__.columns}
+    except Exception:
+        return set()
+
+
+def _provider_field_flags():
+    columns = _listing_column_names()
+    return {
+        "whatsapp": "whatsapp" in columns,
+        "instagram_url": "instagram_url" in columns,
+        "facebook_url": "facebook_url" in columns,
+        "tags_csv": "tags_csv" in columns,
+        "search_keywords": "search_keywords" in columns,
+        "gallery_urls": "gallery_urls" in columns,
+        "opening_hours": any(name in columns for name in {"opening_hours", "business_hours", "hours"}),
+    }
+
+
+def _provider_dashboard_context(profile, listing):
+    first_name = (getattr(profile, "first_name", None) or "Provider").strip() or "Provider"
+    last_name = (getattr(profile, "last_name", None) or "").strip()
+    full_name = f"{first_name} {last_name}".strip() or first_name
+    avatar_url = getattr(profile, "avatar_url", None) or url_for("static", filename="assets/img/user.jpg")
+
+    context = {
+        "profile": profile,
+        "dashboard_user": {
+            "id": str(profile.id),
+            "first_name": first_name,
+            "last_name": last_name,
+            "full_name": full_name,
+            "email": getattr(profile, "email", None) or "",
+            "role": getattr(profile, "role", None) or "provider",
+            "avatar_url": avatar_url,
+        },
+        "user_name": full_name,
+        "user_email": getattr(profile, "email", None) or "",
+        "user_avatar_url": avatar_url,
+        "messages2": [],
+        "saveds": [],
+    }
+    context.update(
+        {
+            "provider_listing": listing,
+            **_provider_listing_metrics(listing),
+            "provider_ready_message": "Your provider account is ready. Complete your business information.",
+            "provider_public_listing_url": _provider_public_listing_url(listing),
+            "provider_fields": _provider_field_flags(),
+        }
+    )
+    return context
+
+
+def _coerce_coordinate(raw_value):
+    cleaned = (raw_value or "").strip()
+    if not cleaned:
+        return None
+    try:
+        return float(cleaned)
+    except ValueError:
+        return None
+
+
+def _ensure_provider_listing(profile):
+    listing = _resolve_provider_listing(profile)
+    if listing:
+        return listing
+
+    listing_name = "New Business"
+    listing = Listing(
+        name=listing_name,
+        listing_name=listing_name,
+        slug=_build_provider_slug(profile, listing_name),
+        provider_name=getattr(profile, "full_name", None) or listing_name,
+        provider_email=getattr(profile, "email", None),
+        email=getattr(profile, "email", None),
+        is_active=False,
+        status="draft",
+    )
+    db.session.add(listing)
+    return listing
+
+
+@main.route("/dashboard/provider")
+def dashboard_provider():
+    profile, redirect_response = _require_provider_account()
+    if redirect_response:
+        return redirect_response
+
+    listing = _resolve_provider_listing(profile)
+    context = _provider_dashboard_context(profile, listing)
+    return render_template("pages/dashboard-provider.html", **context)
+
+
+@main.route("/dashboard/provider/business", methods=["GET", "POST"])
+def dashboard_provider_business():
+    profile, redirect_response = _require_provider_account()
+    if redirect_response:
+        return redirect_response
+
+    listing = _resolve_provider_listing(profile)
+
+    if request.method == "POST":
+        try:
+            listing = listing or _ensure_provider_listing(profile)
+            for form_name, attr_name in PROVIDER_BUSINESS_FIELDS.items():
+                if not hasattr(listing, attr_name):
+                    continue
+                value = (request.form.get(form_name) or "").strip()
+                if not value:
+                    continue
+                if attr_name == "email":
+                    value = value.lower()
+                setattr(listing, attr_name, value)
+
+            if hasattr(listing, "latitude"):
+                latitude = _coerce_coordinate(request.form.get("latitude"))
+                if latitude is not None:
+                    listing.latitude = latitude
+            if hasattr(listing, "longitude"):
+                longitude = _coerce_coordinate(request.form.get("longitude"))
+                if longitude is not None:
+                    listing.longitude = longitude
+
+            if hasattr(listing, "name") and not (listing.name or "").strip():
+                fallback_name = (listing.listing_name or "New Business").strip()
+                listing.name = fallback_name
+            if hasattr(listing, "listing_name") and not (listing.listing_name or "").strip():
+                listing.listing_name = listing.name
+            if hasattr(listing, "slug") and not (listing.slug or "").strip():
+                listing.slug = _build_provider_slug(profile, listing.listing_name or listing.name)
+
+            db.session.commit()
+            flash("Business information updated successfully.", "success")
+        except Exception:
+            db.session.rollback()
+            flash("Could not update business information right now.", "error")
+
+        return redirect(url_for("main.dashboard_provider_business"))
+
+    context = _provider_dashboard_context(profile, listing)
+    return render_template("pages/dashboard-provider-business.html", **context)
+
+
+@main.route("/dashboard/provider/media", methods=["GET", "POST"])
+def dashboard_provider_media():
+    profile, redirect_response = _require_provider_account()
+    if redirect_response:
+        return redirect_response
+
+    listing = _resolve_provider_listing(profile)
+
+    if request.method == "POST":
+        try:
+            listing = listing or _ensure_provider_listing(profile)
+            for form_name, attr_name in PROVIDER_MEDIA_FIELDS.items():
+                if not hasattr(listing, attr_name):
+                    continue
+                value = (request.form.get(form_name) or "").strip()
+                if not value:
+                    continue
+                setattr(listing, attr_name, value)
+
+            db.session.commit()
+            flash("Business media updated successfully.", "success")
+        except Exception:
+            db.session.rollback()
+            flash("Could not update business media right now.", "error")
+
+        return redirect(url_for("main.dashboard_provider_media"))
+
+    context = _provider_dashboard_context(profile, listing)
+    return render_template("pages/dashboard-provider-media.html", **context)
+
+
+@main.route("/listing/<string:slug>/")
+def public_listing(slug):
+    listing = Listing.query.filter_by(slug=slug).first_or_404()
+    return render_template("pages/public-listing.html", listing=listing)
+
+
+@main.route("/dashboard-my-profile/", methods=["GET", "POST"])
 def dashboard_my_profile():
+    if request.method == "POST":
+        if not getattr(current_user, "is_authenticated", False):
+            flash("Please log in to update your profile.", "error")
+            return redirect(url_for("auth.login"))
+
+        form_type = (request.form.get("form_type") or "").strip().lower()
+        user = current_user
+
+        if form_type == "profile":
+            first_name = (request.form.get("first_name") or "").strip()
+            last_name = (request.form.get("last_name") or "").strip()
+            email = (request.form.get("email") or "").strip().lower()
+            phone = (request.form.get("phone") or "").strip()
+
+            if not first_name or not last_name:
+                flash("First name and last name are required.", "error")
+                return redirect(url_for("main.dashboard_my_profile"))
+
+            if not email:
+                flash("Email is required.", "error")
+                return redirect(url_for("main.dashboard_my_profile"))
+
+            email_owner = UserProfile.query.filter_by(email=email).first()
+            if email_owner and email_owner.id != user.id:
+                flash("That email is already in use.", "error")
+                return redirect(url_for("main.dashboard_my_profile"))
+
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.phone = phone or None
+
+            db.session.commit()
+            flash("Profile updated successfully.", "success")
+            return redirect(url_for("main.dashboard_my_profile"))
+
+        if form_type == "avatar":
+            avatar_url = (request.form.get("avatar_url") or "").strip()
+            if avatar_url:
+                user.avatar_url = avatar_url
+                db.session.commit()
+                flash("Profile image updated successfully.", "success")
+            elif request.files.get("myfile"):
+                avatar_file = request.files.get("myfile")
+                original_filename = avatar_file.filename or ""
+                extension = _avatar_extension(original_filename)
+
+                if not original_filename.strip():
+                    flash("Please select an image file.", "error")
+                    return redirect(url_for("main.dashboard_my_profile"))
+
+                if extension not in ALLOWED_AVATAR_EXTENSIONS:
+                    flash("Invalid image format. Allowed: jpg, jpeg, png, webp.", "error")
+                    return redirect(url_for("main.dashboard_my_profile"))
+
+                try:
+                    uploads_root = Path(current_app.static_folder) / "uploads" / "avatars"
+                    uploads_root.mkdir(parents=True, exist_ok=True)
+
+                    safe_stem = secure_filename(Path(original_filename).stem) or "avatar"
+                    filename = f"{safe_stem}-{uuid4().hex}.{extension}"
+                    destination = uploads_root / filename
+                    avatar_file.save(destination)
+
+                    user.avatar_url = f"/static/uploads/avatars/{filename}"
+                    db.session.commit()
+                    flash("Profile image updated successfully.", "success")
+                except Exception:
+                    db.session.rollback()
+                    flash("Could not upload profile image. Please try again.", "error")
+            else:
+                flash("No new profile image provided.", "error")
+            return redirect(url_for("main.dashboard_my_profile"))
+
+        if form_type == "password":
+            old_password = request.form.get("old_password") or ""
+            new_password = request.form.get("new_password") or ""
+            confirm_password = request.form.get("confirm_password") or ""
+
+            if not old_password or not new_password or not confirm_password:
+                flash("All password fields are required.", "error")
+                return redirect(url_for("main.dashboard_my_profile"))
+
+            if not user.check_password(old_password):
+                flash("Current password is incorrect.", "error")
+                return redirect(url_for("main.dashboard_my_profile"))
+
+            if len(new_password) < 6:
+                flash("New password must be at least 6 characters.", "error")
+                return redirect(url_for("main.dashboard_my_profile"))
+
+            if new_password != confirm_password:
+                flash("New password and confirmation do not match.", "error")
+                return redirect(url_for("main.dashboard_my_profile"))
+
+            user.set_password(new_password)
+            db.session.commit()
+            flash("Password updated successfully.", "success")
+            return redirect(url_for("main.dashboard_my_profile"))
+
+        flash("Unsupported profile action.", "error")
+        return redirect(url_for("main.dashboard_my_profile"))
+
     context = get_dashboard_context()
     return render_template("pages/dashboard-my-profile.html", **context)
 
@@ -2042,13 +2504,21 @@ dashboard_bp = Blueprint("dashboard", __name__)
 
 @dashboard_bp.route("/dashboard/user")
 def user_dashboard():
+    if getattr(current_user, "is_authenticated", False):
+        role = (getattr(current_user, "role", "") or "").strip().lower()
+        if role == "provider":
+            return redirect(url_for("main.dashboard_provider"))
+        if role == "sales":
+            return redirect(url_for("dashboard.sales_dashboard"))
+        if role == "admin":
+            return redirect(url_for("dashboard.admin_dashboard"))
     profile = DashboardService.resolve_profile()
     context = DashboardService.build_user_dashboard(profile)
     return render_template("Components/User-Dashboard/user/dashboard-user.html", **context)
 
-@dashboard_bp.route("/dashboard/provider")
+@dashboard_bp.route("/dashboard/provider-legacy")
 def provider_dashboard():
-    return render_template("Components/User-Dashboard/provider/dashboard-provider.html")
+    return redirect(url_for("main.dashboard_provider"))
 
 @dashboard_bp.route("/dashboard/sales")
 def sales_dashboard():

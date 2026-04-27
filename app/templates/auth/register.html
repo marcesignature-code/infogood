@@ -36,6 +36,27 @@
 										<p class="text-muted mb-0">Choose your role and create your account</p>
 									</div>
 
+									{% with messages = get_flashed_messages(with_categories=true) %}
+									{% if messages %}
+									{% set ns = namespace(best_category='', best_message='') %}
+									{% for category, message in messages %}
+										{% set normalized = 'danger' if category in ['error', 'danger'] else category %}
+										{% if normalized == 'danger' %}
+											{% set ns.best_category = 'danger' %}
+											{% set ns.best_message = message %}
+										{% elif ns.best_category != 'danger' %}
+											{% set ns.best_category = normalized %}
+											{% set ns.best_message = message %}
+										{% endif %}
+									{% endfor %}
+									<div class="mb-3">
+										<div class="alert alert-{{ ns.best_category or 'info' }} py-2 mb-2" role="alert">
+											{{ ns.best_message }}
+										</div>
+									</div>
+									{% endif %}
+									{% endwith %}
+
 									<form class="text-start" method="POST" action="{{ url_for('auth.register') }}">
 										
 										<div class="text-center mb-4">
@@ -99,18 +120,22 @@
 											</div>
 
 											<div class="form-group mb-4">
-												<label>Business Type</label>
-												<input type="text" name="business_type" class="form-control" placeholder="Hotel, Restaurant, Tour Operator...">
-											</div>
-
-											<div class="form-group mb-4">
 												<label>Main Category</label>
-												<input type="text" name="main_category" class="form-control" placeholder="Accommodation, Food & Drinks...">
+												<select name="main_category" id="provider_main_category" class="form-control">
+													<option value="">Select main category</option>
+													<option value="accommodation">Accommodation</option>
+													<option value="food_drink">Food &amp; Drink</option>
+													<option value="activities_experiences">Activities &amp; Experiences</option>
+													<option value="free_activities">Free Activities</option>
+													<option value="tourism_services">Tourism Services</option>
+												</select>
 											</div>
 
 											<div class="form-group mb-4">
-												<label>City</label>
-												<input type="text" name="city" class="form-control" placeholder="City">
+												<label>Subcategory</label>
+												<select name="subcategory" id="provider_subcategory" class="form-control">
+													<option value="">Select subcategory</option>
+												</select>
 											</div>
 										</div>
 
@@ -174,14 +199,65 @@
 		const userRadio = document.getElementById("role_user");
 		const providerRadio = document.getElementById("role_provider");
 		const providerFields = document.getElementById("provider-fields");
+		const mainCategorySelect = document.getElementById("provider_main_category");
+		const subcategorySelect = document.getElementById("provider_subcategory");
+		const subcategoriesByMain = {
+			accommodation: ["hotel", "hostel", "cabin", "apartment", "lodge"],
+			food_drink: ["restaurant", "cafe", "bar", "bakery", "fast_food"],
+			activities_experiences: ["tour", "adventure", "cultural_experience", "wellness", "nightlife"],
+			free_activities: ["park", "viewpoint", "museum_free", "walking_route", "public_space"],
+			tourism_services: ["transport", "travel_agency", "guide", "car_rental", "information_center"]
+		};
 
 		function toggleProviderFields() {
-			providerFields.style.display = providerRadio.checked ? "block" : "none";
+			const enabled = providerRadio && providerRadio.checked;
+			providerFields.style.display = enabled ? "block" : "none";
+
+			if (mainCategorySelect) {
+				mainCategorySelect.required = enabled;
+			}
+			if (subcategorySelect) {
+				subcategorySelect.required = enabled;
+			}
+			const businessNameInput = document.querySelector("input[name='business_name']");
+			if (businessNameInput) {
+				businessNameInput.required = enabled;
+			}
+			if (enabled && providerRadio) {
+				providerRadio.checked = true;
+			}
+			if (!enabled && userRadio) {
+				userRadio.checked = true;
+			}
 		}
 
-		if (userRadio && providerRadio && providerFields) {
+		function prettify(value) {
+			return value.replace(/_/g, " ").replace(/\b\w/g, function (m) { return m.toUpperCase(); });
+		}
+
+		function fillSubcategories() {
+			if (!subcategorySelect || !mainCategorySelect) {
+				return;
+			}
+			const selected = mainCategorySelect.value;
+			const options = subcategoriesByMain[selected] || [];
+			subcategorySelect.innerHTML = '<option value="">Select subcategory</option>';
+
+			options.forEach(function (item) {
+				const option = document.createElement("option");
+				option.value = item;
+				option.textContent = prettify(item);
+				subcategorySelect.appendChild(option);
+			});
+		}
+
+		if (providerFields && userRadio && providerRadio) {
 			userRadio.addEventListener("change", toggleProviderFields);
 			providerRadio.addEventListener("change", toggleProviderFields);
+			if (mainCategorySelect) {
+				mainCategorySelect.addEventListener("change", fillSubcategories);
+			}
+			fillSubcategories();
 			toggleProviderFields();
 		}
 	});
